@@ -1,4 +1,4 @@
-package Exceptions
+package except
 
 import (
 	"github.com/gin-gonic/gin"

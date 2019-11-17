@@ -7,5 +7,5 @@ import (
 
 func main() {
 	routers := routes.InitRouters()
-	bootstrap.Run(routers)
+	boot.Run(routers)
 }
