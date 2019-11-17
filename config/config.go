@@ -2,8 +2,8 @@ package config
 
 import (
 	"github.com/fsnotify/fsnotify"
-
 	"github.com/spf13/viper"
+	"log"
 	"strings"
 )
 
@@ -18,7 +18,6 @@ func Init(cfg string) error {
 	if err := config.initConfig(); err != nil {
 		return err
 	}
-	config.initLog()
 	config.watchConfig()
 	return nil
 }
@@ -48,20 +47,6 @@ func (c *Config) initConfig() error {
 func (c *Config) watchConfig() {
 	viper.WatchConfig()
 	viper.OnConfigChange(func(in fsnotify.Event) {
-		//log.Infof("Config file Changed: %s", in.Name)
+		log.Printf("Config file Changed: %s \n", in.Name)
 	})
-}
-
-func (c *Config) initLog() {
-	//passLagerCfg := log.PassLagerCfg{
-	//	Writers:        viper.GetString("log.writers"),
-	//	LoggerLevel:    viper.GetString("log.logger_level"),
-	//	LoggerFile:     viper.GetString("log.logger_file"),
-	//	LogFormatText:  viper.GetBool("log.log_format_text"),
-	//	RollingPolicy:  viper.GetString("log.rollingPolicy"),
-	//	LogRotateDate:  viper.GetInt("log.log_rotate_date"),
-	//	LogRotateSize:  viper.GetInt("log.log_rotate_size"),
-	//	LogBackupCount: viper.GetInt("log.log_backup_count"),
-	//}
-	//log.InitWithConfig(&passLagerCfg)
 }

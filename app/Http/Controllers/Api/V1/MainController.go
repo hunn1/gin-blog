@@ -1,11 +1,11 @@
 package V1
 
 import (
-	"github.com/gin-gonic/gin"
 	"Kronos/helpers"
+	"github.com/gin-gonic/gin"
 )
 
-func ShowApi(c *gin.Context)  {
+func ShowApi(c *gin.Context) {
 	var msg struct {
 		Name    string `json:"user"`
 		Message string
@@ -17,4 +17,3 @@ func ShowApi(c *gin.Context)  {
 	apiReturn := helpers.ApiReturn{200, "我不知道呀", msg}
 	c.JSON(200, apiReturn)
 }
-

@@ -2,6 +2,8 @@ package routes
 
 import (
 	"Kronos/Exceptions"
+	"Kronos/config"
+	"Kronos/library/logs"
 	"Kronos/routes/api"
 	"Kronos/routes/web"
 	"github.com/gin-gonic/gin"
@@ -17,7 +19,9 @@ func InitRouters() *gin.Engine {
 
 	// 使用日志
 	engine.Use(gin.Logger())
-
+	_ = config.Init("./config/config.yaml")
+	// 自定义日志存储
+	engine.Use(logs.LoggerToFile())
 	// 未找到路由 & 未找到操作方法
 	engine.NoRoute(func(context *gin.Context) {
 		context.JSON(http.StatusNotFound, Exceptions.HandleErrors())
