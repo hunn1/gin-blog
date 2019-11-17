@@ -1,21 +1,20 @@
 package template
 
 import (
-	"fmt"
 	"github.com/gin-contrib/multitemplate"
 	"path/filepath"
+	"strings"
 )
 
 func LoadTemplates(templatesDir string) multitemplate.Renderer {
 	r := multitemplate.NewRenderer()
-
+	// 读取layout文件
 	articleLayouts, err := filepath.Glob(templatesDir + "/layouts/layout.html")
 	if err != nil {
 		panic(err.Error())
 	}
-
+	// 读取模板文件
 	articles, err := filepath.Glob(templatesDir + "/*/*.html")
-	fmt.Println(articles)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -25,7 +24,9 @@ func LoadTemplates(templatesDir string) multitemplate.Renderer {
 		layoutCopy := make([]string, len(articleLayouts))
 		copy(layoutCopy, articleLayouts)
 		files := append(layoutCopy, article)
-		r.AddFromFiles(filepath.Base(article), files...)
+		// 转换为 模块@文件的形式，避免重复文件的问题
+		filePath := filepath.Dir(article)
+		r.AddFromFiles(strings.Split(filePath, "/")[3]+"@"+filepath.Base(article), files...)
 	}
 	return r
 }
