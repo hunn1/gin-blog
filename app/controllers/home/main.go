@@ -6,7 +6,7 @@ import (
 )
 
 func IndexApi(c *gin.Context) {
-	c.HTML(http.StatusOK, "main@main.html", gin.H{
+	c.HTML(http.StatusOK, "main/main", gin.H{
 		"title": "Go Go Go !",
 	})
 
