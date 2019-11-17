@@ -1,0 +1,30 @@
+{{define "head"}}
+    <title>Go 语言</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+{{end}}
+{{define "content"}}
+    <div id="app">
+        {{ template "menu.html"}}
+
+    </div>
+{{end}}
+
+{{define "js"}}
+    <!-- import Vue before Element -->
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <!-- import JavaScript -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: function () {
+                return {visible: false}
+            }
+        })
+    </script>
+{{end}}

@@ -1,0 +1,14 @@
+language: go
+go:
+  - "1.10"
+addons:
+  sonarcloud:
+    organization: "$SONAR_ORG"
+    token:
+      secure: "$SONAR_TOKEN"
+before_script:
+  - git clone --depth=1 --branch=master https://github.com/lookwi/Kronos.git /home/travis/gopath/src/Kronos
+  - cd /home/travis/gopath/src/Kronos && make deps
+script:
+  - make test
+  - sonar-scanner -Dsonar.sources=. -Dsonar.host.url=https://sonarcloud.io -Dsonar.projectKey=morningo -X

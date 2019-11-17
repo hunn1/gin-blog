@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+// 错误信息
 func HandleErrors() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		defer func() {

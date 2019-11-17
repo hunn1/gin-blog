@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -17,7 +18,7 @@ import (
 */
 func Run(router *gin.Engine) {
 	server := &http.Server{
-		Addr:    ":8080",
+		Addr:    viper.GetString("addr"),
 		Handler: router,
 	}
 	// 开启 Server

@@ -26,6 +26,7 @@ func InitRouters() *gin.Engine {
 	engine.NoRoute(func(context *gin.Context) {
 		context.JSON(http.StatusNotFound, Exceptions.HandleErrors())
 	})
+	// 没找到操作方法
 	engine.NoMethod(func(context *gin.Context) {
 		context.JSON(http.StatusNotFound, Exceptions.HandleErrors())
 	})
