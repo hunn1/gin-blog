@@ -1,7 +1,7 @@
 package main
 
 import (
-	"Kronos/bootstrap"
+	"Kronos/boot"
 	"Kronos/routes"
 )
 

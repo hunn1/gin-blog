@@ -1,7 +1,7 @@
 package web
 
 import (
-	"Kronos/app/Http/Controllers/Home"
+	"Kronos/app/controllers/home"
 	"Kronos/helpers"
 	"Kronos/library/template"
 	"github.com/gin-gonic/gin"
@@ -19,7 +19,7 @@ func RegisterWebRouter(router *gin.Engine) {
 	})
 	web := router.Group("/")
 	{
-		web.GET("/", Home.IndexApi)
+		web.GET("/", home.IndexApi)
 	}
 
 }

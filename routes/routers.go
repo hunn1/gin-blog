@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"Kronos/Exceptions"
 	"Kronos/config"
+	"Kronos/except"
 	"Kronos/library/logs"
 	"Kronos/routes/api"
 	"Kronos/routes/web"
