@@ -4,6 +4,7 @@ name: kronos                  # API Server的名字
 url: http://127.0.0.1:8082   # pingServer函数请求的API服务器的ip:port
 max_ping_count: 10            # pingServer函数try的次数
 jwt_secret:
+loc: Asia/Shanghai
 tls:
   addr: :8081
   cert: cert/server.crt
@@ -12,12 +13,9 @@ locus:
   path: storage/logs/
   file: access.log
 db:
-  name: db_apiserver
+  type: mysql
+  name: kronos
   addr: 127.0.0.1:3306
-  username: root
-  password: root
-docker_db:
-  name: db_apiserver
-  addr: 127.0.0.1:3306
+  charset: utf8mb4
   username: root
   password: root
