@@ -2,13 +2,11 @@ package models
 
 import (
 	"database/sql"
-
-	"github.com/jinzhu/gorm"
 	"time"
 )
 
 type User struct {
-	gorm.Model
+	BaseModel
 	Name         string
 	Age          sql.NullInt64
 	Birthday     *time.Time

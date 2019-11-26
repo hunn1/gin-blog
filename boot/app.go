@@ -1,6 +1,7 @@
 package boot
 
 import (
+	"Kronos/library/databases"
 	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -8,6 +9,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"os/signal"
 	"time"
@@ -28,6 +30,17 @@ func Run(router *gin.Engine) {
 			log.Fatalf("listen: %s\n", err)
 		}
 	}()
+	// 数据库初始化
+	dbType := viper.GetString("db.type")
+	host := viper.GetString("db.host")
+
+	user := viper.GetString("db.user")
+	pass := viper.GetString("db.pass")
+	dbname := viper.GetString("db.dbname")
+	charset := viper.GetString("db.charset")
+	loc := viper.GetString("db.loc")
+	native := viper.GetString("db.native")
+	databases.InitDB(dbType, host, user, pass, dbname, charset, loc, url.QueryEscape(native))
 	// 接收退出信号
 	quit := make(chan os.Signal)
 	signal.Notify(quit, os.Interrupt)
@@ -39,6 +52,7 @@ func Run(router *gin.Engine) {
 	defer cancelFunc()
 
 	if err := server.Shutdown(timeout); err != nil {
+
 		log.Fatal("Server Shutdown", err)
 	}
 
