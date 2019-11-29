@@ -13,6 +13,7 @@ import (
 )
 
 func InitRouters() *gin.Engine {
+	_ = config.Init("./config/config.yaml")
 	engine := gin.New()
 	// 自定义中间件
 
@@ -21,7 +22,7 @@ func InitRouters() *gin.Engine {
 
 	// 使用日志
 	engine.Use(gin.Logger())
-	_ = config.Init("./config/config.yaml")
+
 	// 开启调试模式
 	fmt.Println(viper.GetBool("debug"))
 	if debug := viper.GetBool("debug"); debug == false {

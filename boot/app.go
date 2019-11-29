@@ -40,7 +40,8 @@ func Run(router *gin.Engine) {
 	charset := viper.GetString("db.charset")
 	loc := viper.GetString("db.loc")
 	native := viper.GetString("db.native")
-	databases.InitDB(dbType, host, user, pass, dbname, charset, loc, url.QueryEscape(native))
+	prefix := viper.GetString("db.prefix")
+	databases.InitDB(dbType, host, user, pass, dbname, charset, loc, url.QueryEscape(native), prefix)
 	// 接收退出信号
 	quit := make(chan os.Signal)
 	signal.Notify(quit, os.Interrupt)
