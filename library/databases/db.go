@@ -31,7 +31,9 @@ func InitDB(DbType, host, user, pass, dbname, charset, loc, native, prefix strin
 	db.DB().SetMaxOpenConns(100)
 	db.DB().SetConnMaxLifetime(5 * time.Minute)
 	// 自动创建数据库
-	migrate.AutoMigrate()
+	if migerr := db.Set("gorm:table_options", "ENGINE=Innodb").AutoMigrate(migrate.Models...).Error; nil != migerr {
+		logrus.Fatal("auto migrate tables failed: " + migerr.Error())
+	}
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
 		return prefix + defaultTableName
 	}
