@@ -33,7 +33,7 @@ func HandleErrors() gin.HandlerFunc {
 				} else {
 					c.JSON(http.StatusInternalServerError, gin.H{
 						"code":    500,
-						"message": "Oops , Something Went Wrong Message...",
+						"message": "Oops , Something Went Wrong Message..." + errMsg,
 					})
 					return
 				}

@@ -1,4 +1,4 @@
-{{define "title"}}首页{{end}}
+{{define "title"}}首页-{{ .title }} {{end}}
 {{define "content"}}
     <div id="app">
         {{include "public/menu" }}
@@ -6,8 +6,18 @@
 {{end}}
 
 {{define "js"}}
-    <script src="https://unpkg.com/vue/dist/vue.js"></script>
 
+
+    {{range .artList}}
+        {{ .ID }}
+        {{ .Title }}
+        {{ .Thumb }}
+        {{ .Description }}
+        {{ .Keyword }}
+        {{ .CreatedAt }}
+        {{ .UpdatedAt }}
+    {{end}}
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <script>
         new Vue({

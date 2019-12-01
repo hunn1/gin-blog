@@ -6,7 +6,6 @@ import (
 	"Kronos/library/logs"
 	"Kronos/routes/api"
 	"Kronos/routes/web"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"net/http"
@@ -23,13 +22,8 @@ func InitRouters() *gin.Engine {
 	// 使用日志
 	engine.Use(gin.Logger())
 
-	// 开启调试模式
-	fmt.Println(viper.GetBool("debug"))
-	if debug := viper.GetBool("debug"); debug == false {
-		gin.SetMode(gin.ReleaseMode)
-	} else {
-		gin.SetMode(gin.DebugMode)
-	}
+	// 模式
+	gin.SetMode(viper.GetString("runmode"))
 
 	// 自定义日志存储
 	engine.Use(logs.LoggerToFile())

@@ -4,7 +4,7 @@ GOBUILD=$(GOCMD) build
 GOCLEAN=$(GOCMD) clean
 GOTEST=$(GOCMD) test
 GOGET=$(GOCMD) get
-BINARY_NAME=morningo
+BINARY_NAME=kronos
 BINARY_UNIX=$(BINARY_NAME)_unix
 
 all: run
