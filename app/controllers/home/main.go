@@ -17,5 +17,4 @@ func IndexApi(c *gin.Context) {
 		"title": "Go Go Go !",
 		"body":  first,
 	})
-
 }
