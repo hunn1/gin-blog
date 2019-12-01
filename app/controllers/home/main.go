@@ -11,8 +11,8 @@ func IndexApi(c *gin.Context) {
 
 	//title := c.Query("title")
 	//key := c.Query("keyword")
-	user := models.User{}
-	first := databases.GetDB().First(&user)
+	article := models.Article{}
+	first := databases.DB.First(&article)
 	c.JSON(http.StatusOK, gin.H{
 		"title": "Go Go Go !",
 		"body":  first,

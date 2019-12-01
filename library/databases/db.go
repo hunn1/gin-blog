@@ -1,7 +1,6 @@
 package databases
 
 import (
-	"Kronos/app/migrate"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
@@ -10,7 +9,7 @@ import (
 	"time"
 )
 
-var db *gorm.DB
+var DB *gorm.DB
 
 // 初始化DB
 func InitDB(DbType, host, user, pass, dbname, charset, loc, native, prefix string) {
@@ -22,7 +21,7 @@ func InitDB(DbType, host, user, pass, dbname, charset, loc, native, prefix strin
 	)
 	// 设置数据库连接数
 
-	db, err = gorm.Open(DbType, dabs)
+	db, err := gorm.Open(DbType, dabs)
 	if err != nil {
 		logrus.Fatal("Cannot Connect : " + err.Error())
 	}
@@ -30,21 +29,19 @@ func InitDB(DbType, host, user, pass, dbname, charset, loc, native, prefix strin
 	db.DB().SetMaxIdleConns(10)
 	db.DB().SetMaxOpenConns(100)
 	db.DB().SetConnMaxLifetime(5 * time.Minute)
-	// 自动创建数据库
-	if migerr := db.Set("gorm:table_options", "ENGINE=Innodb").AutoMigrate(migrate.Models...).Error; nil != migerr {
-		logrus.Fatal("auto migrate tables failed: " + migerr.Error())
-	}
+
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
 		return prefix + defaultTableName
 	}
+	DB = db
 }
 func GetDB() *gorm.DB {
-	return db
+	return DB
 }
 
 // 好像不需要关闭数据库连接 先写着
 func CloseDB() {
-	if err := db.Close(); nil != err {
+	if err := DB.Close(); nil != err {
 		logrus.Fatal("Disconnect from database failed: " + err.Error())
 	}
 }
