@@ -13,16 +13,10 @@ import (
 
 func IndexApi(c *gin.Context) {
 
-	//title := c.Query("title")
-	//key := c.Query("keyword")
-
 	PageSize, _ := strconv.ParseInt(c.DefaultQuery("limit", "1"), 10, 0)
 	// 文章模型
 	var artList []models.Article
-	//err := databases.DB.First(&article)
-	//if err.Error != nil {
-	//	helpers.Abort(c, "Test Message")
-	//}
+
 	var count int32
 	artCount := databases.DB.Model(models.Article{}).Count(&count)
 	if artCount.Error != nil {
