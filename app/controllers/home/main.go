@@ -6,13 +6,16 @@ import (
 	"Kronos/library/databases"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
 func IndexApi(c *gin.Context) {
 
 	//title := c.Query("title")
 	//key := c.Query("keyword")
-
+	Page, _ := strconv.ParseInt(c.DefaultQuery("p", "1"), 10, 0)
+	PageSize, _ := strconv.ParseInt(c.DefaultQuery("limit", "1"), 10, 0)
+	// 文章模型
 	var artList []models.Article
 	//err := databases.DB.First(&article)
 	//if err.Error != nil {
@@ -23,8 +26,7 @@ func IndexApi(c *gin.Context) {
 	if artCount.Error != nil {
 		helpers.Abort(c, "没有数据")
 	}
-	Page := 1
-	PageSize := 5
+
 	//查询分页的数据
 	artCount.Offset((Page - 1) * PageSize).Limit(PageSize).Find(&artList)
 
