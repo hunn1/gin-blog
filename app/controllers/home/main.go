@@ -28,7 +28,7 @@ func IndexApi(c *gin.Context) {
 	artCount.Offset((pagination.Page - 1) * PageSize).Limit(PageSize).Find(&artList)
 
 	c.HTML(http.StatusOK, "main/main", gin.H{
-		"title":   "Go Go Go !" + strconv.Itoa(int((pagination.Page - 1))),
+		"title":   "Go Go Go !" + strconv.Itoa(int(pagination.Page-1)),
 		"artList": artList,
 		"page":    template.HTML(pagination.Pages()),
 	})
