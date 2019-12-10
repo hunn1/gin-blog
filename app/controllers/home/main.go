@@ -5,6 +5,7 @@ import (
 	"Kronos/helpers"
 	"Kronos/library/databases"
 	"Kronos/library/page"
+	"github.com/foolin/goview/supports/ginview"
 	"github.com/gin-gonic/gin"
 	"html/template"
 	"net/http"
@@ -27,7 +28,7 @@ func IndexApi(c *gin.Context) {
 	//查询分页的数据
 	artCount.Offset((pagination.Page - 1) * PageSize).Limit(PageSize).Find(&artList)
 
-	c.HTML(http.StatusOK, "main/main", gin.H{
+	ginview.HTML(c, http.StatusOK, "main/main", gin.H{
 		"title":   "Go Go Go !" + strconv.Itoa(int(pagination.Page-1)),
 		"artList": artList,
 		"page":    template.HTML(pagination.Pages()),

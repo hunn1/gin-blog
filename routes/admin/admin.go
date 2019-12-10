@@ -2,19 +2,14 @@ package admin
 
 import (
 	"Kronos/app/controllers/home"
-	"Kronos/helpers"
 	"github.com/foolin/goview"
 	"github.com/foolin/goview/supports/ginview"
 	"github.com/gin-gonic/gin"
-	html "html/template"
 )
 
 func RegAdminRouter(router *gin.Engine) {
 	// HTML 模板
-
-	router.Static("resources/public", "./resources/public")
-	//router.HTMLRender = template.LoadTemplates("resources/views/home")
-	router.HTMLRender = ginview.New(goview.Config{
+	givMid := ginview.NewMiddleware(goview.Config{
 		Root:         "resources/views/admin",
 		Extension:    ".html",
 		Master:       "layouts/master",
@@ -23,12 +18,9 @@ func RegAdminRouter(router *gin.Engine) {
 		DisableCache: true,
 		Delims:       goview.Delims{},
 	})
-	router.SetFuncMap(html.FuncMap{
-		// 注册模板函数
-		"formatAsDate": helpers.FormatAsDate,
-	})
-	web := router.Group("/")
+
+	admin := router.Group("/admin", givMid)
 	{
-		web.GET("/", home.IndexApi)
+		admin.GET("/", home.IndexApi)
 	}
 }
