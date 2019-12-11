@@ -1,0 +1,22 @@
+{{define "title"}}首页-{{ .title }} {{end}}
+{{define "content"}}
+    <div id="app">
+        {{include "public/menu" }}
+    </div>
+{{end}}
+
+{{define "js"}}
+
+
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: function () {
+                return {visible: false}
+            }
+        })
+    </script>
+{{end}}

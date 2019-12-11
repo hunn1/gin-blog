@@ -1,7 +1,7 @@
 package admin
 
 import (
-	"Kronos/app/controllers/home"
+	"Kronos/app/controllers/admin"
 	"github.com/foolin/goview"
 	"github.com/foolin/goview/supports/ginview"
 	"github.com/gin-gonic/gin"
@@ -19,8 +19,8 @@ func RegAdminRouter(router *gin.Engine) {
 		Delims:       goview.Delims{},
 	})
 
-	admin := router.Group("/admin", givMid)
+	group := router.Group("/admin", givMid)
 	{
-		admin.GET("/", home.IndexApi)
+		group.GET("/", admin.ShowLogin)
 	}
 }
