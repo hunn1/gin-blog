@@ -6,13 +6,24 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 	"time"
 )
 
 var DB *gorm.DB
 
 // 初始化DB
-func InitDB(DbType, host, user, pass, dbname, charset, loc, native, prefix string) {
+func InitDB() {
+	// 数据库初始化
+	DbType := viper.GetString("db.type")
+	host := viper.GetString("db.host")
+	user := viper.GetString("db.user")
+	pass := viper.GetString("db.pass")
+	dbname := viper.GetString("db.dbname")
+	charset := viper.GetString("db.charset")
+	loc := viper.GetString("db.loc")
+	native := viper.GetString("db.native")
+	prefix := viper.GetString("db.prefix")
 	var err error
 	dabs := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=%s&parseTime=True&loc=%s&allowNativePasswords=%s",
 		user, pass, host,

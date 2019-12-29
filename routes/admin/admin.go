@@ -2,6 +2,9 @@ package admin
 
 import (
 	"Kronos/app/controllers/admin"
+	"Kronos/app/middle"
+	"Kronos/library/casbin_adapter"
+	"Kronos/library/casbin_helper"
 	"github.com/foolin/goview"
 	"github.com/foolin/goview/supports/ginview"
 	"github.com/gin-gonic/gin"
@@ -20,11 +23,14 @@ func RegAdminRouter(router *gin.Engine) {
 		Delims:       goview.Delims{},
 	})
 
+	e, err := casbin_adapter.InitAdapter()
+	if err != nil {
+		panic("无法初始化权限")
+	}
+	router.Use(middle.AuthAdmin(e, casbin_helper.NotCheck("/admin/login")))
 	group := router.Group("/admin", givMid)
 	{
-		//a := mysqladapter.NewAdapter("mysql", "root:@tcp(127.0.0.1:3306)/")
-		//e := casbin.NewEnforcer("examples/basic_model.conf", a)
-		//group.Use(middle.NewAuthorizer(e))
-		group.GET("/", admin.ShowLogin)
+
+		group.GET("/login", admin.ShowLogin)
 	}
 }
