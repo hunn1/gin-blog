@@ -33,7 +33,6 @@ func Run(router *gin.Engine) {
 	// 数据库初始化
 	dbType := viper.GetString("db.type")
 	host := viper.GetString("db.host")
-
 	user := viper.GetString("db.user")
 	pass := viper.GetString("db.pass")
 	dbname := viper.GetString("db.dbname")
@@ -41,6 +40,7 @@ func Run(router *gin.Engine) {
 	loc := viper.GetString("db.loc")
 	native := viper.GetString("db.native")
 	prefix := viper.GetString("db.prefix")
+
 	databases.InitDB(dbType, host, user, pass, dbname, charset, loc, url.QueryEscape(native), prefix)
 	// 接收退出信号
 	quit := make(chan os.Signal)

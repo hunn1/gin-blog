@@ -4,6 +4,10 @@ name: kronos                  # API Server的名字
 url: http://127.0.0.1:8082   # pingServer函数请求的API服务器的ip:port
 max_ping_count: 10            # pingServer函数try的次数
 jwt_secret:
+session:
+  type: redis # file redis
+  secret: DSDI@#&#@&$
+  name: kronos
 tls:
   addr: :8081
   cert: cert/server.crt
@@ -20,3 +24,7 @@ db:
   user: root
   pass: root_123456
   native: true
+redis:
+  host: 127.0.0.1
+  port: 6379
+  pass:

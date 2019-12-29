@@ -8,7 +8,9 @@ BINARY_NAME=kronos
 BINARY_UNIX=$(BINARY_NAME)_unix
 
 all: run
-
+gotool:
+	gofmt -w .
+	go tool vet . |& grep -v vendor;true
 build:
 	$(GOBUILD) -o ./build/$(BINARY_NAME) -tags=jsoniter -v ./
 

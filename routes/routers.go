@@ -2,10 +2,14 @@ package routes
 
 import (
 	"Kronos/config"
+	"Kronos/except"
 	"Kronos/library/logs"
 	"Kronos/routes/admin"
 	"Kronos/routes/api"
 	"Kronos/routes/web"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
+	"github.com/gin-contrib/sessions/redis"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 )
@@ -14,9 +18,21 @@ func InitRouters() *gin.Engine {
 	_ = config.Init("./config/config.yaml")
 	engine := gin.New()
 	// 自定义中间件
+	// Session
+	var store sessions.Store
+	secret := viper.GetString("session.secret")
+	if viper.GetString("session.type") == "redis" {
+		host := viper.GetString("redis.host")
+		port := viper.GetString("redis.port")
+		pass := viper.GetString("redis.pass")
+		store, _ = redis.NewStore(100, "tcp", host+":"+port, pass, []byte(secret))
+	} else {
+		store = cookie.NewStore([]byte(secret))
+	}
+	engine.Use(sessions.Sessions(viper.GetString("session.name"), store))
 
 	// 错误中间件
-	//engine.Use(except.HandleErrors())
+	engine.Use(except.HandleErrors())
 
 	// 使用日志
 	engine.Use(gin.Logger())

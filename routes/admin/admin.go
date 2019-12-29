@@ -8,7 +8,8 @@ import (
 )
 
 func RegAdminRouter(router *gin.Engine) {
-	// HTML 模板
+
+	//	// HTML 模板
 	givMid := ginview.NewMiddleware(goview.Config{
 		Root:         "resources/views/admin",
 		Extension:    ".html",
@@ -21,6 +22,9 @@ func RegAdminRouter(router *gin.Engine) {
 
 	group := router.Group("/admin", givMid)
 	{
+		//a := mysqladapter.NewAdapter("mysql", "root:@tcp(127.0.0.1:3306)/")
+		//e := casbin.NewEnforcer("examples/basic_model.conf", a)
+		//group.Use(middle.NewAuthorizer(e))
 		group.GET("/", admin.ShowLogin)
 	}
 }

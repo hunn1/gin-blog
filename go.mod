@@ -3,10 +3,15 @@ module Kronos
 go 1.13
 
 require (
+	github.com/allegro/bigcache v1.2.1
+	github.com/casbin/casbin v1.9.1
+	github.com/casbin/casbin/v2 v2.1.2
+	github.com/casbin/mysql-adapter v0.0.0-20170721055345-c494d0c4c842
 	github.com/fastly/go-utils v0.0.0-20180712184237-d95a45783239 // indirect
 	github.com/foolin/goview v0.2.0
 	github.com/fsnotify/fsnotify v1.4.7
-	github.com/gin-gonic/gin v1.4.0
+	github.com/gin-contrib/sessions v0.0.3
+	github.com/gin-gonic/gin v1.5.0
 	github.com/go-sql-driver/mysql v1.4.1
 	github.com/jehiah/go-strftime v0.0.0-20171201141054-1d33003b3869 // indirect
 	github.com/jinzhu/gorm v1.9.11
