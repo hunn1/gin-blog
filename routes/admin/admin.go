@@ -12,7 +12,7 @@ import (
 
 func RegAdminRouter(router *gin.Engine) {
 
-	//	// HTML 模板
+	// HTML 模板
 	givMid := ginview.NewMiddleware(goview.Config{
 		Root:         "resources/views/admin",
 		Extension:    ".html",
@@ -22,15 +22,16 @@ func RegAdminRouter(router *gin.Engine) {
 		DisableCache: true,
 		Delims:       goview.Delims{},
 	})
-
+	// Casbin
 	e, err := casbin_adapter.InitAdapter()
 	if err != nil {
 		panic("无法初始化权限")
 	}
-	router.Use(middle.AuthAdmin(e, casbin_helper.NotCheck("/admin/login")))
+	router.Use(middle.AuthAdmin(e, casbin_helper.NotCheck("/admin/")))
+
 	group := router.Group("/admin", givMid)
 	{
-
+		group.GET("/", admin.ShowLogin)
 		group.GET("/login", admin.ShowLogin)
 	}
 }

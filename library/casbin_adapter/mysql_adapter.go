@@ -3,7 +3,7 @@ package casbin_adapter
 import (
 	"fmt"
 	"github.com/casbin/casbin/v2"
-	adapter "github.com/casbin/mysql-adapter"
+	adapter "github.com/casbin/gorm-adapter/v2"
 	"github.com/spf13/viper"
 )
 
@@ -24,7 +24,11 @@ func InitAdapter() (*casbin.SyncedEnforcer, error) {
 		native,
 	)
 
-	a := adapter.NewAdapter("mysql", dabs)
-	e, err := casbin.NewSyncedEnforcer("examples/basic_model.conf", a)
+	//a, err := adapter.NewAdapterByDB(databases.DB)
+	a, err := adapter.NewAdapter("mysql", dabs, true)
+	if err != nil {
+		return nil, fmt.Errorf("can not Init: %v", err.Error())
+	}
+	e, err := casbin.NewSyncedEnforcer("./config/rbac_model.conf", a)
 	return e, err
 }
