@@ -3,6 +3,7 @@ package middle
 import (
 	"Kronos/helpers"
 	"Kronos/library/casbin_helper"
+	"fmt"
 	"github.com/casbin/casbin/v2"
 	"github.com/gin-gonic/gin"
 )
@@ -16,13 +17,21 @@ func AuthAdmin(enforcer *casbin.SyncedEnforcer, nocheck ...casbin_helper.DontChe
 			return
 		}
 		userId := c.GetString("user_id")
+
 		p := c.Request.URL.Path
 		m := c.Request.Method
+
+		fmt.Println("UserID:" + userId)
+		fmt.Println("Path:" + p)
+		fmt.Println("Method:" + m)
+
 		if b, err := enforcer.Enforce(userId, p, m); err != nil {
-			c.JSON(401, helpers.ApiReturn{Code: 401, Message: err.Error()})
+			c.JSON(401, helpers.NewApiReturn(401, err.Error(), "nil"))
+			c.Abort()
 			return
 		} else if !b {
-			c.JSON(401, helpers.ApiReturn{Code: 401, Message: err.Error()})
+			c.JSON(401, helpers.NewApiReturn(401, "权限验证失败", b))
+			c.Abort()
 			return
 		}
 		c.Next()

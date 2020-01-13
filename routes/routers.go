@@ -2,7 +2,6 @@ package routes
 
 import (
 	"Kronos/config"
-	"Kronos/except"
 	"Kronos/library/logs"
 	"Kronos/routes/admin"
 	"Kronos/routes/api"
@@ -32,7 +31,7 @@ func InitRouters() *gin.Engine {
 	engine.Use(sessions.Sessions(viper.GetString("session.name"), store))
 
 	// 错误中间件
-	engine.Use(except.HandleErrors())
+	//engine.Use(except.HandleErrors())
 
 	// 使用日志
 	engine.Use(gin.Logger())

@@ -1,6 +1,7 @@
 package boot
 
 import (
+	models "Kronos/app/models/migrate"
 	"Kronos/library/databases"
 	"context"
 	"fmt"
@@ -31,6 +32,7 @@ func Run(router *gin.Engine) {
 	}()
 	// 初始化数据库
 	databases.InitDB()
+	models.AutoMigrate()
 	// 接收退出信号
 	quit := make(chan os.Signal)
 	signal.Notify(quit, os.Interrupt)

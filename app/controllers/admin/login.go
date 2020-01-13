@@ -1,24 +1,30 @@
 package admin
 
 import (
-	"fmt"
+	"Kronos/helpers"
 	"github.com/foolin/goview/supports/ginview"
-	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
 func ShowLogin(c *gin.Context) {
-	session := sessions.Default(c)
-
-	session.Set("loginuser", "Testa")
-	session.Save()
-
-	loginuser := session.Get("loginuser")
-	fmt.Println("loginuser:", loginuser)
-	ginview.HTML(c, http.StatusOK, "main/main", nil)
+	//session := sessions.Default(c)
+	//
+	//session.Set("loginuser", "Testa")
+	//session.Save()
+	//
+	//loginuser := session.Get("loginuser")
+	//fmt.Println("loginuser:", loginuser)
+	ginview.HTML(c, http.StatusOK, "login/login", nil)
 }
 
+func TestC(c *gin.Context) {
+	c.JSON(200, helpers.ApiReturn{
+		Code:    0,
+		Message: "111",
+		Data:    nil,
+	})
+}
 func Login(c *gin.Context) {
 	//username, password := c.PostForm("username"), c.PostForm("password")
 	//// Authentication

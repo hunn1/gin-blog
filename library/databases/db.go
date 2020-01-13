@@ -45,6 +45,7 @@ func InitDB() {
 		return prefix + defaultTableName
 	}
 	DB = db
+
 }
 func GetDB() *gorm.DB {
 	return DB

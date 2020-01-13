@@ -5,3 +5,11 @@ type ApiReturn struct {
 	Message string      `json:"message"`
 	Data    interface{} `json:"data"`
 }
+
+func NewApiReturn(code int, msg string, data interface{}) *ApiReturn {
+	return &ApiReturn{
+		code,
+		msg,
+		data,
+	}
+}
