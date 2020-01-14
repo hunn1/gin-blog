@@ -5,7 +5,6 @@ import (
 	"Kronos/app/middle"
 	"Kronos/library/casbin_adapter"
 	"Kronos/library/casbin_helper"
-	"fmt"
 	"github.com/foolin/goview"
 	"github.com/foolin/goview/supports/ginview"
 	"github.com/gin-gonic/gin"
@@ -26,15 +25,15 @@ func RegAdminRouter(router *gin.Engine) {
 	// Casbin
 	e, err := casbin_adapter.InitAdapter()
 
-	_, err = e.Enforce("alice", "data1", "read")
-	// Modify the policy.
-	// e.AddPolicy(...)
-	// e.RemovePolicy(...)
+	//_, err = e.Enforce("alice", "data1", "read")
+	//// Modify the policy.
+	//// e.AddPolicy(...)
+	//// e.RemovePolicy(...)
+	//
+	//// Save the policy back to DB.
+	//err = e.SavePolicy()
 
-	// Save the policy back to DB.
-	err = e.SavePolicy()
-
-	fmt.Println(e)
+	//fmt.Println(e)
 	if err != nil {
 		panic("无法初始化权限")
 	}

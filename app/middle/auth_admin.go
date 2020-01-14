@@ -1,9 +1,7 @@
 package middle
 
 import (
-	"Kronos/helpers"
 	"Kronos/library/casbin_helper"
-	"fmt"
 	"github.com/casbin/casbin/v2"
 	"github.com/foolin/goview/supports/ginview"
 	"github.com/gin-gonic/gin"
@@ -24,9 +22,9 @@ func AuthAdmin(enforcer *casbin.SyncedEnforcer, nocheck ...casbin_helper.DontChe
 		p := strings.ToLower(c.Request.URL.Path)
 		m := strings.ToLower(c.Request.Method)
 
-		fmt.Println("UserID:" + userId)
-		fmt.Println("Path:" + p)
-		fmt.Println("Method:" + m)
+		//fmt.Println("UserID:" + userId)
+		//fmt.Println("Path:" + p)
+		//fmt.Println("Method:" + m)
 
 		var b bool
 		var err error
@@ -34,17 +32,19 @@ func AuthAdmin(enforcer *casbin.SyncedEnforcer, nocheck ...casbin_helper.DontChe
 			// TODO 判断是是否为调试模式
 			// TODO 调试模式下 判断 异步，同步 返回 JSON HTML
 			//c.JSON(403, helpers.NewApiReturn(401, err.Error(), b))
-			c.AbortWithStatus(403)
+			//c.AbortWithStatus(403)
 			ginview.HTML(c, http.StatusForbidden, "err/403", gin.H{"errMsg": err.Error()})
 			c.Abort()
 			return
 		}
 
 		if !b {
-			c.JSON(401, helpers.NewApiReturn(401, "权限验证失败", b))
+
+			//c.JSON(401, helpers.NewApiReturn(401, "权限验证失败", b))
 			//c.Abort()
 			//fmt.Println("Check:" + strconv.FormatBool(b))
 			//c.Redirect(302, "/admin/login")
+			ginview.HTML(c, http.StatusUnauthorized, "err/401", gin.H{"errMsg": "无权访问该页面", "url": "/admin/login"})
 			c.Abort()
 			return
 		}

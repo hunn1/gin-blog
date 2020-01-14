@@ -1,0 +1,21 @@
+{{define "title"}}错误页{{end}}
+{{define "content"}}
+    <div id="app">
+        401 {{.errMsg}}
+        <a href="{{.url}}">回到首页</a>
+    </div>
+{{end}}
+
+{{define "js"}}
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: function () {
+                return {visible: false}
+            }
+        })
+    </script>
+{{end}}
