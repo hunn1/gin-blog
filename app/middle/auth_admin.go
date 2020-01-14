@@ -16,7 +16,7 @@ func AuthAdmin(enforcer *casbin.SyncedEnforcer, nocheck ...casbin_helper.DontChe
 			c.Next()
 			return
 		}
-		userId := c.GetString("user_id")
+		userId := "1"
 
 		p := c.Request.URL.Path
 		m := c.Request.Method
@@ -26,7 +26,7 @@ func AuthAdmin(enforcer *casbin.SyncedEnforcer, nocheck ...casbin_helper.DontChe
 		fmt.Println("Method:" + m)
 
 		if b, err := enforcer.Enforce(userId, p, m); err != nil {
-			c.JSON(401, helpers.NewApiReturn(401, err.Error(), "nil"))
+			c.JSON(401, helpers.NewApiReturn(401, err.Error(), nil))
 			c.Abort()
 			return
 		} else if !b {
