@@ -25,14 +25,23 @@ func RegAdminRouter(router *gin.Engine) {
 	})
 	// Casbin
 	e, err := casbin_adapter.InitAdapter()
+
+	_, err = e.Enforce("alice", "data1", "read")
+	// Modify the policy.
+	// e.AddPolicy(...)
+	// e.RemovePolicy(...)
+
+	// Save the policy back to DB.
+	err = e.SavePolicy()
+
 	fmt.Println(e)
 	if err != nil {
 		panic("无法初始化权限")
 	}
-	router.Use(middle.AuthAdmin(e, casbin_helper.Check("/admin/")))
 
 	ntc := router.Group("/admin", givMid)
 	{
+		ntc.Use(middle.AuthAdmin(e, casbin_helper.NotCheck("/admin/login")))
 		ntc.GET("/", admin.ShowLogin)
 		ntc.GET("login", admin.ShowLogin)
 		ntc.GET("test", admin.TestC)

@@ -30,5 +30,10 @@ func InitAdapter() (*casbin.SyncedEnforcer, error) {
 		return nil, fmt.Errorf("can not Init: %v", err.Error())
 	}
 	e, err := casbin.NewSyncedEnforcer("./config/rbac_model.conf", a)
+	// 开启AutoSave机制
+	e.EnableAutoSave(true)
+	e.EnableLog(true)
+	// 因为开启了AutoSave机制，现在内存中的改变会同步回写到持久层中
+	//e.AddPolicy("admin", "test", "test")
 	return e, err
 }
