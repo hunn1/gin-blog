@@ -2,6 +2,7 @@ package middle
 
 import (
 	"Kronos/library/casbin_helper"
+	"fmt"
 	"github.com/casbin/casbin/v2"
 	"github.com/foolin/goview/supports/ginview"
 	"github.com/gin-gonic/gin"
@@ -22,9 +23,9 @@ func AuthAdmin(enforcer *casbin.SyncedEnforcer, nocheck ...casbin_helper.DontChe
 		p := strings.ToLower(c.Request.URL.Path)
 		m := strings.ToLower(c.Request.Method)
 
-		//fmt.Println("UserID:" + userId)
-		//fmt.Println("Path:" + p)
-		//fmt.Println("Method:" + m)
+		fmt.Println("UserID  v0 :" + userId)
+		fmt.Println("Path v1 :" + p)
+		fmt.Println("Method v2 :" + m)
 
 		var b bool
 		var err error

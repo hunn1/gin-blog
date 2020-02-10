@@ -49,7 +49,7 @@ func InitRouters() *gin.Engine {
 	//engine.NoMethod(func(context *gin.Context) {
 	//	context.JSON(http.StatusNotFound, except.HandleErrors())
 	//})
-	engine.Static("resources/public", "./resources/public")
+	engine.Static("public", "./resources/public")
 	// API 路由注册
 	api.RegisterApiRouter(engine)
 	// web 路由
