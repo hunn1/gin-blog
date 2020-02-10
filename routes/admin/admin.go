@@ -37,12 +37,15 @@ func RegAdminRouter(router *gin.Engine) {
 	if err != nil {
 		panic("无法初始化权限")
 	}
-
+	router.LoadHTMLFiles("resources/views/admin/login/login.html")
+	router.GET("/admin/login", admin.ShowLogin)
 	ntc := router.Group("/admin", givMid)
 	{
+
 		ntc.Use(middle.AuthAdmin(e, casbin_helper.NotCheck("/admin/login")))
+
 		ntc.GET("/", admin.ShowLogin)
-		ntc.GET("login", admin.ShowLogin)
+
 		ntc.GET("test", admin.TestC)
 	}
 

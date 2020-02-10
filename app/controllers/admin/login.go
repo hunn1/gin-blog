@@ -2,7 +2,6 @@ package admin
 
 import (
 	"Kronos/helpers"
-	"github.com/foolin/goview/supports/ginview"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -15,7 +14,8 @@ func ShowLogin(c *gin.Context) {
 	//
 	//loginuser := session.Get("loginuser")
 	//fmt.Println("loginuser:", loginuser)
-	ginview.HTML(c, http.StatusOK, "login/login", nil)
+
+	c.HTML(http.StatusOK, "login.html", nil)
 }
 
 func TestC(c *gin.Context) {
