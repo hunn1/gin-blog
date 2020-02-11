@@ -15,7 +15,7 @@ func ShowLogin(c *gin.Context) {
 	//loginuser := session.Get("loginuser")
 	//fmt.Println("loginuser:", loginuser)
 
-	c.HTML(http.StatusOK, "login.html", nil)
+	c.HTML(http.StatusOK, "admin_login.html", nil)
 }
 
 func TestC(c *gin.Context) {

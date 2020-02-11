@@ -37,7 +37,7 @@ func RegAdminRouter(router *gin.Engine) {
 	if err != nil {
 		panic("无法初始化权限")
 	}
-	router.LoadHTMLFiles("resources/views/admin/login/login.html")
+	router.LoadHTMLFiles("resources/views/admin/login/admin_login.html")
 	router.GET("/admin/login", admin.ShowLogin)
 	ntc := router.Group("/admin", givMid)
 	{
