@@ -44,7 +44,7 @@ func RegAdminRouter(router *gin.Engine) {
 
 		ntc.Use(middle.AuthAdmin(e, casbin_helper.NotCheck("/admin/login")))
 
-		ntc.GET("/", admin.ShowLogin)
+		ntc.GET("/", admin.Dashboard)
 
 		ntc.GET("test", admin.TestC)
 	}
