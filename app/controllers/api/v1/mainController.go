@@ -14,6 +14,6 @@ func ShowApi(c *gin.Context) {
 	msg.Name = "Lena"
 	msg.Message = "hey"
 	msg.Number = 123
-	apiReturn := helpers.ApiReturn{200, "我不知道呀", "msg"}
+	apiReturn := helpers.NewApiReturn(200, "我不知道呀", "msg")
 	c.JSON(200, apiReturn)
 }

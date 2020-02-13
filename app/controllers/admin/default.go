@@ -7,6 +7,5 @@ import (
 )
 
 func Dashboard(c *gin.Context) {
-
 	ginview.HTML(c, http.StatusOK, "main/main", nil)
 }

@@ -24,24 +24,16 @@ func RegAdminRouter(router *gin.Engine) {
 	})
 	// Casbin
 	e, err := casbin_adapter.InitAdapter()
-
-	//_, err = e.Enforce("alice", "data1", "read")
-	//// Modify the policy.
-	//// e.AddPolicy(...)
-	//// e.RemovePolicy(...)
-	//
-	//// Save the policy back to DB.
-	//err = e.SavePolicy()
-
-	//fmt.Println(e)
 	if err != nil {
 		panic("无法初始化权限")
 	}
+	// 单独加载后台登录页
 	router.LoadHTMLFiles("resources/views/admin/login/admin_login.html")
 	router.GET("/admin/login", admin.ShowLogin)
+	// 分组使用母版内容
 	ntc := router.Group("/admin", givMid)
 	{
-
+		// 使用中间件认证
 		ntc.Use(middle.AuthAdmin(e, casbin_helper.NotCheck("/admin/login")))
 
 		ntc.GET("/", admin.Dashboard)

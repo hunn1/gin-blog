@@ -1,6 +1,7 @@
 package middle
 
 import (
+	"Kronos/helpers"
 	"Kronos/library/casbin_helper"
 	"fmt"
 	"github.com/casbin/casbin/v2"
@@ -38,14 +39,12 @@ func AuthAdmin(enforcer *casbin.SyncedEnforcer, nocheck ...casbin_helper.DontChe
 			c.Abort()
 			return
 		}
-
 		if !b {
-
 			//c.JSON(401, helpers.NewApiReturn(401, "权限验证失败", b))
 			//c.Abort()
 			//fmt.Println("Check:" + strconv.FormatBool(b))
 			//c.Redirect(302, "/admin/login")
-			ginview.HTML(c, http.StatusUnauthorized, "err/401", gin.H{"errMsg": "无权访问该页面", "url": "/admin/login"})
+			ginview.HTML(c, http.StatusUnauthorized, "err/401", helpers.NewApiRedirect(200, "无权限访问该内容", "/admin/login"))
 			c.Abort()
 			return
 		}

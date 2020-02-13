@@ -19,19 +19,16 @@ func ShowLogin(c *gin.Context) {
 }
 
 func TestC(c *gin.Context) {
-	c.JSON(200, helpers.ApiReturn{
-		Code:    0,
-		Message: "111",
-		Data:    nil,
-	})
+	c.JSON(200, helpers.NewApiReturn(0, "111", nil))
 }
+
 func Login(c *gin.Context) {
 	//username, password := c.PostForm("username"), c.PostForm("password")
 	//// Authentication
 	//// blahblah...
 	//
 	//// Generate random session id
-	//u, err := uuid.NewRandom()
+	//u, err := .NewRandom()
 	//if err != nil {
 	//	log.Fatal(err)
 	//}
@@ -40,5 +37,5 @@ func Login(c *gin.Context) {
 	//component.GlobalCache.Set(sessionId, []byte(username))
 	//// Send cache key back to client in cookie
 	//c.SetCookie("current_subject", sessionId, 30*60, "/resource", "", false, true)
-	//c.JSON(200, component.RestResponse{Code: 1, Message: username + " logged in successfully"})
+	//c.JSON(200, helpers.ApiReturn{ 200, username + " logged in successfully", nil})
 }

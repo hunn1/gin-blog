@@ -1,17 +1,20 @@
 package helpers
 
-type ApiReturn struct {
-	Code    int         `json:"code"`
-	Message string      `json:"message"`
-	Data    interface{} `json:"data,omitempty"`
-	//RedirectUrl string      `json:"redirect_url,omitempty"`
+import "github.com/gin-gonic/gin"
+
+func NewApiReturn(code int, msg string, data interface{}) *gin.H {
+	return &gin.H{
+		"code":    code,
+		"message": msg,
+		"data":    data,
+	}
 }
 
-func NewApiReturn(code int, msg string, data interface{}) *ApiReturn {
-	return &ApiReturn{
-		code,
-		msg,
-		data,
-		//redirect_url,
+func NewApiRedirect(code int, msg string, redirectUrl string) *gin.H {
+
+	return &gin.H{
+		"code":        code,
+		"message":     msg,
+		"redirectUrl": redirectUrl,
 	}
 }
