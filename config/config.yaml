@@ -8,6 +8,7 @@ session:
   type: redis # file redis
   secret: DSDI@#&#@&$
   name: kronos
+
 tls:
   addr: :8081
   cert: cert/server.crt

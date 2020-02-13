@@ -1,32 +1,33 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-    <meta charset="utf-8" />
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+    <meta charset="utf-8"/>
     <title>登录管理系统</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no"/>
     <link rel="apple-touch-icon" href="/public/pages/ico/60.png">
     <link rel="apple-touch-icon" sizes="76x76" href="/public/pages/ico/76.png">
     <link rel="apple-touch-icon" sizes="120x120" href="/public/pages/ico/120.png">
     <link rel="apple-touch-icon" sizes="152x152" href="/public/pages/ico/152.png">
-    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico"/>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-touch-fullscreen" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta content="" name="description" />
-    <meta content="" name="author" />
-    <link href="/public/assets/plugins/pace/pace-theme-flash.css" rel="stylesheet" type="text/css" />
-    <link href="/public/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="/public/assets/plugins/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css" />
-    <link href="/public/assets/plugins/jquery-scrollbar/jquery.scrollbar.css" rel="stylesheet" type="text/css" media="screen" />
-    <link href="/public/assets/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css" media="screen" />
-    <link href="/public/assets/plugins/switchery/css/switchery.min.css" rel="stylesheet" type="text/css" media="screen" />
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
+    <link href="/public/assets/plugins/pace/pace-theme-flash.css" rel="stylesheet" type="text/css"/>
+    <link href="/public/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/public/assets/plugins/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css"/>
+    <link href="/public/assets/plugins/jquery-scrollbar/jquery.scrollbar.css" rel="stylesheet" type="text/css"
+          media="screen"/>
+    <link href="/public/assets/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css" media="screen"/>
+    <link href="/public/assets/plugins/switchery/css/switchery.min.css" rel="stylesheet" type="text/css"
+          media="screen"/>
     <link href="/public/pages/css/pages-icons.css" rel="stylesheet" type="text/css">
-    <link class="main-stylesheet" href="/public/pages/css/themes/light.css" rel="stylesheet" type="text/css" />
+    <link class="main-stylesheet" href="/public/pages/css/themes/light.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript">
-        window.onload = function()
-        {
+        window.onload = function () {
             // fix for windows 8
             if (navigator.appVersion.indexOf("Windows NT 6.2") != -1)
                 document.head.innerHTML += '<link rel="stylesheet" type="text/css" href="/public/pages/css/windows.chrome.fix.css" />'
@@ -38,7 +39,10 @@
     <!-- START Login Background Pic Wrapper-->
     <div class="bg-pic">
         <!-- START Background Pic-->
-        <img src="/public/assets/img/demo/new-york-city-buildings-sunrise-morning-hd-wallpaper.jpg" data-src="/public/assets/img/demo/new-york-city-buildings-sunrise-morning-hd-wallpaper.jpg" data-src-retina="/public/assets/img/demo/new-york-city-buildings-sunrise-morning-hd-wallpaper.jpg" alt="" class="lazy">
+        <img src="/public/assets/img/demo/new-york-city-buildings-sunrise-morning-hd-wallpaper.jpg"
+             data-src="/public/assets/img/demo/new-york-city-buildings-sunrise-morning-hd-wallpaper.jpg"
+             data-src-retina="/public/assets/img/demo/new-york-city-buildings-sunrise-morning-hd-wallpaper.jpg" alt=""
+             class="lazy">
         <!-- END Background Pic-->
         <!-- START Background Caption-->
 
@@ -48,10 +52,11 @@
     <!-- START Login Right Container-->
     <div class="login-container bg-white">
         <div class="p-l-50 m-l-20 p-r-50 m-r-20 p-t-50 m-t-30 sm-p-l-15 sm-p-r-15 sm-p-t-40">
-            <img src="/public/assets/img/logo.png" alt="logo" data-src="/public/assets/img/logo.png" data-src-retina="/public/assets/img/logo_2x.png" width="78" height="22">
+            <img src="/public/assets/img/logo.png" alt="logo" data-src="/public/assets/img/logo.png"
+                 data-src-retina="/public/assets/img/logo_2x.png" width="78" height="22">
             <p class="p-t-35">登录后台面板</p>
             <!-- START Login Form -->
-            <form id="form-login" class="p-t-15" role="form" action="index.html">
+            <form id="form-login" class="p-t-15" role="form" action="" method="post">
                 <!-- START Form Control-->
                 <div class="form-group form-group-default">
                     <label>账号</label>
@@ -93,7 +98,9 @@
         <!-- BEGIN Overlay Header !-->
         <div class="container-fluid">
             <!-- BEGIN Overlay Logo !-->
-            <img class="overlay-brand" src="/public/assets/img/logo.png" alt="logo" data-src="/public/assets/img/logo.png" data-src-retina="/public/assets/img/logo_2x.png" width="78" height="22">
+            <img class="overlay-brand" src="/public/assets/img/logo.png" alt="logo"
+                 data-src="/public/assets/img/logo.png" data-src-retina="/public/assets/img/logo_2x.png" width="78"
+                 height="22">
             <!-- END Overlay Logo !-->
             <!-- BEGIN Overlay Close !-->
             <a href="#" class="close-icon-light overlay-close text-black fs-16">
@@ -125,8 +132,7 @@
 <!-- END VENDOR JS -->
 <script src="/public/pages/js/pages.min.js"></script>
 <script>
-    $(function()
-    {
+    $(function () {
         $('#form-login').validate()
     })
 </script>

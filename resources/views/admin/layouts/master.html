@@ -1,8 +1,3 @@
-
-
-
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,95 +6,17 @@
 
 </head>
 <body class="fixed-header menu-pin">
-<!-- BEGIN SIDEBPANEL-->
-<nav class="page-sidebar" data-pages="sidebar">
-    <!-- BEGIN SIDEBAR MENU TOP TRAY CONTENT-->
-    <!-- END SIDEBAR MENU TOP TRAY CONTENT-->
-    <!-- BEGIN SIDEBAR MENU HEADER-->
-    <div class="sidebar-header">
-        <img src="/public/assets/img/logo.png" alt="logo" class="brand" data-src="/public/assets/img/logo.png" data-src-retina="/public/assets/img/logo_2x.png" width="78" height="22">
-    </div>
-    <!-- END SIDEBAR MENU HEADER-->
-    <!-- START SIDEBAR MENU -->
-    <div class="sidebar-menu">
-        <!-- BEGIN SIDEBAR MENU ITEMS-->
-        <ul class="menu-items">
-            <li class="m-t-30 ">
-                <a href="index.html" class="detailed">
-                    <span class="title">面板</span>
-                </a>
-                <span class="icon-thumbnail"><i data-feather="shield"></i></span>
-            </li>
-        </ul>
-        <div class="clearfix"></div>
-    </div>
-    <!-- END SIDEBAR MENU -->
-</nav>
-<!-- END SIDEBAR -->
-<!-- END SIDEBPANEL-->
+{{include "public/menu"}}
 <!-- START PAGE-CONTAINER -->
 <div class="page-container ">
-    <!-- START HEADER -->
-    <div class="header ">
-        <!-- START MOBILE SIDEBAR TOGGLE -->
-        <a href="#" class="btn-link toggle-sidebar d-lg-none pg pg-menu" data-toggle="sidebar">
-        </a>
-        <!-- END MOBILE SIDEBAR TOGGLE -->
-        <div class="">
-            <div class="brand inline">
-                <img src="/public/assets/img/logo.png" alt="logo" data-src="/public/assets/img/logo.png" data-src-retina="/public/assets/img/logo_2x.png" width="78" height="22">
-            </div>
-        </div>
-        <div class="d-flex align-items-center">
-
-            <!-- START User Info-->
-            <div class="pull-left p-r-10 fs-14 font-heading d-lg-inline-block d-none m-l-20">
-                <span class="semi-bold">Admin</span> <span class="text-master">Nest</span>
-            </div>
-            <div class="dropdown pull-right d-lg-inline-block d-none">
-                <button class="profile-dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <span class="thumbnail-wrapper d32 circular inline">
-              <img src="/public/assets/img/profiles/avatar.jpg" alt="" data-src="/public/assets/img/profiles/avatar.jpg" data-src-retina="/public/assets/img/profiles/avatar_small2x.jpg" width="32" height="32">
-              </span>
-                </button>
-                <div class="dropdown-menu dropdown-menu-right profile-dropdown" role="menu">
-                    <a href="#" class="dropdown-item"><i class="pg-settings_small"></i> 个人资料 </a>
-                    <a href="#" class="clearfix bg-master-lighter dropdown-item">
-                        <span class="pull-left">登出</span>
-                        <span class="pull-right"><i class="pg-power"></i></span>
-                    </a>
-                </div>
-            </div>
-            <!-- END User Info-->
-
-        </div>
-    </div>
-    <!-- END HEADER -->
+    {{include "public/avatar"}}
     <!-- START PAGE CONTENT WRAPPER -->
     <div class="page-content-wrapper ">
         <!-- START PAGE CONTENT -->
         <div class="content ">
             {{template  "content" .}}
         </div>
-        <!-- END PAGE CONTENT -->
-        <!-- START COPYRIGHT -->
-        <!-- START CONTAINER FLUID -->
-        <!-- START CONTAINER FLUID -->
-        <div class=" container-fluid  container-fixed-lg footer">
-            <div class="copyright sm-text-center">
-                <p class="small no-margin pull-left sm-pull-reset">
-                    <span class="hint-text">Copyright &copy; 2017 </span>
-                    <span class="font-montserrat">REVOX</span>.
-                    <span class="hint-text">All rights reserved. </span>
-                    <span class="sm-block"><a href="#" class="m-l-10 m-r-10">Terms of use</a> <span class="muted">|</span> <a href="#" class="m-l-10">Privacy Policy</a></span>
-                </p>
-                <p class="small no-margin pull-right sm-pull-reset">
-                    Hand-crafted <span class="hint-text">&amp; made with Love</span>
-                </p>
-                <div class="clearfix"></div>
-            </div>
-        </div>
-        <!-- END COPYRIGHT -->
+        {{include "public/copyright"}}
     </div>
     <!-- END PAGE CONTENT WRAPPER -->
 </div>
@@ -113,3 +30,4 @@
 {{template  "js" .}}
 </body>
 </html>
+

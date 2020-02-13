@@ -2,6 +2,7 @@ package admin
 
 import (
 	"Kronos/helpers"
+	"github.com/foolin/goview/supports/ginview"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -19,11 +20,17 @@ func ShowLogin(c *gin.Context) {
 }
 
 func TestC(c *gin.Context) {
-	c.JSON(200, helpers.NewApiReturn(0, "111", nil))
+	ginview.HTML(c, http.StatusUnauthorized, "err/401", helpers.NewApiRedirect(200, "无权限访问该内容", "/admin/login"))
+	c.Abort()
+	//c.JSON(200, helpers.NewApiReturn(0, "111", nil))
 }
 
 func Login(c *gin.Context) {
+	//session := sessions.Default(c)
+
 	//username, password := c.PostForm("username"), c.PostForm("password")
+
+	//c.JSON(200, helpers.NewApiReturn(200, "", gin.H{"username": username, "password": session.Get("Test")}))
 	//// Authentication
 	//// blahblah...
 	//

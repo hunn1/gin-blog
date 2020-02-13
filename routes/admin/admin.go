@@ -5,13 +5,15 @@ import (
 	"Kronos/app/middle"
 	"Kronos/library/casbin_adapter"
 	"Kronos/library/casbin_helper"
+	"Kronos/library/session"
 	"github.com/foolin/goview"
 	"github.com/foolin/goview/supports/ginview"
 	"github.com/gin-gonic/gin"
 )
 
 func RegAdminRouter(router *gin.Engine) {
-
+	// 初始化Session
+	router.Use(session.NewSessionStore())
 	// HTML 模板
 	givMid := ginview.NewMiddleware(goview.Config{
 		Root:         "resources/views/admin",
@@ -30,6 +32,7 @@ func RegAdminRouter(router *gin.Engine) {
 	// 单独加载后台登录页
 	router.LoadHTMLFiles("resources/views/admin/login/admin_login.html")
 	router.GET("/admin/login", admin.ShowLogin)
+	router.POST("/admin/login", admin.Login)
 	// 分组使用母版内容
 	ntc := router.Group("/admin", givMid)
 	{
