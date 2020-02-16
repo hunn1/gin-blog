@@ -8,7 +8,11 @@ import (
 
 var Models = []interface{}{
 	&models.Article{},
-	&models.User{},
+	&models.Admin{},
+	&models.Permissions{},
+	&models.RolePermission{},
+	&models.Roles{},
+	&models.UserRole{},
 }
 
 func AutoMigrate() {
