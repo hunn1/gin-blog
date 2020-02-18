@@ -3,10 +3,12 @@ package middle
 import (
 	"Kronos/helpers"
 	"Kronos/library/casbin_helper"
+	"Kronos/library/session"
 	"github.com/casbin/casbin/v2"
 	"github.com/foolin/goview/supports/ginview"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -18,7 +20,10 @@ func AuthAdmin(enforcer *casbin.SyncedEnforcer, nocheck ...casbin_helper.DontChe
 			c.Next()
 			return
 		}
-		userId := "1"
+		// Session 判断权限
+		getSession := session.GetSession(c)
+		// fmt.Println("SESS : " + strconv.Itoa(int(getSession)))
+		userId := strconv.Itoa(int(getSession))
 
 		p := strings.ToLower(c.Request.URL.Path)
 		m := strings.ToLower(c.Request.Method)
@@ -34,7 +39,7 @@ func AuthAdmin(enforcer *casbin.SyncedEnforcer, nocheck ...casbin_helper.DontChe
 			// TODO 调试模式下 判断 异步，同步 返回 JSON HTML
 			//c.JSON(403, helpers.NewApiReturn(401, err.Error(), b))
 			//c.AbortWithStatus(403)
-			ginview.HTML(c, http.StatusForbidden, "err/403", gin.H{"errMsg": err.Error()})
+			ginview.HTML(c, http.StatusForbidden, "err/403", helpers.NewApiReturn(403, err.Error(), nil))
 			c.Abort()
 			return
 		}

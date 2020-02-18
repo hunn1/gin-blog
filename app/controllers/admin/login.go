@@ -1,48 +1,46 @@
 package admin
 
 import (
+	"Kronos/app/models"
 	"Kronos/helpers"
-	"github.com/foolin/goview/supports/ginview"
+	"Kronos/library/databases"
+	"Kronos/library/password"
+	"Kronos/library/session"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
+// 登录页面显示
 func ShowLogin(c *gin.Context) {
-	//session := sessions.Default(c)
-	//
-	//session.Set("loginuser", "Testa")
-	//session.Save()
-	//
-	//loginuser := session.Get("loginuser")
-	//fmt.Println("loginuser:", loginuser)
-
 	c.HTML(http.StatusOK, "admin_login.html", nil)
 }
 
-func TestC(c *gin.Context) {
-	ginview.HTML(c, http.StatusUnauthorized, "err/401", helpers.NewApiRedirect(200, "无权限访问该内容", "/admin/login"))
-	c.Abort()
-	//c.JSON(200, helpers.NewApiReturn(0, "111", nil))
+// 登录
+func Login(c *gin.Context) {
+
+	username, pass := c.PostForm("username"), c.PostForm("password")
+	var admin models.Admin
+	adminData := databases.DB.Where("username=?", username).First(&admin)
+	if adminData.Error != nil {
+		c.JSON(200, helpers.NewApiReturn(400, "账号或密码错误", nil))
+		return
+	}
+
+	passBool := password.Compare(admin.Password, pass)
+	if passBool != nil {
+		c.JSON(200, helpers.NewApiReturn(400, "账号或密码错误", nil))
+		return
+	}
+	session.SaveSession(c, uint(admin.ID))
+	c.Redirect(302, "/admin/")
 }
 
-func Login(c *gin.Context) {
-	//session := sessions.Default(c)
-
-	//username, password := c.PostForm("username"), c.PostForm("password")
-
-	//c.JSON(200, helpers.NewApiReturn(200, "", gin.H{"username": username, "password": session.Get("Test")}))
-	//// Authentication
-	//// blahblah...
-	//
-	//// Generate random session id
-	//u, err := .NewRandom()
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//sessionId := fmt.Sprintf("%s-%s", u.String(), username)
-	//// Store current subject in cache
-	//component.GlobalCache.Set(sessionId, []byte(username))
-	//// Send cache key back to client in cookie
-	//c.SetCookie("current_subject", sessionId, 30*60, "/resource", "", false, true)
-	//c.JSON(200, helpers.ApiReturn{ 200, username + " logged in successfully", nil})
+// 登出
+func Logout(c *gin.Context) {
+	if hasSession := session.HadSession(c); hasSession == false {
+		c.JSON(200, helpers.NewApiReturn(200, "未进行登录", nil))
+		return
+	}
+	session.ClearAuthSession(c)
+	c.JSON(200, helpers.NewApiReturn(200, "退出成功", nil))
 }

@@ -12,8 +12,7 @@ import (
 )
 
 func RegAdminRouter(router *gin.Engine) {
-	// 初始化Session
-	router.Use(session.NewSessionStore())
+
 	// HTML 模板
 	givMid := ginview.NewMiddleware(goview.Config{
 		Root:         "resources/views/admin",
@@ -37,11 +36,21 @@ func RegAdminRouter(router *gin.Engine) {
 	ntc := router.Group("/admin", givMid)
 	{
 		// 使用中间件认证
-		ntc.Use(middle.AuthAdmin(e, casbin_helper.NotCheck("/admin/login")))
-
+		ntc.Use(middle.AuthAdmin(e, casbin_helper.NotCheck("/admin/login", "/admin/logout")))
+		// 初始化Session
+		ntc.Use(session.AuthSessionMiddle())
+		// 登出
+		ntc.GET("/logout", admin.Logout)
+		// 后台面板
 		ntc.GET("/", admin.Dashboard)
 
-		ntc.GET("test", admin.TestC)
+		users := ntc.Group("user")
+		{
+			users.GET("lists")
+			users.GET("edit")
+			users.POST("apply")
+			users.POST("delete")
+		}
 	}
 
 }
