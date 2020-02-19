@@ -30,9 +30,9 @@ func RegAdminRouter(router *gin.Engine) {
 	}
 	// 单独加载后台登录页
 	router.LoadHTMLFiles("resources/views/admin/login/admin_login.html")
-	router.GET("/admin/login", admin.ShowLogin)
-	router.POST("/admin/login", admin.Login)
+
 	// 分组使用母版内容
+	router.Use(session.NewSessionStore())
 	ntc := router.Group("/admin", givMid)
 	{
 		// 使用中间件认证
@@ -40,10 +40,12 @@ func RegAdminRouter(router *gin.Engine) {
 		// 初始化Session
 		ntc.Use(session.AuthSessionMiddle())
 		// 登出
-		ntc.GET("/logout", admin.Logout)
+		ntc.GET("logout", admin.Logout)
+		ntc.GET("login", admin.ShowLogin)
+		ntc.POST("login", admin.Login)
 		// 后台面板
 		ntc.GET("/", admin.Dashboard)
-
+		// 用户
 		users := ntc.Group("user")
 		{
 			users.GET("lists")

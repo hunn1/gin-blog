@@ -4,6 +4,7 @@ import (
 	"Kronos/helpers"
 	"github.com/foolin/goview/supports/ginview"
 	"github.com/gin-contrib/sessions"
+
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-contrib/sessions/redis"
 	"github.com/gin-gonic/gin"
@@ -21,15 +22,16 @@ func NewSessionStore() gin.HandlerFunc {
 	secret := viper.GetString("session.secret")
 	name := viper.GetString("session.name")
 	// 判断
+	var store sessions.Store
 	switch typeOf {
 	case "redis":
-		store := redisStore(secret)
+		store = redisStore(secret)
 		return sessions.Sessions(name, store)
-
 	case "cookie":
-		fallthrough
+		store = cookieStore(secret)
+		return sessions.Sessions(name, store)
 	default:
-		store := cookieStore(secret)
+		store = cookieStore(secret)
 		return sessions.Sessions(name, store)
 	}
 }
@@ -53,11 +55,15 @@ func cookieStore(secret string) cookie.Store {
 func AuthSessionMiddle() gin.HandlerFunc {
 
 	return func(c *gin.Context) {
-		NewSessionStore()
 		session := sessions.Default(c)
 		userId := session.Get(UserKey)
 		if userId == nil {
-			ginview.HTML(c, http.StatusUnauthorized, "err/401", helpers.NewApiRedirect(200, "请登录后重试...", "/admin/login"))
+			ginview.HTML(
+				c,
+				http.StatusUnauthorized,
+				"err/401",
+				helpers.NewApiRedirect(200, "请登录后重试...", "/admin/login"),
+			)
 			c.Abort()
 			return
 		}

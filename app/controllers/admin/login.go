@@ -17,7 +17,6 @@ func ShowLogin(c *gin.Context) {
 
 // 登录
 func Login(c *gin.Context) {
-
 	username, pass := c.PostForm("username"), c.PostForm("password")
 	var admin models.Admin
 	adminData := databases.DB.Where("username=?", username).First(&admin)
@@ -25,7 +24,6 @@ func Login(c *gin.Context) {
 		c.JSON(200, helpers.NewApiReturn(400, "账号或密码错误", nil))
 		return
 	}
-
 	passBool := password.Compare(admin.Password, pass)
 	if passBool != nil {
 		c.JSON(200, helpers.NewApiReturn(400, "账号或密码错误", nil))

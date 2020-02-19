@@ -7,6 +7,7 @@ import (
 	"Kronos/routes/api"
 	"Kronos/routes/web"
 	"github.com/gin-contrib/sessions"
+
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-contrib/sessions/redis"
 	"github.com/gin-gonic/gin"
@@ -54,6 +55,7 @@ func InitRouters() *gin.Engine {
 	api.RegisterApiRouter(engine)
 	// web 路由
 	web.RegisterWebRouter(engine)
+	// 后台路由
 	admin.RegAdminRouter(engine)
 	// ... 其他路由注册
 

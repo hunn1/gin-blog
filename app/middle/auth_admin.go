@@ -22,15 +22,9 @@ func AuthAdmin(enforcer *casbin.SyncedEnforcer, nocheck ...casbin_helper.DontChe
 		}
 		// Session 判断权限
 		getSession := session.GetSession(c)
-		// fmt.Println("SESS : " + strconv.Itoa(int(getSession)))
 		userId := strconv.Itoa(int(getSession))
-
 		p := strings.ToLower(c.Request.URL.Path)
 		m := strings.ToLower(c.Request.Method)
-
-		//fmt.Println("UserID  v0 :" + userId)
-		//fmt.Println("Path v1 :" + p)
-		//fmt.Println("Method v2 :" + m)
 
 		var b bool
 		var err error
