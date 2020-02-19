@@ -40,5 +40,6 @@ func Logout(c *gin.Context) {
 		return
 	}
 	session.ClearAuthSession(c)
-	c.JSON(200, helpers.NewApiReturn(200, "退出成功", nil))
+	//c.JSON(200, helpers.NewApiReturn(200, "退出成功", nil))
+	c.Redirect(302, "/admin/login")
 }

@@ -1,8 +1,6 @@
 package session
 
 import (
-	"Kronos/helpers"
-	"github.com/foolin/goview/supports/ginview"
 	"github.com/gin-contrib/sessions"
 
 	"github.com/gin-contrib/sessions/cookie"
@@ -58,16 +56,17 @@ func AuthSessionMiddle() gin.HandlerFunc {
 		session := sessions.Default(c)
 		userId := session.Get(UserKey)
 		if userId == nil {
-			ginview.HTML(
-				c,
-				http.StatusUnauthorized,
-				"err/401",
-				helpers.NewApiRedirect(200, "请登录后重试...", "/admin/login"),
-			)
+			//ginview.HTML(
+			//	c,
+			//	http.StatusUnauthorized,
+			//	"err/401",
+			//	helpers.NewApiRedirect(200, "请登录后重试...", "/admin/login"),
+			//)
+			c.Redirect(302, "/admin/login")
 			c.Abort()
 			return
 		}
-		c.Set(UserKey, userId.(uint))
+		c.Set(UserKey, userId)
 		c.Next()
 		return
 	}

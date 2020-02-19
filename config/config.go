@@ -47,6 +47,7 @@ func (c *Config) initConfig() error {
 func (c *Config) watchConfig() {
 	viper.WatchConfig()
 	viper.OnConfigChange(func(in fsnotify.Event) {
-		log.Printf("Config file Changed: %s \n", in.Name)
+		log.Printf("Config file Changed: %s %s %s \n", in.Name, in.String(), in.Op)
+		recover()
 	})
 }

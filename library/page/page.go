@@ -11,14 +11,14 @@ import (
 
 //Pagination 分页器
 type Pagination struct {
-	Request *http.Request
-	Total   int
-	Pernum  int
-	Page    int64
+	Request  *http.Request
+	Total    int
+	Perineum int
+	Page     int64
 }
 
 //NewPagination 新建分页器
-func NewPagination(req *http.Request, total int, pernum int) *Pagination {
+func NewPagination(req *http.Request, total int, perineum int) *Pagination {
 	queryParams := req.URL.Query()
 	//从当前请求中获取page
 	page := queryParams.Get("page")
@@ -28,23 +28,23 @@ func NewPagination(req *http.Request, total int, pernum int) *Pagination {
 	p, _ := strconv.ParseInt(page, 10, 0)
 
 	return &Pagination{
-		Request: req,
-		Total:   total,
-		Pernum:  pernum,
-		Page:    p,
+		Request:  req,
+		Total:    total,
+		Perineum: perineum,
+		Page:     p,
 	}
 }
 
 //Pages 渲染生成html分页标签
 func (p *Pagination) Pages() string {
 
-	pagenum := int(p.Page)
-	if pagenum == 0 {
+	pageful := int(p.Page)
+	if pageful == 0 {
 		return ""
 	}
 
 	//计算总页数
-	var totalPageNum = int(math.Ceil(float64(p.Total) / float64(p.Pernum)))
+	var totalPageNum = int(math.Ceil(float64(p.Total) / float64(p.Perineum)))
 
 	//首页链接
 	var firstLink string
@@ -58,18 +58,18 @@ func (p *Pagination) Pages() string {
 	var pageLinks []string
 
 	//首页和上一页链接
-	if pagenum > 1 {
+	if pageful > 1 {
 		firstLink = fmt.Sprintf(`<li><a href="%s">首页</a></li>`, p.pageURL("1"))
-		prevLink = fmt.Sprintf(`<li><a href="%s">上一页</a></li>`, p.pageURL(strconv.Itoa(pagenum-1)))
+		prevLink = fmt.Sprintf(`<li><a href="%s">上一页</a></li>`, p.pageURL(strconv.Itoa(pageful-1)))
 	} else {
 		firstLink = `<li class="disabled"><a href="#">首页</a></li>`
 		prevLink = `<li class="disabled"><a href="#">上一页</a></li>`
 	}
 
 	//末页和下一页
-	if pagenum < totalPageNum {
+	if pageful < totalPageNum {
 		lastLink = fmt.Sprintf(`<li><a href="%s">末页</a></li>`, p.pageURL(strconv.Itoa(totalPageNum)))
-		nextLink = fmt.Sprintf(`<li><a href="%s">下一页</a></li>`, p.pageURL(strconv.Itoa(pagenum+1)))
+		nextLink = fmt.Sprintf(`<li><a href="%s">下一页</a></li>`, p.pageURL(strconv.Itoa(pageful+1)))
 	} else {
 		lastLink = `<li class="disabled"><a href="#">末页</a></li>`
 		nextLink = `<li class="disabled"><a href="#">下一页</a></li>`
@@ -77,8 +77,8 @@ func (p *Pagination) Pages() string {
 
 	//生成中间页码链接
 	pageLinks = make([]string, 0, 10)
-	startPos := pagenum - 3
-	endPos := pagenum + 3
+	startPos := pageful - 3
+	endPos := pageful + 3
 	if startPos < 1 {
 		endPos = endPos + int(math.Abs(float64(startPos))) + 1
 		startPos = 1
@@ -88,7 +88,7 @@ func (p *Pagination) Pages() string {
 	}
 	for i := startPos; i <= endPos; i++ {
 		var s string
-		if i == pagenum {
+		if i == pageful {
 			s = fmt.Sprintf(`<li class="active"><a href="%s">%d</a></li>`, p.pageURL(strconv.Itoa(i)), i)
 		} else {
 			s = fmt.Sprintf(`<li><a href="%s">%d</a></li>`, p.pageURL(strconv.Itoa(i)), i)

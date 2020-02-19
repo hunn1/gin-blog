@@ -36,6 +36,8 @@ func RegAdminRouter(router *gin.Engine) {
 
 	// 分组使用母版内容
 	router.Use(session.NewSessionStore())
+	router.GET("/admin/login", auth.ShowLogin)
+	router.POST("/admin/login", auth.Login)
 	ntc := router.Group("/admin", givMid)
 	{
 		// 使用中间件认证
@@ -44,8 +46,7 @@ func RegAdminRouter(router *gin.Engine) {
 		ntc.Use(session.AuthSessionMiddle())
 		// 登出
 		ntc.GET("logout", auth.Logout)
-		ntc.GET("login", auth.ShowLogin)
-		ntc.POST("login", auth.Login)
+
 		// 后台面板
 		ntc.GET("/", dashboard.Index)
 		// 用户
