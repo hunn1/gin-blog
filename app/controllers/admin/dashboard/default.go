@@ -1,4 +1,4 @@
-package admin
+package dashboard
 
 import (
 	"github.com/foolin/goview/supports/ginview"
@@ -6,6 +6,6 @@ import (
 	"net/http"
 )
 
-func Dashboard(c *gin.Context) {
+func Index(c *gin.Context) {
 	ginview.HTML(c, http.StatusOK, "main/main", nil)
 }

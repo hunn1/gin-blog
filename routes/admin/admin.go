@@ -1,7 +1,10 @@
 package admin
 
 import (
-	"Kronos/app/controllers/admin"
+	"Kronos/app/controllers/admin/admins"
+	"Kronos/app/controllers/admin/auth"
+	"Kronos/app/controllers/admin/dashboard"
+	"Kronos/app/controllers/admin/role"
 	"Kronos/app/middle"
 	"Kronos/library/casbin_adapter"
 	"Kronos/library/casbin_helper"
@@ -40,19 +43,28 @@ func RegAdminRouter(router *gin.Engine) {
 		// 初始化Session
 		ntc.Use(session.AuthSessionMiddle())
 		// 登出
-		ntc.GET("logout", admin.Logout)
-		ntc.GET("login", admin.ShowLogin)
-		ntc.POST("login", admin.Login)
+		ntc.GET("logout", auth.Logout)
+		ntc.GET("login", auth.ShowLogin)
+		ntc.POST("login", auth.Login)
 		// 后台面板
-		ntc.GET("/", admin.Dashboard)
+		ntc.GET("/", dashboard.Index)
 		// 用户
 		users := ntc.Group("user")
 		{
-			users.GET("lists")
-			users.GET("edit")
-			users.POST("apply")
-			users.POST("delete")
+			users.GET("lists", admins.Lists)
+			//users.GET("edit")
+			//users.POST("apply")
+			//users.POST("delete")
 		}
+		// 角色
+		roles := ntc.Group("role")
+		{
+			roles.GET("lists", role.Lists)
+			//roles.GET("edit")
+			//roles.POST("apply")
+			//roles.POST("delete")
+		}
+
 	}
 
 }

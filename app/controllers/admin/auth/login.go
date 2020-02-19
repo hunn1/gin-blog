@@ -1,4 +1,4 @@
-package admin
+package auth
 
 import (
 	"Kronos/app/models"
