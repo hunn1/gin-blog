@@ -1,0 +1,15 @@
+{{define "title"}}角色 - 列表页 {{end}}
+{{define "content"}}
+
+    {{.page}}
+    {{ range .list}}
+        <span>{{.ID}}</span>
+        <span>{{.Title}}</span>
+    {{end}}
+{{end}}
+
+{{define "js"}}
+    {{include "public/footer"}}
+    <!-- END PAGE LEVEL JS -->
+{{end}}
+
