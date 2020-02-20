@@ -38,7 +38,7 @@ func InitAdapter() (*casbin.SyncedEnforcer, error) {
 	e.EnableLog(enableLog)
 	// 10秒重新加载一次权限
 	e.StartAutoLoadPolicy(10 * time.Second)
-	e.EnableAutoBuildRoleLinks(true)
+	//e.EnableAutoBuildRoleLinks(true)
 	// 因为开启了AutoSave机制，现在内存中的改变会同步回写到持久层中
 	//e.AddPolicy("admin", "test", "test")
 	return e, err
