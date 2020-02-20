@@ -35,6 +35,7 @@ func GetCount(maps interface{}) (int, error) {
 	return count, nil
 }
 
+// 获取角色列表
 func GetRolesPage(pageNum int, pageSize int, maps interface{}) ([]*Roles, error) {
 	var role []*Roles
 	err := databases.DB.Preload("Permissions").Where(maps).Offset(pageNum).Limit(pageSize).Find(&role).Error
@@ -44,6 +45,7 @@ func GetRolesPage(pageNum int, pageSize int, maps interface{}) ([]*Roles, error)
 	return role, nil
 }
 
+// 按照ID  获取角色
 func GetRoleByID(id int) (*Roles, error) {
 	var role Roles
 	err := databases.DB.Preload("Permissions").Where("id = ?", id).First(&role).Error
@@ -53,6 +55,7 @@ func GetRoleByID(id int) (*Roles, error) {
 	return &role, nil
 }
 
+// 确认角色名称是否已存在
 func CheckRoleName(name string) (bool, error) {
 	var role Roles
 	err := databases.DB.Where("title=?", name).First(&role).Error
@@ -65,6 +68,7 @@ func CheckRoleName(name string) (bool, error) {
 	return false, nil
 }
 
+// 编辑角色
 func EditRole(id int, data map[string]interface{}) error {
 	var role []Roles
 	var permsiss Permissions
@@ -79,6 +83,7 @@ func EditRole(id int, data map[string]interface{}) error {
 	return nil
 }
 
+// 添加角色
 func AddRole(data map[string]interface{}) (id int, err error) {
 	role := Roles{
 		Title:       data["title"].(string),
@@ -90,9 +95,7 @@ func AddRole(data map[string]interface{}) (id int, err error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return int(role.ID), nil
-
 }
 
 //func (r *Roles) Add() (id int, err error) {
