@@ -22,4 +22,6 @@ require (
 	github.com/spf13/viper v1.5.0
 	github.com/tebeka/strftime v0.1.3 // indirect
 	golang.org/x/crypto v0.0.0-20190426145343-a29dc8fdc734
+	gopkg.in/go-playground/validator.v9 v9.29.1
+
 )

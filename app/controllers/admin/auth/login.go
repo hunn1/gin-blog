@@ -2,7 +2,7 @@ package auth
 
 import (
 	"Kronos/app/models"
-	"Kronos/helpers"
+	"Kronos/library/apgs"
 	"Kronos/library/databases"
 	"Kronos/library/password"
 	"Kronos/library/session"
@@ -21,12 +21,12 @@ func Login(c *gin.Context) {
 	var admin models.Admin
 	adminData := databases.DB.Where("username=?", username).First(&admin)
 	if adminData.Error != nil {
-		c.JSON(200, helpers.NewApiReturn(400, "账号或密码错误", nil))
+		c.JSON(200, apgs.NewApiReturn(400, "账号或密码错误", nil))
 		return
 	}
 	passBool := password.Compare(admin.Password, pass)
 	if passBool != nil {
-		c.JSON(200, helpers.NewApiReturn(400, "账号或密码错误", nil))
+		c.JSON(200, apgs.NewApiReturn(400, "账号或密码错误", nil))
 		return
 	}
 	session.SaveSession(c, uint(admin.ID))
@@ -36,7 +36,7 @@ func Login(c *gin.Context) {
 // 登出
 func Logout(c *gin.Context) {
 	if hasSession := session.HadSession(c); hasSession == false {
-		c.JSON(200, helpers.NewApiReturn(200, "未进行登录", nil))
+		c.JSON(200, apgs.NewApiReturn(200, "未进行登录", nil))
 		return
 	}
 	session.ClearAuthSession(c)

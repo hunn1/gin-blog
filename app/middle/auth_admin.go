@@ -1,7 +1,7 @@
 package middle
 
 import (
-	"Kronos/helpers"
+	"Kronos/library/apgs"
 	"Kronos/library/casbin_helper"
 	"Kronos/library/session"
 	"github.com/casbin/casbin/v2"
@@ -33,7 +33,7 @@ func AuthAdmin(enforcer *casbin.SyncedEnforcer, nocheck ...casbin_helper.DontChe
 			// TODO 调试模式下 判断 异步，同步 返回 JSON HTML
 			//c.JSON(403, helpers.NewApiReturn(401, err.Error(), b))
 			//c.AbortWithStatus(403)
-			ginview.HTML(c, http.StatusForbidden, "err/403", helpers.NewApiReturn(403, err.Error(), nil))
+			ginview.HTML(c, http.StatusForbidden, "err/403", apgs.NewApiReturn(403, err.Error(), nil))
 			c.Abort()
 			return
 		}
@@ -42,7 +42,7 @@ func AuthAdmin(enforcer *casbin.SyncedEnforcer, nocheck ...casbin_helper.DontChe
 			//c.Abort()
 			//fmt.Println("Check:" + strconv.FormatBool(b))
 			//c.Redirect(302, "/admin/login")
-			ginview.HTML(c, http.StatusUnauthorized, "err/401", helpers.NewApiRedirect(200, "无权限访问该内容", "/admin/login"))
+			ginview.HTML(c, http.StatusUnauthorized, "err/401", apgs.NewApiRedirect(200, "无权限访问该内容", "/admin/login"))
 			c.Abort()
 			return
 		}

@@ -1,7 +1,7 @@
 package v1
 
 import (
-	"Kronos/helpers"
+	"Kronos/library/apgs"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,6 +14,6 @@ func ShowApi(c *gin.Context) {
 	msg.Name = "Lena"
 	msg.Message = "hey"
 	msg.Number = 123
-	apiReturn := helpers.NewApiReturn(200, "我不知道呀", "msg")
-	c.JSON(200, apiReturn)
+	apgsReturn := apgs.NewApiReturn(200, "我不知道呀", "msg")
+	c.JSON(200, apgsReturn)
 }

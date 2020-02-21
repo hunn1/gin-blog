@@ -98,11 +98,35 @@ func AddRole(data map[string]interface{}) (id int, err error) {
 	return int(role.ID), nil
 }
 
-//func (r *Roles) Add() (id int, err error) {
-//	role := map[string]interface{}{
-//		"title":       r.Title,
-//		"id":          r.ID,
-//		"description": r.Description,
-//	}
-//
-//}
+// 删除角色
+func DeleteRole(id int) error {
+	var role Roles
+	databases.DB.Where("id = ?", id).First(&role)
+	databases.DB.Model(&role).Association("Permissions").Delete()
+	err := databases.DB.Where("id = ?", id).Delete(&role).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// 删除所有角色
+func CleanRole() error {
+	//Unscoped 方法可以物理删除记录
+	if err := databases.DB.Unscoped().Where("deleted_on != ? ", 0).Delete(&Roles{}).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// 获取所有角色
+func GetRolesAll() ([]*Roles, error) {
+	var role []*Roles
+	err := databases.DB.Preload("Permissions").Find(&role).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return nil, err
+	}
+
+	return role, nil
+}
