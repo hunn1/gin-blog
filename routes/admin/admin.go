@@ -6,6 +6,7 @@ import (
 	"Kronos/app/controllers/admin/dashboard"
 	"Kronos/app/controllers/admin/role"
 	"Kronos/app/middle"
+	"Kronos/helpers"
 	"Kronos/library/casbin_adapter"
 	"Kronos/library/casbin_helper"
 	"Kronos/library/session"
@@ -22,7 +23,7 @@ func RegAdminRouter(router *gin.Engine) {
 		Extension:    ".html",
 		Master:       "layouts/master",
 		Partials:     nil,
-		Funcs:        nil,
+		Funcs:        helpers.TFMP,
 		DisableCache: true,
 		Delims:       goview.Delims{},
 	})
@@ -50,7 +51,7 @@ func RegAdminRouter(router *gin.Engine) {
 		// 后台面板
 		ntc.GET("/", dashboard.Index)
 		// 用户
-		users := ntc.Group("user")
+		users := ntc.Group("admins")
 		{
 			users.GET("lists", admins.Lists)
 			//users.GET("edit")

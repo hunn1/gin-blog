@@ -14,10 +14,44 @@
             <!-- BEGIN SIDEBAR MENU ITEMS-->
             <ul class="menu-items">
                 <li class="m-t-30 ">
-                    <a href="index.html" class="detailed">
+                    <a href="/admin/" class="detailed">
                         <span class="title">面板</span>
                     </a>
                     <span class="icon-thumbnail"><i data-feather="shield"></i></span>
+                </li>
+                <li class="open active">
+                    <a href="javascript:;">
+                        <span class="title">管理员设置</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <span class="icon-thumbnail"><i data-feather="cpu"></i></span>
+                    <ul class="sub-menu">
+                        <li class="">
+                            <a href="/admin/admins/lists">管理员</a>
+                            <span class="icon-thumbnail"><i data-feather="users"></i></span>
+                        </li>
+                        <li class="">
+                            <a href="/admin/role/lists">角色</a>
+                            <span class="icon-thumbnail">
+                                <div class="fa-item"><i class="fa fa-group"></i></div>
+                            </span>
+                        </li>
+                        <li class="">
+                            <a href="/admin/permissions/lists">权限</a>
+                            <span class="icon-thumbnail">
+                                <div class="fa-item"><i class="fa fa-truck"></i></div>
+                            </span>
+                        </li>
+                    </ul>
+                </li>
+                <li class="m-t-10 ">
+                    <a href="/admin/" class="detailed">
+                        <span class="title">系统配置</span>
+                        <span class="details">所有可变公共配置</span>
+                    </a>
+                    <span class="icon-thumbnail">
+                        <div class="fa-item"><i class="fa pg-contact_book"></i></div>
+                    </span>
                 </li>
             </ul>
             <div class="clearfix"></div>

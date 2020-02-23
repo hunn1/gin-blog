@@ -34,6 +34,25 @@ func NewPagination(req *http.Request, total int, perineum int) *Pagination {
 		Page:     p,
 	}
 }
+func (p *Pagination) GetPage() int {
+	result := 0
+	page := p.Page
+	if page > 0 {
+		result = int((page - 1) * int64(p.Perineum))
+	}
+
+	return result
+}
+
+// 获取当前页 开始记录
+func (p *Pagination) FirstItem() int64 {
+	return p.Page * int64(p.Perineum)
+}
+
+// 获取当前页结束记录
+func (p *Pagination) LastItem() int64 {
+	return p.FirstItem() + int64(p.Perineum)
+}
 
 //Pages 渲染生成html分页标签
 func (p *Pagination) Pages() string {
@@ -59,20 +78,20 @@ func (p *Pagination) Pages() string {
 
 	//首页和上一页链接
 	if pageful > 1 {
-		firstLink = fmt.Sprintf(`<li><a href="%s">首页</a></li>`, p.pageURL("1"))
-		prevLink = fmt.Sprintf(`<li><a href="%s">上一页</a></li>`, p.pageURL(strconv.Itoa(pageful-1)))
+		firstLink = fmt.Sprintf(`<li  class="paginate_button "><a href="%s">首页</a></li>`, p.pageURL("1"))
+		prevLink = fmt.Sprintf(`<li class="paginate_button "><a href="%s">上一页</a></li>`, p.pageURL(strconv.Itoa(pageful-1)))
 	} else {
-		firstLink = `<li class="disabled"><a href="#">首页</a></li>`
-		prevLink = `<li class="disabled"><a href="#">上一页</a></li>`
+		firstLink = `<li class="paginate_button disabled"><a href="#">首页</a></li>`
+		prevLink = `<li class="paginate_button disabled"><a href="#">上一页</a></li>`
 	}
 
 	//末页和下一页
 	if pageful < totalPageNum {
-		lastLink = fmt.Sprintf(`<li><a href="%s">末页</a></li>`, p.pageURL(strconv.Itoa(totalPageNum)))
-		nextLink = fmt.Sprintf(`<li><a href="%s">下一页</a></li>`, p.pageURL(strconv.Itoa(pageful+1)))
+		lastLink = fmt.Sprintf(`<li class="paginate_button "><a href="%s">末页</a></li>`, p.pageURL(strconv.Itoa(totalPageNum)))
+		nextLink = fmt.Sprintf(`<li class="paginate_button "><a href="%s">下一页</a></li>`, p.pageURL(strconv.Itoa(pageful+1)))
 	} else {
-		lastLink = `<li class="disabled"><a href="#">末页</a></li>`
-		nextLink = `<li class="disabled"><a href="#">下一页</a></li>`
+		lastLink = `<li class="paginate_button disabled"><a href="#">末页</a></li>`
+		nextLink = `<li class="paginate_button disabled"><a href="#">下一页</a></li>`
 	}
 
 	//生成中间页码链接
@@ -89,14 +108,14 @@ func (p *Pagination) Pages() string {
 	for i := startPos; i <= endPos; i++ {
 		var s string
 		if i == pageful {
-			s = fmt.Sprintf(`<li class="active"><a href="%s">%d</a></li>`, p.pageURL(strconv.Itoa(i)), i)
+			s = fmt.Sprintf(`<li class="paginate_button active"><a href="%s">%d</a></li>`, p.pageURL(strconv.Itoa(i)), i)
 		} else {
-			s = fmt.Sprintf(`<li><a href="%s">%d</a></li>`, p.pageURL(strconv.Itoa(i)), i)
+			s = fmt.Sprintf(`<li class="paginate_button "><a href="%s">%d</a></li>`, p.pageURL(strconv.Itoa(i)), i)
 		}
 		pageLinks = append(pageLinks, s)
 	}
 
-	return fmt.Sprintf(`<ul class="pagination">%s%s%s%s%s</ul>`, firstLink, prevLink, strings.Join(pageLinks, ""), nextLink, lastLink)
+	return fmt.Sprintf(`<ul class="">%s%s%s%s%s</ul>`, firstLink, prevLink, strings.Join(pageLinks, ""), nextLink, lastLink)
 }
 
 //pageURL 生成分页url
