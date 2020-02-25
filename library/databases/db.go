@@ -24,6 +24,7 @@ func InitDB() {
 	loc := viper.GetString("db.loc")
 	native := viper.GetString("db.native")
 	prefix := viper.GetString("db.prefix")
+	debug := viper.GetBool("db.debug")
 	var err error
 	dabs := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=%s&parseTime=True&loc=%s&allowNativePasswords=%s",
 		user, pass, host,
@@ -36,7 +37,7 @@ func InitDB() {
 	if err != nil {
 		logrus.Fatal("Cannot Connect : " + err.Error())
 	}
-
+	db.LogMode(debug)
 	db.DB().SetMaxIdleConns(10)
 	db.DB().SetMaxOpenConns(100)
 	db.DB().SetConnMaxLifetime(5 * time.Minute)

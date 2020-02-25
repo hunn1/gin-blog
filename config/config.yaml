@@ -25,6 +25,8 @@ db:
   user: root
   pass: root_123456
   native: true
+  debug: true
+
 redis:
   host: 127.0.0.1
   port: 6379

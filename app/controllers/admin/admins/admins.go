@@ -9,20 +9,32 @@ import (
 	"html/template"
 )
 
+type AdminHandler struct {
+}
+
 func Lists(c *gin.Context) {
 
-	list := make([]models.Admin, 10)
+	all := c.Request.URL.Query()
+	// 条件封装
+	var where = make(map[string]interface{})
 
+	where["username like"] = all["filter_username"][0] + "%"
+	build, vals, _ := models.WhereBuild(where)
+	// 列表页
+	list := make([]models.Admin, 10)
 	find := databases.DB.Model(&list)
+	// 总条数
 	var count int
-	find.Count(&count)
+	find.Where(build, vals).Count(&count)
+	// 分页
 	page := page.NewPagination(c.Request, count, 1)
-	find.Select("username, last_login_ip, is_super,created_at").Offset(page.GetPage()).Limit(page.Perineum).Find(&list)
-	//c.JSON(200, list)
+	// 查询数据绑定到列表slice
+	find.Select("username, last_login_ip, is_super,created_at").Where(build, vals).Offset(page.GetPage()).Limit(page.Perineum).Find(&list)
+
 	ginview.HTML(c, 200, "admins/lists", gin.H{
 		"page":  template.HTML(page.Pages()),
 		"total": page.Total,
 		"lists": list,
-		"req":   "",
+		"req":   gin.H{"username": all["filter_username"][0]},
 	})
 }
