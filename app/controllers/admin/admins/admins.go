@@ -2,6 +2,7 @@ package admins
 
 import (
 	"Kronos/app/models"
+	"Kronos/helpers"
 	"Kronos/library/databases"
 	"Kronos/library/page"
 	"github.com/foolin/goview/supports/ginview"
@@ -14,11 +15,14 @@ type AdminHandler struct {
 
 func Lists(c *gin.Context) {
 
-	all := c.Request.URL.Query()
+	all := helpers.GetMapFilterQuery(c.Request.URL.Query())
+
 	// 条件封装
 	var where = make(map[string]interface{})
+	if all["username"] != nil {
+		where["username like"] = all["username"]
+	}
 
-	where["username like"] = all["filter_username"][0] + "%"
 	build, vals, _ := models.WhereBuild(where)
 	// 列表页
 	list := make([]models.Admin, 10)
@@ -35,6 +39,6 @@ func Lists(c *gin.Context) {
 		"page":  template.HTML(page.Pages()),
 		"total": page.Total,
 		"lists": list,
-		"req":   gin.H{"username": all["filter_username"][0]},
+		"req":   all,
 	})
 }
