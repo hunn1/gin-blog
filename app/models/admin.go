@@ -32,7 +32,7 @@ func (u *Admin) GetByCount(whereSql string, vals []interface{}) (count int) {
 
 func (u *Admin) Lists(fields string, whereSql string, vals []interface{}, page *page.Pagination) []Admin {
 	list := make([]Admin, page.Perineum)
-	databases.DB.Model(u).Select(fields).Where(whereSql, vals).Offset(page.GetPage()).Limit(page.Perineum).Find(&list)
+	databases.DB.Model(&u).Select(fields).Where(whereSql, vals).Offset(page.GetPage()).Limit(page.Perineum).Find(&list)
 	return list
 }
 

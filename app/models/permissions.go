@@ -1,5 +1,7 @@
 package models
 
+import "Kronos/library/databases"
+
 // 菜单权限
 type Permissions struct {
 	ID          uint64 `gorm:"primary_key" json:"id" structs:"id"`
@@ -8,4 +10,11 @@ type Permissions struct {
 	Slug        string `gorm:"type:varchar(50);"`             // 权限名称
 	HttpPath    string `gorm:"type:text"`                     // URI路径
 	Method      string `gorm:"type:char(10);"`
+}
+
+func (m *Permissions) GetMenus() []Permissions {
+
+	allMenu := make([]Permissions, 10)
+	databases.DB.Model(&allMenu).Find(&allMenu)
+	return allMenu
 }
