@@ -23,7 +23,7 @@ func RegAdminRouter(router *gin.Engine) {
 		Extension:    ".html",
 		Master:       "layouts/master",
 		Partials:     nil,
-		Funcs:        helpers.TFMP,
+		Funcs:        helpers.Builtins,
 		DisableCache: true,
 		Delims:       goview.Delims{},
 	})
@@ -54,9 +54,9 @@ func RegAdminRouter(router *gin.Engine) {
 		users := ntc.Group("admins")
 		{
 			users.GET("lists", admins.Lists)
-			//users.GET("edit")
-			//users.POST("apply")
-			//users.POST("delete")
+			users.GET("edit", admins.ShowEdit)
+			users.POST("apply", admins.Apply)
+			users.POST("delete", admins.Delete)
 		}
 		// 角色
 		roles := ntc.Group("role")

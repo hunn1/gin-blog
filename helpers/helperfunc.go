@@ -1,18 +1,38 @@
 package helpers
 
 import (
+	"encoding/binary"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"html/template"
+	"net"
 	"net/http"
 	"net/url"
 	"strings"
 	"time"
 )
 
-var TFMP = template.FuncMap{
+var Builtins = template.FuncMap{
 	"showStatus": ShowStatus,
 	"showtime":   ShowTime,
+	"ip2long":    Ip2long,
+	"long2ip":    Long2ip,
+}
+
+func Ip2long(ipstr string) uint32 {
+	ip := net.ParseIP(ipstr)
+	if ip == nil {
+		return 0
+	}
+	ip = ip.To4()
+	return binary.BigEndian.Uint32(ip)
+}
+
+func Long2ip(ipLong uint32) string {
+	ipByte := make([]byte, 4)
+	binary.BigEndian.PutUint32(ipByte, ipLong)
+	ip := net.IP(ipByte)
+	return ip.String()
 }
 
 func ShowStatus(ts interface{}, on string, on2 string) (tsf string) {

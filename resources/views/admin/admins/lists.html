@@ -1,4 +1,4 @@
-{{define "title"}}首页-{{ .title }} {{end}}
+{{define "title"}}管理员列表{{end}}
 {{define "content"}}
     <div class="container-fluid container-fixed-lg ">
         <!-- START card -->
@@ -43,8 +43,9 @@
                 <div class="pull-right">
 
                     <div class="col-xs-12">
-                        <button id="show-modal" class="btn btn-primary btn-cons"><i class="fa fa-plus"></i> 添加记录
-                        </button>
+                        <a id="show-modal" href="/admin/admins/edit" class="btn btn-primary btn-cons"><i
+                                    class="fa fa-plus"></i> 添加记录
+                        </a>
                     </div>
                 </div>
                 <div class="clearfix"></div>
@@ -78,7 +79,7 @@
                                     <p>{{showStatus .IsSuper "否" "是"}}</p>
                                 </td>
                                 <td class="v-align-middle">
-                                    <p>{{.LastLoginIp}}</p>
+                                    <p>{{long2ip .LastLoginIp}}</p>
                                 </td>
                                 <td class="v-align-middle">
                                     <p>{{showtime .CreatedAt "2006-01-02 15:04:05"}}</p>
@@ -92,7 +93,7 @@
                 <div class="row">
                     <div>
                         <div class="dataTables_paginate paging_simple_numbers" id="tableWithExportOptions_paginate">
-                            {{.page}}
+                            {{.pagination}}
                         </div>
                         <div class="dataTables_info" id="tableWithExportOptions_info" role="status" aria-live="polite">
                             共计{{.total}} 记录

@@ -1,0 +1,92 @@
+{{define "title"}}编辑管理员{{end}}
+{{define "content"}}
+    <div class=" container-fluid   container-fixed-lg">
+        <!-- START card -->
+        <div class="card card-default">
+            <div class="card-header ">
+                <div class="card-title">编辑管理员信息
+                </div>
+                <div class="tools">
+                    <a class="collapse" href="javascript:;"></a>
+                    <a class="config" data-toggle="modal" href="#grid-config"></a>
+                    <a class="reload" href="javascript:;"></a>
+                    <a class="remove" href="javascript:;"></a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <h5>Color
+                            <span class="semi-bold">Options</span>
+                        </h5>
+                        <p>Pure CSS radio button with a cool animation. These are available in all primary colors in
+                            bootstrap
+                        </p>
+                        <br>
+                        <div class="radio radio-success">
+                            <input type="radio" value="yes" name="optionyes" id="yes">
+                            <label for="yes">Agree</label>
+                            <input type="radio" checked="checked" value="no" name="optionyes" id="no">
+                            <label for="no">Disagree</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <h5>State
+                            <span class="semi-bold">Options</span>
+                        </h5>
+                        <p>Use of different color opacity helps to destigues between different states such as disable
+                        </p>
+                        <br>
+                        <div class="radio radio-primary">
+                            <input type="radio" disabled="disabled" value="Disabled" name="Disabled" id="Disabled">
+                            <label for="Disabled">Disabled</label>
+                            <input type="radio" disabled="disabled" checked="checked" value="ADisabled" name="ADisabled"
+                                   id="ADisabled">
+                            <label for="ADisabled">Disabled</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <h5>Slide
+                            <span class="semi-bold">Toggle</span>
+                        </h5>
+                        <p>A cool iOS slide toggle. These are cutomize for all boostrap colors</p>
+                        <br>
+                        <div class="row">
+                            <div class="col-6">
+                                <input type="checkbox" data-init-plugin="switchery" checked="checked" disabled=""
+                                       data-switchery="true" style="display: none;"><span
+                                        class="switchery switchery-default"
+                                        style="background-color: rgb(0, 123, 232); border-color: rgb(0, 123, 232); box-shadow: rgb(0, 123, 232) 0px 0px 0px 16px inset; transition: border 0.4s ease 0s, box-shadow 0.4s ease 0s, background-color 1.2s ease 0s; opacity: 0.5;"><small
+                                            style="left: 20px; background-color: rgb(255, 255, 255); transition: left 0.2s ease 0s;"></small></span>
+                                <input type="checkbox" data-init-plugin="switchery" checked="checked"
+                                       data-switchery="true" style="display: none;"><span
+                                        class="switchery switchery-default"
+                                        style="background-color: rgb(0, 123, 232); border-color: rgb(0, 123, 232); box-shadow: rgb(0, 123, 232) 0px 0px 0px 16px inset; transition: border 0.4s ease 0s, box-shadow 0.4s ease 0s, background-color 1.2s ease 0s;"><small
+                                            style="left: 20px; background-color: rgb(255, 255, 255); transition: left 0.2s ease 0s;"></small></span>
+                            </div>
+                            <div class="col-6">
+                                <input type="checkbox" data-init-plugin="switchery" data-size="small"
+                                       data-color="primary" checked="checked" data-switchery="true"
+                                       style="display: none;"><span class="switchery switchery-small"
+                                                                    style="background-color: rgb(0, 123, 232); border-color: rgb(0, 123, 232); box-shadow: rgb(0, 123, 232) 0px 0px 0px 11px inset; transition: border 0.4s ease 0s, box-shadow 0.4s ease 0s, background-color 1.2s ease 0s;"><small
+                                            style="left: 13px; background-color: rgb(255, 255, 255); transition: left 0.2s ease 0s;"></small></span>
+                                <input type="checkbox" data-init-plugin="switchery" data-size="large"
+                                       data-color="primary" checked="checked" data-switchery="true"
+                                       style="display: none;"><span class="switchery switchery-large"
+                                                                    style="background-color: rgb(0, 123, 232); border-color: rgb(0, 123, 232); box-shadow: rgb(0, 123, 232) 0px 0px 0px 21px inset; transition: border 0.4s ease 0s, box-shadow 0.4s ease 0s, background-color 1.2s ease 0s;"><small
+                                            style="left: 26px; background-color: rgb(255, 255, 255); transition: left 0.2s ease 0s;"></small></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END card -->
+    </div>
+{{end}}
+
+{{define "js"}}
+    {{include "public/footer"}}
+    <!-- END PAGE LEVEL JS -->
+{{end}}
+
