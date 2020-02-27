@@ -1,0 +1,46 @@
+<div class="row">
+    <label class="col-md-2 control-label"> 用户名称</label>
+    <div class="col-md-7">
+        <input type="text" class="form-control input-sm"
+               id="username"
+               placeholder="用户名称..."
+               name="username"
+               value="{{.admin.Username}}"
+                {{if .admin.Username}}
+                    disabled="disabled"
+                {{end}}
+               required="">
+        <label id="route_name" class="error" for="username"></label>
+    </div>
+</div>
+
+<div class="row">
+    <label class="col-md-2 control-label"> 密码</label>
+    <div class="col-md-7">
+        <input type="text" class="form-control input-sm jscolor"
+               id="password"
+               placeholder="无需修改密码请置空..."
+               name="password"
+               value=""
+               required="">
+        <label id="title" class="error" for="password"></label>
+    </div>
+</div>
+
+
+<div class="row">
+    <label class="col-md-2 control-label"> 创建时间</label>
+    <div class="col-md-7">
+        <label>{{showtime .admin.CreatedAt "2006-01-02 15:04:05"}}</label>
+    </div>
+</div>
+
+<div class="row">
+    <label class="col-md-2 control-label"> 更新时间</label>
+    <div class="col-md-7">
+        <label>{{showtime .admin.UpdatedAt "2006-01-02 15:04:05"}}</label>
+    </div>
+</div>
+
+
+

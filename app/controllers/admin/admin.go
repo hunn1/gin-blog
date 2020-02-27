@@ -23,12 +23,14 @@ func (h *AdminBaseHandler) AllParams(c *gin.Context) map[string]interface{} {
 				}
 			}
 		}
-
 	}
 	return queryMap
-
 }
 
+func (h *AdminBaseHandler) GetWhere(len int) map[string]interface{} {
+	h.Where = make(map[string]interface{}, len)
+	return h.Where
+}
 func (h *AdminBaseHandler) ShowError(c *gin.Context, url string) {
 	ginview.HTML(c, 200, "err/redirect", gin.H{
 		"wait": 3,

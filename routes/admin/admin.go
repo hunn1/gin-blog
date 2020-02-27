@@ -54,11 +54,11 @@ func RegAdminRouter(router *gin.Engine) {
 		// 用户
 		users := ntc.Group("admins")
 		{
-			var admins = &admins.AdminsHandler{}
-			users.GET("lists", admins.Lists)
-			users.GET("edit", admins.ShowEdit)
-			users.POST("apply", admins.Apply)
-			users.POST("delete", admins.Delete)
+			var admHandler = admins.AdminsHandler{}
+			users.GET("lists", admHandler.Lists)
+			users.GET("edit", admHandler.ShowEdit)
+			users.POST("apply", admHandler.Apply)
+			users.GET("delete", admHandler.Delete)
 		}
 		// 角色
 		roles := ntc.Group("role")
