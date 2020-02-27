@@ -37,6 +37,7 @@ func RegAdminRouter(router *gin.Engine) {
 
 	// 分组使用母版内容
 	router.Use(session.NewSessionStore())
+	var auth = &auth.LoginHandler{}
 	router.GET("/admin/login", auth.ShowLogin)
 	router.POST("/admin/login", auth.Login)
 	ntc := router.Group("/admin", givMid)
@@ -53,6 +54,7 @@ func RegAdminRouter(router *gin.Engine) {
 		// 用户
 		users := ntc.Group("admins")
 		{
+			var admins = &admins.AdminsHandler{}
 			users.GET("lists", admins.Lists)
 			users.GET("edit", admins.ShowEdit)
 			users.POST("apply", admins.Apply)

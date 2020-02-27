@@ -26,6 +26,7 @@ db:
   pass: root_123456
   native: true
   debug: true
+  prefix: kr_
 
 redis:
   host: 127.0.0.1

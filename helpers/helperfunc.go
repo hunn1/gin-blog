@@ -7,8 +7,6 @@ import (
 	"html/template"
 	"net"
 	"net/http"
-	"net/url"
-	"strings"
 	"time"
 )
 
@@ -66,21 +64,4 @@ func Abort(c *gin.Context, message string) {
 	c.HTML(http.StatusInternalServerError, "/home/err/500.html", gin.H{
 		"message": message,
 	})
-}
-
-func GetMapFilterQuery(query url.Values) map[string]interface{} {
-	queryMap := make(map[string]interface{})
-	for key, value := range query {
-		if len(value) > 0 {
-			isFilter := strings.ContainsAny(key, "filter_")
-			if isFilter != false {
-				index := strings.Index(key, "_")
-				if value[0] != "" {
-					queryMap[key[index+1:len(key)]] = value[0]
-				}
-			}
-		}
-
-	}
-	return queryMap
 }

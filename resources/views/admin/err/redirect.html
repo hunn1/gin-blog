@@ -1,0 +1,33 @@
+{{define "title"}}消息页{{end}}
+{{define "content"}}
+
+    <div class="d-flex justify-content-center full-height full-width align-items-center">
+        <div class="error-container text-center">
+            <h1 class="error-number">消息提示</h1>
+            <h2 class="semi-bold"> {{.message}}</h2>
+            </p>
+            <div class="error-container-innner text-center">
+                页面自动 <a id="href" href="{{.redirectUrl}}">跳转</a> 等待时间：
+                <b id="wait">{{.wait}}</b>
+            </div>
+        </div>
+    </div>
+{{end}}
+
+{{define "js"}}
+    <script type="application/javascript">
+        (function () {
+            var wait = document.getElementById('wait'),
+                href = document.getElementById('href').href;
+            var interval = setInterval(function () {
+                var time = --wait.innerHTML;
+                if (time <= 0) {
+                    location.href = href;
+                    clearInterval(interval);
+                }
+                ;
+            }, 1000);
+        })();
+    </script>
+
+{{end}}

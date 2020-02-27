@@ -38,9 +38,10 @@ func InitDB() {
 		logrus.Fatal("Cannot Connect : " + err.Error())
 	}
 	db.LogMode(debug)
-	db.DB().SetMaxIdleConns(10)
-	db.DB().SetMaxOpenConns(100)
+	db.DB().SetMaxIdleConns(100)
+	db.DB().SetMaxOpenConns(1000)
 	db.DB().SetConnMaxLifetime(5 * time.Minute)
+	//err := db.DB().Ping()
 
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
 		return prefix + defaultTableName

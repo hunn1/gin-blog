@@ -1,36 +1,39 @@
 package admins
 
 import (
+	"Kronos/app/controllers/admin"
 	"Kronos/app/models"
-	"Kronos/helpers"
 	"Kronos/library/page"
 	"github.com/foolin/goview/supports/ginview"
 	"github.com/gin-gonic/gin"
 	"html/template"
 )
 
-func Lists(c *gin.Context) {
+type AdminsHandler struct {
+	admin.AdminBaseHandler
+}
 
-	all := helpers.GetMapFilterQuery(c.Request.URL.Query())
+func (a AdminsHandler) Lists(c *gin.Context) {
+
+	all := a.AllParams(c)
 
 	// 条件封装
-	var where = make(map[string]interface{})
-	if all["username"] != nil {
 
-		where["username like"] = all["username"].(string) + "%"
+	if all["username"] != nil {
+		a.Where["username like"] = all["username"].(string) + "%"
 	}
 
-	build, vals, _ := models.WhereBuild(where)
+	build, vals, _ := models.WhereBuild(a.Where)
 	// 列表页
 	//
-	var admin = &models.Admin{}
+	var model = &models.Admin{}
 	//查询总条数
-	count := admin.GetByCount(build, vals)
+	count := model.GetByCount(build, vals)
 	// 分页
 	pagination := page.NewPagination(c.Request, count, 10)
 	// 查询数据绑定到列表slice
 	fields := "username, last_login_ip, is_super,created_at"
-	lists := admin.Lists(fields, build, vals, pagination)
+	lists := model.Lists(fields, build, vals, pagination)
 
 	ginview.HTML(c, 200, "admins/lists", gin.H{
 		"pagination": template.HTML(pagination.Pages()),
@@ -41,29 +44,29 @@ func Lists(c *gin.Context) {
 }
 
 // 添加或编辑
-func ShowEdit(c *gin.Context) {
-	query := helpers.GetMapFilterQuery(c.Request.URL.Query())
-	where := make(map[string]interface{})
-	var admin = models.Admin{}
+func (a AdminsHandler) ShowEdit(c *gin.Context) {
+	query := a.AllParams(c)
+
+	var model = models.Admin{}
 	// 编辑
 	if query["id"] != nil {
-		where["id"] = query["id"]
-		build, vals, _ := models.WhereBuild(where)
-		admin.Get(build, vals)
+		a.Where["id"] = query["id"]
+		build, vals, _ := models.WhereBuild(a.Where)
+		model.Get(build, vals)
 	}
 
 	ginview.HTML(c, 200, "admins/edit", gin.H{
-		"data": admin,
+		"data": model,
 		"req":  query,
 	})
 }
 
 // 应用操作
-func Apply(c *gin.Context) {
+func (a AdminsHandler) Apply(c *gin.Context) {
 
 }
 
 // 删除数据
-func Delete(c *gin.Context) {
+func (a AdminsHandler) Delete(c *gin.Context) {
 
 }
