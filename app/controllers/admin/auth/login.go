@@ -6,6 +6,7 @@ import (
 	"Kronos/library/databases"
 	"Kronos/library/password"
 	"Kronos/library/session"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -34,7 +35,10 @@ func (l LoginHandler) Login(c *gin.Context) {
 		//c.JSON(200, apgs.NewApiReturn(400, "账号或密码错误", nil))
 		return
 	}
-	session.SaveSession(c, uint(admin.ID))
+	admin.Password = ""
+	saveSession := session.SaveSession(c, session.UserKey, admin)
+	fmt.Println("saveSession")
+	fmt.Println(saveSession)
 	c.Redirect(302, "/admin/")
 }
 

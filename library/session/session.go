@@ -1,6 +1,8 @@
 package session
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/gin-contrib/sessions"
 
 	"github.com/gin-contrib/sessions/cookie"
@@ -73,7 +75,7 @@ func AuthSessionMiddle() gin.HandlerFunc {
 }
 
 // 获取Session
-func GetSession(c *gin.Context) uint {
+func GetUserSession(c *gin.Context) uint {
 	session := sessions.Default(c)
 	userId := session.Get(UserKey)
 	if userId == nil {
@@ -103,14 +105,25 @@ func ClearAuthSession(c *gin.Context) {
 	}
 }
 
-// 保存Session
-func SaveSession(c *gin.Context, id uint) {
+func GetSession(c *gin.Context, key interface{}) interface{} {
 	session := sessions.Default(c)
-	session.Set(UserKey, id)
+	get := session.Get(key)
+	return get
+}
+
+// 保存Session
+func SaveSession(c *gin.Context, key interface{}, val interface{}) bool {
+	session := sessions.Default(c)
+
+	inrec, _ := json.Marshal(val)
+	session.Set(key, inrec)
 	err := session.Save()
 	if err != nil {
-		_ = c.AbortWithError(http.StatusInternalServerError, err)
-		c.Abort()
-		return
+		//_ = c.AbortWithError(http.StatusInternalServerError, err)
+		//c.Abort()
+		fmt.Println(err)
+		return false
 	}
+	return true
+
 }

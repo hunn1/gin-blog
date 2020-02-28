@@ -4,6 +4,8 @@ import (
 	"Kronos/library/apgs"
 	"Kronos/library/casbin_helper"
 	"Kronos/library/session"
+	"encoding/json"
+	"fmt"
 	"github.com/casbin/casbin/v2"
 	"github.com/foolin/goview/supports/ginview"
 	"github.com/gin-gonic/gin"
@@ -20,9 +22,21 @@ func AuthAdmin(enforcer *casbin.SyncedEnforcer, nocheck ...casbin_helper.DontChe
 			c.Next()
 			return
 		}
+		fmt.Println("123123123")
 		// Session 判断权限
-		getSession := session.GetSession(c)
-		userId := strconv.Itoa(int(getSession))
+		get := session.GetSession(c, session.UserKey)
+		var idss map[string]interface{}
+		canGet := json.Unmarshal(get.([]byte), &idss)
+		if canGet != nil {
+			ginview.HTML(c, http.StatusUnauthorized, "err/401", apgs.NewApiRedirect(200, "无权限访问该内容", "/admin/login"))
+		}
+		// 超级管理员不验证权限
+		if idss["IsSuper"] == 1 {
+			c.Next()
+			return
+		}
+
+		userId := strconv.Itoa(int(idss["id"].(float64)))
 		p := strings.ToLower(c.Request.URL.Path)
 		m := strings.ToLower(c.Request.Method)
 
@@ -47,5 +61,6 @@ func AuthAdmin(enforcer *casbin.SyncedEnforcer, nocheck ...casbin_helper.DontChe
 			return
 		}
 		c.Next()
+
 	}
 }
