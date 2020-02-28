@@ -40,6 +40,7 @@ func AuthAdmin(enforcer *casbin.SyncedEnforcer, nocheck ...casbin_helper.DontChe
 
 		var b bool
 		var err error
+
 		if b, err = enforcer.Enforce(userId, p, m); err != nil {
 			// TODO 判断是是否为调试模式
 			// TODO 调试模式下 判断 异步，同步 返回 JSON HTML

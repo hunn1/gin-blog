@@ -9,6 +9,8 @@ import (
 	"time"
 )
 
+var Enfocer *casbin.SyncedEnforcer
+
 // 初始化权限 数据库适配器
 func InitAdapter() (*casbin.SyncedEnforcer, error) {
 
@@ -30,5 +32,10 @@ func InitAdapter() (*casbin.SyncedEnforcer, error) {
 	//e.EnableAutoBuildRoleLinks(true)
 	// 因为开启了AutoSave机制，现在内存中的改变会同步回写到持久层中
 	//e.AddPolicy("admin", "test", "test")
+	Enfocer = e
 	return e, err
+}
+
+func GetEnforcer() *casbin.SyncedEnforcer {
+	return Enfocer
 }

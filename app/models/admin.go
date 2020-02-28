@@ -3,6 +3,7 @@ package models
 import (
 	"Kronos/library/databases"
 	"Kronos/library/page"
+	"errors"
 	"github.com/casbin/casbin/v2"
 	"github.com/jinzhu/gorm"
 	"gopkg.in/go-playground/validator.v9"
@@ -33,7 +34,7 @@ func (u Admin) GetByCount(whereSql string, vals []interface{}) (count int) {
 
 func (u Admin) Lists(fields string, whereSql string, vals []interface{}, page *page.Pagination) ([]Admin, error) {
 	list := make([]Admin, page.Perineum)
-	find := databases.DB.Model(&u).Select(fields).Where(whereSql, vals).Offset(page.GetPage()).Limit(page.Perineum).Find(&list)
+	find := databases.DB.Preload("Roles").Model(&u).Select(fields).Where(whereSql, vals).Offset(page.GetPage()).Limit(page.Perineum).Find(&list)
 	if find.Error != nil && find.Error != gorm.ErrRecordNotFound {
 		return nil, find.Error
 	}
@@ -41,31 +42,47 @@ func (u Admin) Lists(fields string, whereSql string, vals []interface{}, page *p
 }
 
 func (u Admin) Get(whereSql string, vals []interface{}) (Admin, error) {
-	first := databases.DB.Model(&u).Where(whereSql, vals).First(&u)
+	first := databases.DB.Preload("Roles").Model(&u).Where(whereSql, vals).First(&u)
 	if first.Error != nil {
 		return u, first.Error
 	}
 	return u, nil
 }
 
-func (u Admin) Create() (*Admin, error) {
-	create := databases.DB.Model(&u).Create(&u)
+func (u Admin) Create(data map[string]interface{}) (*Admin, error) {
+	var role = make([]Roles, 10)
+	databases.DB.Where("id in (?)", data["role_id"]).Find(&role)
+	create := databases.DB.Model(&u).Create(&u).Association("Roles").Append(role)
 	if create.Error != nil {
 		return nil, create.Error
 	}
 	return &u, nil
 }
 
-func (u Admin) Update() (bool, error) {
-	save := databases.DB.Model(&u).Save(&u)
+func (u Admin) Update(id int, data map[string]interface{}) (bool, error) {
+	var role = make([]Roles, 10)
+	if err := databases.DB.Where("id in (?)", data["role_id"]).Find(&role).Error; err != nil {
+		return false, errors.New("无法找到该角色")
+	}
+
+	find := databases.DB.Model(&u).Where("id = ?", id).Find(&u)
+	if find.Error != nil {
+		return false, find.Error
+	}
+
+	databases.DB.Model(&u).Association("Roles").Replace(role)
+	save := databases.DB.Model(&u).Update(data)
+
 	if save.Error != nil {
 		return false, save.Error
 	}
 	return true, nil
 }
 
-func (u Admin) Delete() (bool, error) {
-	db := databases.DB.Model(&u).Delete(&u)
+func (u Admin) Delete(id int) (bool, error) {
+	databases.DB.Where("id = ?", id).Find(&u)
+	databases.DB.Model(&u).Association("Roles").Delete()
+	db := databases.DB.Model(&u).Where("id = ?", id).Delete(&u)
 	if db.Error != nil {
 		return false, db.Error
 	}

@@ -6,6 +6,8 @@ import (
 	"Kronos/library/apgs"
 	"Kronos/library/page"
 	"Kronos/library/password"
+	"encoding/json"
+	"fmt"
 	"github.com/foolin/goview/supports/ginview"
 	"github.com/gin-gonic/gin"
 	"html/template"
@@ -49,7 +51,7 @@ func (a AdminsHandler) Lists(c *gin.Context) {
 // 添加或编辑
 func (a AdminsHandler) ShowEdit(c *gin.Context) {
 	query := a.AllParams(c)
-
+	var marshal []byte
 	var model = models.Admin{}
 	// 编辑
 	if query["id"] != nil {
@@ -58,49 +60,62 @@ func (a AdminsHandler) ShowEdit(c *gin.Context) {
 		where["id"] = query["id"]
 		build, vals, _ := models.WhereBuild(where)
 		model, _ = model.Get(build, vals)
+		marshal, _ = json.Marshal(model.Roles)
 
+		fmt.Println()
 	}
+	var role = models.Roles{}
+	allRoles, _ := role.GetRolesAll()
+
 	ginview.HTML(c, 200, "admins/edit", gin.H{
-		"admin": model,
-		"req":   query,
+		"admin":   model,
+		"req":     query,
+		"roles":   allRoles,
+		"marshal": string(marshal),
 	})
 }
 
 // 应用操作
 func (a AdminsHandler) Apply(c *gin.Context) {
 	id := c.PostForm("id")
+	roleId := c.PostFormArray("role_id[]")
 	parseInt, _ := strconv.ParseInt(id, 10, 64)
 	var model = models.Admin{}
 	if parseInt > 0 {
 		passowrd := c.PostForm("passowrd")
 		IsSuper := c.PostForm("IsSuper")
-		where := a.GetWhere(1)
-		where["id"] = parseInt
-		build, vals, _ := models.WhereBuild(where)
-		get, _ := model.Get(build, vals)
-		get.Password, _ = password.Encrypt(passowrd)
-		i, _ := strconv.ParseInt(IsSuper, 10, 0)
-		get.IsSuper = int(i)
-		update, err := get.Update()
+		v := a.GetWhere(10)
+
+		v["passowrd"], _ = password.Encrypt(passowrd)
+		v["is_super"] = IsSuper
+		v["role_id"] = roleId
+		update, err := model.Update(int(parseInt), v)
 
 		if err != nil {
 			c.JSON(200, apgs.NewApiReturn(4003, "无法更新该数据", err))
+			return
 		}
 		if update == false {
 			c.JSON(200, apgs.NewApiReturn(4004, "更新失败", nil))
+			return
 		}
-		c.JSON(200, apgs.NewApiReturn(200, "更新成功", update))
+
+		c.JSON(200, apgs.NewApiRedirect(200, "更新成功", "/admin/admins/lists"))
+		return
+
 	} else {
 		err := c.ShouldBind(&model)
 
 		if err == nil {
 			model.Password, _ = password.Encrypt(model.Password)
-			create, err := model.Create()
+			v := a.GetWhere(10)
+			v["role_id"] = roleId
+			create, err := model.Create(v)
 			if err != nil {
 				c.JSON(200, apgs.NewApiReturn(4003, "无法创建该数据", nil))
 			}
 			create.Password = ""
-			c.JSON(200, apgs.NewApiReturn(200, "创建成功", create))
+			c.JSON(200, apgs.NewApiRedirect(200, "创建成功", "/admin/admins/lists"))
 		}
 	}
 }
@@ -111,14 +126,7 @@ func (a AdminsHandler) Delete(c *gin.Context) {
 	parseInt, _ := strconv.ParseInt(id, 10, 64)
 	var mod = models.Admin{}
 	if parseInt > 0 {
-		where := a.GetWhere(10)
-		where["id"] = parseInt
-		build, vals, _ := models.WhereBuild(where)
-		get, err := mod.Get(build, vals)
-		if err != nil {
-			c.JSON(200, apgs.NewApiReturn(4001, "该数据不存在或无法访问", nil))
-		}
-		b, err := get.Delete()
+		b, err := mod.Delete(int(parseInt))
 		if err != nil {
 			c.JSON(200, apgs.NewApiReturn(4004, "无法删除该数据", nil))
 		}

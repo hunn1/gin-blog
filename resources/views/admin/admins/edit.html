@@ -39,10 +39,22 @@
         </div>
         <!-- END card -->
     </div>
+    </div>
 {{end}}
 
 {{define "js"}}
     {{include "public/footer"}}
     <!-- END PAGE LEVEL JS -->
+    <script type="application/javascript">
+        var data = {{.marshal}};
+        var arr = new Array()
+        $(document).ready(function () {
+            let parseJSON = $.parseJSON(data);
+            for (item in parseJSON) {
+                arr.push(parseJSON[item].id)
+            }
+            $("#multi").val(arr).select2();
+        });
+    </script>
 {{end}}
 

@@ -28,7 +28,7 @@ func RegAdminRouter(router *gin.Engine) {
 		Delims:       goview.Delims{},
 	})
 	// Casbin
-	e, err := casbin_adapter.InitAdapter()
+	Egor, err := casbin_adapter.InitAdapter()
 	if err != nil {
 		panic("无法初始化权限")
 	}
@@ -43,7 +43,7 @@ func RegAdminRouter(router *gin.Engine) {
 	ntc := router.Group("/admin", givMid)
 	{
 		// 使用中间件认证
-		ntc.Use(middle.AuthAdmin(e, casbin_helper.NotCheck("/admin/login", "/admin/logout")))
+		ntc.Use(middle.AuthAdmin(Egor, casbin_helper.NotCheck("/admin/login", "/admin/logout")))
 		// 初始化Session
 		ntc.Use(session.AuthSessionMiddle())
 		// 登出
@@ -63,7 +63,8 @@ func RegAdminRouter(router *gin.Engine) {
 		// 角色
 		roles := ntc.Group("role")
 		{
-			roles.GET("lists", role.Lists)
+			var roleHandler = role.RolesHandler{}
+			roles.GET("lists", roleHandler.Lists)
 			//roles.GET("edit")
 			//roles.POST("apply")
 			//roles.POST("delete")

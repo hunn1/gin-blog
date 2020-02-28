@@ -13,7 +13,18 @@
         <label id="route_name" class="error" for="username"></label>
     </div>
 </div>
+<div class="row">
+    <label class="col-md-2 control-label"> 角色选择</label>
+    <div class="col-md-7">
+        <select id="multi" class="full-width" name="role_id[]" multiple>
+            {{range .roles}}
+                <option value="{{.ID}}">{{.Title}}</option>
+            {{end}}
 
+        </select>
+    </div>
+
+</div>
 <div class="row">
     <label class="col-md-2 control-label"> 密码</label>
     <div class="col-md-7">
@@ -52,6 +63,8 @@
         <label>{{showtime .admin.UpdatedAt "2006-01-02 15:04:05"}}</label>
     </div>
 </div>
+
+
 
 
 

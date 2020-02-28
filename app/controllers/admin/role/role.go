@@ -1,23 +1,33 @@
 package role
 
 import (
-	"Kronos/app/models"
-	"Kronos/library/databases"
-	"Kronos/library/page"
-	"github.com/foolin/goview/supports/ginview"
+	"Kronos/app/controllers/admin"
 	"github.com/gin-gonic/gin"
-	"html/template"
 )
 
-func Lists(c *gin.Context) {
+type RolesHandler struct {
+	admin.AdminBaseHandler
+}
 
-	page := page.NewPagination(c.Request, 100, 10)
-
-	list := make([]models.Roles, 10)
-	databases.DB.Model(&list).Offset(0).Limit(10).Find(&list)
-
-	ginview.HTML(c, 200, "role/lists", gin.H{
-		"page": template.HTML(page.Pages()),
-		"list": list,
-	})
+func (r *RolesHandler) Lists(c *gin.Context) {
+	//params := r.AllParams(c)
+	//where := r.GetWhere(10)
+	//
+	//if params["title"] != nil {
+	//	where["title like"] = params["title"].(string) + "like"
+	//}
+	//
+	//build, vals, _ := models.WhereBuild(where)
+	//var model = models.Roles{}
+	//count, _ := model.GetCount(build, vals)
+	//
+	//page := page.NewPagination(c.Request, count, 10)
+	//list, _ := model.GetRolesAll(build, vals, page)
+	//
+	//ginview.HTML(c, 200, "role/lists", gin.H{
+	//	"pagination": template.HTML(page.Pages()),
+	//	"lists":      list,
+	//	"total":      count,
+	//	"req":        params,
+	//})
 }

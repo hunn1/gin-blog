@@ -14,8 +14,8 @@ func NewApiReturn(code int, msg string, data interface{}) *gin.H {
 // Map 格式返回状态 消息 跳转连接
 func NewApiRedirect(code int, msg string, redirectUrl string) *gin.H {
 	return &gin.H{
-		"code":        code,
-		"message":     msg,
-		"redirectUrl": redirectUrl,
+		"code":    code,
+		"message": msg,
+		"url":     redirectUrl,
 	}
 }

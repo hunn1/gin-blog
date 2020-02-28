@@ -2,6 +2,7 @@ package models
 
 import (
 	"Kronos/library/databases"
+	"Kronos/library/page"
 	"github.com/jinzhu/gorm"
 )
 
@@ -14,7 +15,7 @@ type Roles struct {
 }
 
 // 按照ID查找
-func FindByID(id int) (bool, error) {
+func (r *Roles) FindByID(id int) (bool, error) {
 	var role Roles
 	err := databases.DB.Select("id").Where("id = ? ", id).First(&role).Error
 	if err != nil {
@@ -27,18 +28,18 @@ func FindByID(id int) (bool, error) {
 }
 
 // 依据传入的条件查找条数
-func GetCount(maps interface{}) (int, error) {
+func (r *Roles) GetCount(whereSql string, vals []interface{}) (int, error) {
 	var count int
-	if err := databases.DB.Model(&Roles{}).Where(maps).Count(&count).Error; err != nil {
+	if err := databases.DB.Model(&Roles{}).Where(whereSql, vals).Count(&count).Error; err != nil {
 		return 0, err
 	}
 	return count, nil
 }
 
 // 获取角色列表
-func GetRolesPage(pageNum int, pageSize int, maps interface{}) ([]*Roles, error) {
+func (r *Roles) GetRolesPage(whereSql string, vals []interface{}, p *page.Pagination) ([]*Roles, error) {
 	var role []*Roles
-	err := databases.DB.Preload("Permissions").Where(maps).Offset(pageNum).Limit(pageSize).Find(&role).Error
+	err := databases.DB.Preload("Permissions").Where(whereSql, vals).Offset(p.Page).Limit(p.Perineum).Find(&role).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, err
 	}
@@ -46,7 +47,7 @@ func GetRolesPage(pageNum int, pageSize int, maps interface{}) ([]*Roles, error)
 }
 
 // 按照ID  获取角色
-func GetRoleByID(id int) (*Roles, error) {
+func (r *Roles) GetRoleByID(id int) (*Roles, error) {
 	var role Roles
 	err := databases.DB.Preload("Permissions").Where("id = ?", id).First(&role).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
@@ -56,7 +57,7 @@ func GetRoleByID(id int) (*Roles, error) {
 }
 
 // 确认角色名称是否已存在
-func CheckRoleName(name string) (bool, error) {
+func (r *Roles) CheckRoleName(name string) (bool, error) {
 	var role Roles
 	err := databases.DB.Where("title=?", name).First(&role).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
@@ -69,7 +70,7 @@ func CheckRoleName(name string) (bool, error) {
 }
 
 // 编辑角色
-func EditRole(id int, data map[string]interface{}) error {
+func (r *Roles) EditRole(id int, data map[string]interface{}) error {
 	var role []Roles
 	var permsiss Permissions
 	databases.DB.Where("id in (?)", data["permissions_id"].(int)).Find(&permsiss)
@@ -84,7 +85,7 @@ func EditRole(id int, data map[string]interface{}) error {
 }
 
 // 添加角色
-func AddRole(data map[string]interface{}) (id int, err error) {
+func (r *Roles) AddRole(data map[string]interface{}) (id int, err error) {
 	role := Roles{
 		Title:       data["title"].(string),
 		Description: data["description"].(string),
@@ -99,7 +100,7 @@ func AddRole(data map[string]interface{}) (id int, err error) {
 }
 
 // 删除角色
-func DeleteRole(id int) error {
+func (r *Roles) DeleteRole(id int) error {
 	var role Roles
 	databases.DB.Where("id = ?", id).First(&role)
 	databases.DB.Model(&role).Association("Permissions").Delete()
@@ -111,7 +112,7 @@ func DeleteRole(id int) error {
 }
 
 // 删除所有角色
-func CleanRole() error {
+func (r *Roles) CleanRole() error {
 	//Unscoped 方法可以物理删除记录
 	if err := databases.DB.Unscoped().Where("deleted_on != ? ", 0).Delete(&Roles{}).Error; err != nil {
 		return err
@@ -121,9 +122,9 @@ func CleanRole() error {
 }
 
 // 获取所有角色
-func GetRolesAll() ([]*Roles, error) {
+func (r *Roles) GetRolesAll() ([]*Roles, error) {
 	var role []*Roles
-	err := databases.DB.Preload("Permissions").Find(&role).Error
+	err := databases.DB.Model(&role).Find(&role).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, err
 	}
