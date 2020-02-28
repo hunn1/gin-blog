@@ -42,7 +42,6 @@ func WhereBuild(where map[string]interface{}) (whereSQL string, vals []interface
 			//fmt.Println(reflect.TypeOf(v))
 			switch v := v.(type) {
 			case NullType:
-				fmt.Println()
 				if v == IsNotNull {
 					whereSQL += fmt.Sprint(k, " IS NOT NULL")
 				} else {

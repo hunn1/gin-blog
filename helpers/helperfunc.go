@@ -34,6 +34,11 @@ func Long2ip(ipLong uint32) string {
 }
 
 func ShowStatus(ts interface{}, on string, on2 string) (tsf string) {
+	tsf = ""
+	if ts == nil {
+		return tsf
+	}
+
 	switch ts {
 	case ts.(int):
 		if ts == 0 {

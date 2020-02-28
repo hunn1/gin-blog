@@ -6,7 +6,6 @@ import (
 	"Kronos/library/databases"
 	"Kronos/library/password"
 	"Kronos/library/session"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -36,9 +35,8 @@ func (l LoginHandler) Login(c *gin.Context) {
 		return
 	}
 	admin.Password = ""
-	saveSession := session.SaveSession(c, session.UserKey, admin)
-	fmt.Println("saveSession")
-	fmt.Println(saveSession)
+	session.SaveSession(c, session.UserKey, admin)
+
 	c.Redirect(302, "/admin/")
 }
 

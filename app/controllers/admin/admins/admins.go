@@ -58,6 +58,7 @@ func (a AdminsHandler) ShowEdit(c *gin.Context) {
 		where["id"] = query["id"]
 		build, vals, _ := models.WhereBuild(where)
 		model, _ = model.Get(build, vals)
+
 	}
 	ginview.HTML(c, 200, "admins/edit", gin.H{
 		"admin": model,
@@ -72,11 +73,14 @@ func (a AdminsHandler) Apply(c *gin.Context) {
 	var model = models.Admin{}
 	if parseInt > 0 {
 		passowrd := c.PostForm("passowrd")
+		IsSuper := c.PostForm("IsSuper")
 		where := a.GetWhere(1)
 		where["id"] = parseInt
 		build, vals, _ := models.WhereBuild(where)
 		get, _ := model.Get(build, vals)
 		get.Password, _ = password.Encrypt(passowrd)
+		i, _ := strconv.ParseInt(IsSuper, 10, 0)
+		get.IsSuper = int(i)
 		update, err := get.Update()
 
 		if err != nil {

@@ -5,7 +5,6 @@ import (
 	"Kronos/library/casbin_helper"
 	"Kronos/library/session"
 	"encoding/json"
-	"fmt"
 	"github.com/casbin/casbin/v2"
 	"github.com/foolin/goview/supports/ginview"
 	"github.com/gin-gonic/gin"
@@ -22,7 +21,6 @@ func AuthAdmin(enforcer *casbin.SyncedEnforcer, nocheck ...casbin_helper.DontChe
 			c.Next()
 			return
 		}
-		fmt.Println("123123123")
 		// Session 判断权限
 		get := session.GetSession(c, session.UserKey)
 		var idss map[string]interface{}
