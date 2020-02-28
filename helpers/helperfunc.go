@@ -23,6 +23,10 @@ func Ip2long(ipstr string) uint32 {
 		return 0
 	}
 	ip = ip.To4()
+	if ip == nil {
+		return 0
+	}
+
 	return binary.BigEndian.Uint32(ip)
 }
 

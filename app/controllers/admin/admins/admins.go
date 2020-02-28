@@ -113,9 +113,11 @@ func (a AdminsHandler) Apply(c *gin.Context) {
 			create, err := model.Create(v)
 			if err != nil {
 				c.JSON(200, apgs.NewApiReturn(4003, "无法创建该数据", nil))
+				return
 			}
 			create.Password = ""
 			c.JSON(200, apgs.NewApiRedirect(200, "创建成功", "/admin/admins/lists"))
+			return
 		}
 	}
 }
@@ -126,12 +128,17 @@ func (a AdminsHandler) Delete(c *gin.Context) {
 	parseInt, _ := strconv.ParseInt(id, 10, 64)
 	var mod = models.Admin{}
 	if parseInt > 0 {
-		b, err := mod.Delete(int(parseInt))
+		_, err := mod.Delete(int(parseInt))
 		if err != nil {
 			c.JSON(200, apgs.NewApiReturn(4004, "无法删除该数据", nil))
+			return
 		}
-		c.JSON(200, apgs.NewApiReturn(200, "删除成功", b))
+		c.JSON(200, apgs.NewApiRedirect(200, "删除成功", "/admin/admins/lists"))
+		return
 
+	} else {
+		c.JSON(200, apgs.NewApiReturn(4004, "ID不能为0", nil))
+		return
 	}
 
 }

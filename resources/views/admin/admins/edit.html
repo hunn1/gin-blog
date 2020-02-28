@@ -49,9 +49,11 @@
         var data = {{.marshal}};
         var arr = new Array()
         $(document).ready(function () {
-            let parseJSON = $.parseJSON(data);
-            for (item in parseJSON) {
-                arr.push(parseJSON[item].id)
+            if (data) {
+                let parseJSON = $.parseJSON(data);
+                for (item in parseJSON) {
+                    arr.push(parseJSON[item].id)
+                }
             }
             $("#multi").val(arr).select2();
         });

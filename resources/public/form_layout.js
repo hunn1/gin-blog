@@ -82,7 +82,7 @@
                 cache: false,
                 async: true,
                 success: function success(json) {
-                    if (json.code > 0) {
+                    if (json.code == 200) {
                         $('body').pgNotification({
                             title: '消息通知',
                             message: json.message,
