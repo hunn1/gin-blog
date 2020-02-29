@@ -1,6 +1,9 @@
 package models
 
-import "Kronos/library/databases"
+import (
+	"Kronos/library/databases"
+	"Kronos/library/page"
+)
 
 // 菜单权限
 type Permissions struct {
@@ -17,4 +20,49 @@ func (m *Permissions) GetMenus() []Permissions {
 	allMenu := make([]Permissions, 10)
 	databases.DB.Model(&allMenu).Find(&allMenu)
 	return allMenu
+}
+
+func (m *Permissions) GetByCount(where string, values []interface{}) (count int) {
+	databases.DB.Model(&m).Where(where, values).Count(&count)
+	return
+}
+
+func (m *Permissions) Lists(fields string, where string, values []interface{}, page *page.Pagination) ([]Permissions, error) {
+	list := make([]Permissions, page.Perineum)
+	if err := databases.DB.Model(&list).Select(fields).Where(where, values).Offset(page.GetPage()).Limit(page.Perineum).Find(&list).Error; err != nil {
+		return nil, err
+	}
+	return list, nil
+}
+
+func (m Permissions) Get(where string, values []interface{}) (Permissions, error) {
+
+	first := databases.DB.Model(&m).Where(where, values).First(&m)
+	if first.Error != nil {
+		return m, first.Error
+	}
+	return m, nil
+}
+
+func (m Permissions) Update(id int, data map[string]interface{}) error {
+
+	find := databases.DB.Model(&m).Where("id = ?", id).Find(&m)
+	if find.Error != nil {
+		return find.Error
+	}
+	save := databases.DB.Model(&m).Update(data)
+
+	if save.Error != nil {
+		return save.Error
+	}
+	return nil
+}
+
+func (m Permissions) Create() error {
+
+	create := databases.DB.Model(&m).Create(&m)
+	if create.Error != nil {
+		return create.Error
+	}
+	return nil
 }

@@ -1,0 +1,67 @@
+<div class="row">
+    <label class="col-md-2 control-label"> 菜单名称</label>
+    <div class="col-md-7">
+        <input type="text" class="form-control input-sm"
+               id="Title"
+               placeholder="菜单名称..."
+               name="Title"
+               value="{{.data.Title}}"
+               required="">
+        <label id="route_name" class="error" for="Title"></label>
+    </div>
+</div>
+<div class="row">
+    <label class="col-md-2 control-label"> 菜单说明</label>
+    <div class="col-md-7">
+        <input type="text" class="form-control input-sm"
+               id="Description"
+               placeholder="菜单说明..."
+               name="Description"
+               value="{{.data.Description}}">
+        <label id="route_name" class="error" for="Description"></label>
+    </div>
+</div>
+<div class="row">
+    <label class="col-md-2 control-label"> Slug</label>
+    <div class="col-md-7">
+        <input type="text" class="form-control input-sm"
+               id="Slug"
+               placeholder="slug..."
+               name="Slug"
+               value="{{.data.Slug}}">
+        <label id="route_name" class="error" for="Slug"></label>
+    </div>
+</div>
+
+<div class="row">
+    <label class="col-md-2 control-label"> HTTP路径</label>
+    <div class="col-md-7">
+        <input type="text" class="form-control input-sm"
+               id="HttpPath"
+               placeholder="菜单说明..."
+               name="HttpPath"
+               value="{{.data.HttpPath}}"
+               required="">
+        <label id="route_name" class="error" for="HttpPath"></label>
+    </div>
+</div>
+
+<div class="row">
+    <label class="col-md-2 control-label"> 操作方法</label>
+    <div class="col-md-7">
+        <input type="text" class="form-control input-sm"
+               placeholder="操作方法..."
+               name="Method"
+               value="{{.data.Method}}"
+               required="">
+        <label id="Method" class="error" for="Method"></label>
+    </div>
+</div>
+
+
+
+
+
+
+
+

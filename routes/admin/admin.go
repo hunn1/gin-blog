@@ -4,6 +4,7 @@ import (
 	"Kronos/app/controllers/admin/admins"
 	"Kronos/app/controllers/admin/auth"
 	"Kronos/app/controllers/admin/dashboard"
+	"Kronos/app/controllers/admin/permissioins"
 	"Kronos/app/controllers/admin/role"
 	"Kronos/app/middle"
 	"Kronos/helpers"
@@ -68,6 +69,16 @@ func RegAdminRouter(router *gin.Engine) {
 			roles.GET("edit", roleHandler.ShowEdit)
 			roles.POST("apply", roleHandler.Apply)
 			roles.POST("delete", roleHandler.Delete)
+		}
+
+		// 角色
+		permission := ntc.Group("permission")
+		{
+			var permissionHandler = permissioins.PermissionHandler{}
+			permission.GET("lists", permissionHandler.Lists)
+			permission.GET("edit", permissionHandler.ShowEdit)
+			permission.POST("apply", permissionHandler.Apply)
+			permission.POST("delete", permissionHandler.Delete)
 		}
 
 	}
