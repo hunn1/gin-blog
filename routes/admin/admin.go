@@ -65,9 +65,9 @@ func RegAdminRouter(router *gin.Engine) {
 		{
 			var roleHandler = role.RolesHandler{}
 			roles.GET("lists", roleHandler.Lists)
-			//roles.GET("edit")
-			//roles.POST("apply")
-			//roles.POST("delete")
+			roles.GET("edit", roleHandler.ShowEdit)
+			roles.POST("apply", roleHandler.Apply)
+			roles.POST("delete", roleHandler.Delete)
 		}
 
 	}

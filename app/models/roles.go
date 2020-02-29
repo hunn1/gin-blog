@@ -14,6 +14,14 @@ type Roles struct {
 	Permissions []Permissions `json:"permissions" gorm:"many2many:role_menu;"`
 }
 
+func (r Roles) Get(whereSql string, vals []interface{}) (Roles, error) {
+	first := databases.DB.Preload("Permissions").Model(&r).Where(whereSql, vals).First(&r)
+	if first.Error != nil {
+		return r, first.Error
+	}
+	return r, nil
+}
+
 // 按照ID查找
 func (r *Roles) FindByID(id int) (bool, error) {
 	var role Roles
@@ -39,7 +47,7 @@ func (r *Roles) GetCount(whereSql string, vals []interface{}) (int, error) {
 // 获取角色列表
 func (r *Roles) GetRolesPage(whereSql string, vals []interface{}, p *page.Pagination) ([]*Roles, error) {
 	var role []*Roles
-	err := databases.DB.Preload("Permissions").Where(whereSql, vals).Offset(p.Page).Limit(p.Perineum).Find(&role).Error
+	err := databases.DB.Where(whereSql, vals).Offset(p.GetPage()).Limit(p.Perineum).Find(&role).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, err
 	}

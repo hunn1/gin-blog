@@ -1,0 +1,52 @@
+{{define "title"}}编辑角色{{end}}
+{{define "content"}}
+    <div class=" container-fluid   container-fixed-lg">
+        <!-- START card -->
+        <div class="card card-default">
+            <div class="card-header ">
+                <div class="card-title">编辑角色
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-10">
+                        <form
+                                enctype="multipart/form-data"
+                                class="form-horizontal form-ajax"
+                                action="/admin/admins/apply"
+                                method="POST"
+                                role="form"
+                                autocomplete="on"
+                                novalidate="novalidate">
+
+                            {{include "role/form"}}
+
+                            <br/>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <input type="hidden" name="id" value="{{.role.ID}}">
+
+                                </div>
+                                <div class="col-md-7">
+                                    <button class="btn btn-success" type="submit">提交</button>
+                                    <a href="javascript:window.history.back();" class="btn btn-default">返回</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END card -->
+    </div>
+    </div>
+{{end}}
+
+{{define "js"}}
+    {{include "public/footer"}}
+    <!-- END PAGE LEVEL JS -->
+    <script type="application/javascript">
+
+    </script>
+{{end}}
+

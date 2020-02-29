@@ -7,7 +7,6 @@ import (
 	"Kronos/library/page"
 	"Kronos/library/password"
 	"encoding/json"
-	"fmt"
 	"github.com/foolin/goview/supports/ginview"
 	"github.com/gin-gonic/gin"
 	"html/template"
@@ -61,8 +60,6 @@ func (a AdminsHandler) ShowEdit(c *gin.Context) {
 		build, vals, _ := models.WhereBuild(where)
 		model, _ = model.Get(build, vals)
 		marshal, _ = json.Marshal(model.Roles)
-
-		fmt.Println()
 	}
 	var role = models.Roles{}
 	allRoles, _ := role.GetRolesAll()
