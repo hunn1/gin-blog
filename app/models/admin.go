@@ -1,24 +1,25 @@
 package models
 
 import (
+	"Kronos/library/casbin_adapter"
 	"Kronos/library/databases"
 	"Kronos/library/page"
-	"errors"
-	"github.com/casbin/casbin/v2"
+	"fmt"
 	"github.com/jinzhu/gorm"
+	"github.com/pkg/errors"
 	"gopkg.in/go-playground/validator.v9"
 )
 
 // 管理员
 type Admin struct {
 	BaseModel
-	Username string `gorm:"type:char(50); unique_index;not null;" form:"username" binding:"required" validate:"min=6,max=32"`
+	Username string `gorm:"type:char(50); unique_index;not null;" form:"adminname" binding:"required" validate:"min=6,max=32"`
 	// 设置管理员账号 唯一并且不为空
-	Password    string          `gorm:"size:255;not null;" form:"password" binding:"required" ` // 设置字段大小为255
-	LastLoginIp uint32          `gorm:"type:int(1);not null;"`                                  // 上次登录IP
-	IsSuper     int             `gorm:"type:tinyint(1);not null"`                               // 是否超级管理员
-	Enforcer    casbin.Enforcer `inject:""`
-	Roles       []Roles         `json:"roles" gorm:"many2many:user_role;not null;"`
+	Password    string `gorm:"size:255;not null;" form:"password" binding:"required" ` // 设置字段大小为255
+	LastLoginIp uint32 `gorm:"type:int(1);not null;"`                                  // 上次登录IP
+	IsSuper     int    `gorm:"type:tinyint(1);not null"`                               // 是否超级管理员
+
+	Roles []Roles `json:"roles" gorm:"many2many:admin_role;not null;"`
 }
 
 // Validate the fields.
@@ -49,6 +50,14 @@ func (u Admin) Get(whereSql string, vals []interface{}) (Admin, error) {
 	return u, nil
 }
 
+func (u Admin) GetById(id int) (Admin, error) {
+	first := databases.DB.Preload("Roles").Model(&u).Where("id = ?", id).First(&u)
+	if first.Error != nil {
+		return u, first.Error
+	}
+	return u, nil
+}
+
 func (u Admin) Create(data map[string]interface{}) (*Admin, error) {
 	var role = make([]Roles, 10)
 	databases.DB.Where("id in (?)", data["role_id"]).Find(&role)
@@ -59,24 +68,24 @@ func (u Admin) Create(data map[string]interface{}) (*Admin, error) {
 	return &u, nil
 }
 
-func (u Admin) Update(id int, data map[string]interface{}) (bool, error) {
+func (u Admin) Update(id int, data map[string]interface{}) error {
 	var role = make([]Roles, 10)
 	if err := databases.DB.Where("id in (?)", data["role_id"]).Find(&role).Error; err != nil {
-		return false, errors.New("无法找到该角色")
+		return errors.New("无法找到该角色")
 	}
 
 	find := databases.DB.Model(&u).Where("id = ?", id).Find(&u)
 	if find.Error != nil {
-		return false, find.Error
+		return find.Error
 	}
 
 	databases.DB.Model(&u).Association("Roles").Replace(role)
 	save := databases.DB.Model(&u).Update(data)
 
 	if save.Error != nil {
-		return false, save.Error
+		return save.Error
 	}
-	return true, nil
+	return nil
 }
 
 func (u Admin) Delete(id int) (bool, error) {
@@ -86,5 +95,50 @@ func (u Admin) Delete(id int) (bool, error) {
 	if db.Error != nil {
 		return false, db.Error
 	}
+	casbin_adapter.GetEnforcer().DeleteUser(u.Username)
 	return true, nil
+}
+
+// LoadPolicy 加载用户权限策略
+func (u *Admin) LoadPolicy(id int) error {
+
+	admin, err := u.GetById(id)
+	if err != nil {
+		return err
+	}
+	casbin_adapter.GetEnforcer().DeleteRolesForUser(admin.Username)
+
+	for _, ro := range admin.Roles {
+		casbin_adapter.GetEnforcer().AddRoleForUser(admin.Username, ro.Title)
+	}
+	fmt.Println("更新角色权限关系", casbin_adapter.GetEnforcer().GetGroupingPolicy())
+	return nil
+}
+
+func (a Admin) GetUsersAll() ([]*Admin, error) {
+	var admin []*Admin
+	err := databases.DB.Model(&a).Preload("Roles").Find(&admin).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return nil, err
+	}
+
+	return admin, nil
+}
+
+// LoadAllPolicy 加载所有的用户策略
+func (a *Admin) LoadAllPolicy() error {
+	admins, err := a.GetUsersAll()
+	if err != nil {
+		return err
+	}
+	for _, admin := range admins {
+		if len(admin.Roles) != 0 {
+			err = a.LoadPolicy(int(admin.ID))
+			if err != nil {
+				return err
+			}
+		}
+	}
+	fmt.Println("角色权限关系", casbin_adapter.GetEnforcer().GetGroupingPolicy())
+	return nil
 }

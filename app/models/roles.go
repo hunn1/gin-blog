@@ -1,6 +1,7 @@
 package models
 
 import (
+	"Kronos/library/casbin_adapter"
 	"Kronos/library/databases"
 	"Kronos/library/page"
 	"github.com/jinzhu/gorm"
@@ -113,6 +114,7 @@ func (r *Roles) DeleteRole(id int) error {
 	databases.DB.Where("id = ?", id).First(&role)
 	databases.DB.Model(&role).Association("Permissions").Delete()
 	err := databases.DB.Where("id = ?", id).Delete(&role).Error
+
 	if err != nil {
 		return err
 	}
@@ -138,4 +140,38 @@ func (r *Roles) GetRolesAll() ([]*Roles, error) {
 	}
 
 	return role, nil
+}
+
+// LoadAllPolicy 加载所有的角色策略
+func (a *Roles) LoadAllPolicy() error {
+	roles, err := a.GetRolesAll()
+	if err != nil {
+		return err
+	}
+
+	for _, role := range roles {
+		err = a.LoadPolicy(int(role.ID))
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// LoadPolicy 加载角色权限策略
+func (a *Roles) LoadPolicy(id int) error {
+
+	role, err := a.GetRoleByID(id)
+	if err != nil {
+		return err
+	}
+	casbin_adapter.GetEnforcer().DeleteRole(role.Title)
+
+	for _, menu := range role.Permissions {
+		if menu.HttpPath == "" || menu.Method == "" {
+			continue
+		}
+		casbin_adapter.GetEnforcer().AddPermissionForUser(role.Title, menu.HttpPath, menu.Method)
+	}
+	return nil
 }

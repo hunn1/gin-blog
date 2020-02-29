@@ -3,12 +3,10 @@ package auth
 import (
 	"Kronos/app/controllers/admin"
 	"Kronos/app/models"
-	"Kronos/helpers"
 	"Kronos/library/apgs"
 	"Kronos/library/databases"
 	"Kronos/library/password"
 	"Kronos/library/session"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -26,7 +24,7 @@ func (l LoginHandler) ShowLogin(c *gin.Context) {
 func (l LoginHandler) Login(c *gin.Context) {
 	username, pass := c.PostForm("username"), c.PostForm("password")
 	var admin models.Admin
-	adminData := databases.DB.Where("username=?", username).First(&admin)
+	adminData := databases.DB.Model(&admin).Preload("Roles").Where("username=?", username).First(&admin)
 	if adminData.Error != nil {
 		c.JSON(200, apgs.NewApiReturn(400, "账号或密码错误", nil))
 		return
@@ -41,10 +39,8 @@ func (l LoginHandler) Login(c *gin.Context) {
 
 	v := l.GetWhere(1)
 	ip := c.ClientIP()
-	fmt.Println(helpers.Ip2long(ip))
-
 	v["last_login_ip"] = ip
-	databases.DB.Model(&adminData).Where("id = ?", admin.ID).Save(v)
+	databases.DB.Model(&admin).Where("id = ?", admin.ID).Update(v)
 	c.Redirect(302, "/admin/")
 }
 

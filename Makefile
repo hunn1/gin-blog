@@ -24,6 +24,10 @@ clean:
 
 run:
 	$(GOBUILD) -o ./build/$(BINARY_NAME) -tags=jsoniter -v ./
+	cp -r resources ./build
+	cp  -r config ./build/
+	rm -f ./build/config/config.go
+	cp -r storage ./build/
 	./build/$(BINARY_NAME)
 
 restart:

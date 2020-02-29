@@ -86,17 +86,14 @@ func (a AdminsHandler) Apply(c *gin.Context) {
 		v["passowrd"], _ = password.Encrypt(passowrd)
 		v["is_super"] = IsSuper
 		v["role_id"] = roleId
-		update, err := model.Update(int(parseInt), v)
+		err := model.Update(int(parseInt), v)
 
 		if err != nil {
 			c.JSON(200, apgs.NewApiReturn(4003, "无法更新该数据", err))
 			return
 		}
-		if update == false {
-			c.JSON(200, apgs.NewApiReturn(4004, "更新失败", nil))
-			return
-		}
 
+		model.LoadPolicy(int(parseInt))
 		c.JSON(200, apgs.NewApiRedirect(200, "更新成功", "/admin/admins/lists"))
 		return
 
@@ -104,18 +101,21 @@ func (a AdminsHandler) Apply(c *gin.Context) {
 		err := c.ShouldBind(&model)
 
 		if err == nil {
-			model.Password, _ = password.Encrypt(model.Password)
-			v := a.GetWhere(10)
-			v["role_id"] = roleId
-			create, err := model.Create(v)
-			if err != nil {
-				c.JSON(200, apgs.NewApiReturn(4003, "无法创建该数据", nil))
-				return
-			}
-			create.Password = ""
-			c.JSON(200, apgs.NewApiRedirect(200, "创建成功", "/admin/admins/lists"))
+			c.JSON(200, apgs.NewApiReturn(4003, "无法获取数据", err))
 			return
 		}
+		model.Password, _ = password.Encrypt(model.Password)
+		v := a.GetWhere(10)
+		v["role_id"] = roleId
+		create, err := model.Create(v)
+		if err != nil {
+			c.JSON(200, apgs.NewApiReturn(4003, "无法创建该数据", nil))
+			return
+		}
+		model.LoadPolicy(int(create.ID))
+		create.Password = ""
+		c.JSON(200, apgs.NewApiRedirect(200, "创建成功", "/admin/admins/lists"))
+		return
 	}
 }
 

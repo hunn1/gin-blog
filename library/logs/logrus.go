@@ -63,9 +63,7 @@ func LoggerToFile() gin.HandlerFunc {
 		logrus.PanicLevel: logWriter,
 	}
 
-	lfHook := lfshook.NewHook(writeMap, &logrus.JSONFormatter{
-
-	})
+	lfHook := lfshook.NewHook(writeMap, &logrus.JSONFormatter{})
 
 	// 新增钩子
 	logger.AddHook(lfHook)
