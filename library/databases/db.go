@@ -49,6 +49,10 @@ func InitDB() {
 	DB = db
 
 }
+
+func GetPrefix() string {
+	return viper.GetString("db.prefix")
+}
 func GetDB() *gorm.DB {
 	return DB
 }

@@ -74,37 +74,38 @@ func (a AdminsHandler) ShowEdit(c *gin.Context) {
 
 // 应用操作
 func (a AdminsHandler) Apply(c *gin.Context) {
-	id := c.PostForm("id")
+
 	roleId := c.PostFormArray("role_id[]")
-	parseInt, _ := strconv.ParseInt(id, 10, 64)
+
 	var model = models.Admin{}
-	if parseInt > 0 {
-		passowrd := c.PostForm("passowrd")
-		IsSuper := c.PostForm("IsSuper")
+	err := c.ShouldBind(&model)
+	if err != nil {
+		c.JSON(200, apgs.NewApiReturn(4003, "无法获取数据", err))
+		return
+	}
+
+	if model.ID > 0 {
+
 		v := a.GetWhere(10)
-
-		v["passowrd"], _ = password.Encrypt(passowrd)
-		v["is_super"] = IsSuper
+		if model.Password != "" {
+			v["passowrd"], _ = password.Encrypt(model.Password)
+		}
+		v["is_super"] = model.IsSuper
 		v["role_id"] = roleId
-		err := model.Update(int(parseInt), v)
-
+		err := model.Update(int(model.ID), v)
 		if err != nil {
 			c.JSON(200, apgs.NewApiReturn(4003, "无法更新该数据", err))
 			return
 		}
 
-		model.LoadPolicy(int(parseInt))
+		model.LoadPolicy(int(model.ID))
 		c.JSON(200, apgs.NewApiRedirect(200, "更新成功", "/admin/admins/lists"))
 		return
 
 	} else {
-		err := c.ShouldBind(&model)
 
-		if err == nil {
-			c.JSON(200, apgs.NewApiReturn(4003, "无法获取数据", err))
-			return
-		}
 		model.Password, _ = password.Encrypt(model.Password)
+
 		v := a.GetWhere(10)
 		v["role_id"] = roleId
 		create, err := model.Create(v)
@@ -124,18 +125,16 @@ func (a AdminsHandler) Delete(c *gin.Context) {
 	id := c.Query("id")
 	parseInt, _ := strconv.ParseInt(id, 10, 64)
 	var mod = models.Admin{}
-	if parseInt > 0 {
-		_, err := mod.Delete(int(parseInt))
-		if err != nil {
-			c.JSON(200, apgs.NewApiReturn(4004, "无法删除该数据", nil))
-			return
-		}
-		c.JSON(200, apgs.NewApiRedirect(200, "删除成功", "/admin/admins/lists"))
-		return
-
-	} else {
+	if parseInt <= 0 {
 		c.JSON(200, apgs.NewApiReturn(4004, "ID不能为0", nil))
 		return
 	}
+	_, err := mod.Delete(int(parseInt))
+	if err != nil {
+		c.JSON(200, apgs.NewApiReturn(4004, "无法删除该数据", nil))
+		return
+	}
+	c.JSON(200, apgs.NewApiRedirect(200, "删除成功", "/admin/admins/lists"))
+	return
 
 }

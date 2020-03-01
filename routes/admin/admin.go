@@ -31,7 +31,7 @@ func RegAdminRouter(router *gin.Engine) {
 	// Casbin
 	Egor, err := casbin_adapter.InitAdapter()
 	if err != nil {
-		panic("无法初始化权限")
+		panic(err)
 	}
 	// 单独加载后台登录页
 	router.LoadHTMLFiles("resources/views/admin/login/admin_login.html")

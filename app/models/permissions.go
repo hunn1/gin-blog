@@ -66,3 +66,19 @@ func (m Permissions) Create() error {
 	}
 	return nil
 }
+
+func EditPerRoles(id int) []int {
+	var permission Permissions
+	var role []Roles
+
+	databases.DB.Model(&permission).Where("id = ? ", id, 0)
+	pf := databases.GetPrefix()
+	joins := " left join " + pf + "role_menu b on " + pf + "roles.id=b.role_id left join " + pf + "permissions c on c.id=b.permissions_id"
+	databases.DB.Joins(joins).Where("c.id = ?", id).Find(&role)
+
+	var roleList []int
+	for _, v := range role {
+		roleList = append(roleList, int(v.ID))
+	}
+	return roleList
+}

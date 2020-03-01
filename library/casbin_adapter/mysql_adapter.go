@@ -22,6 +22,9 @@ func InitAdapter() (*casbin.SyncedEnforcer, error) {
 		return nil, fmt.Errorf("can not Init: %v", err.Error())
 	}
 	e, err := casbin.NewSyncedEnforcer("./config/rbac_model.conf", a)
+	if err != nil {
+		return nil, fmt.Errorf("can not Init: %v", err.Error())
+	}
 	// 开启AutoSave机制
 	e.EnableAutoSave(true)
 	_ = e.BuildRoleLinks()

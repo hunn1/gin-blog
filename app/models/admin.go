@@ -13,11 +13,11 @@ import (
 // 管理员
 type Admin struct {
 	BaseModel
-	Username string `gorm:"type:char(50); unique_index;not null;" form:"adminname" binding:"required" validate:"min=6,max=32"`
+	Username string `gorm:"type:char(50); unique_index;not null;"  binding:"required" validate:"min=6,max=32"`
 	// 设置管理员账号 唯一并且不为空
-	Password    string `gorm:"size:255;not null;" form:"password" binding:"required" ` // 设置字段大小为255
-	LastLoginIp uint32 `gorm:"type:int(1);not null;"`                                  // 上次登录IP
-	IsSuper     int    `gorm:"type:tinyint(1);not null"`                               // 是否超级管理员
+	Password    string `gorm:"size:255;not null;"  binding:"required" ` // 设置字段大小为255
+	LastLoginIp uint32 `gorm:"type:int(1);not null;"`                   // 上次登录IP
+	IsSuper     int    `gorm:"type:tinyint(1);not null"`                // 是否超级管理员
 
 	Roles []Roles `json:"roles" gorm:"many2many:admin_role;not null;"`
 }
