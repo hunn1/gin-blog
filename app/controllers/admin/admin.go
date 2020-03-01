@@ -7,7 +7,6 @@ import (
 )
 
 type AdminBaseHandler struct {
-	Where map[string]interface{}
 }
 
 func (h *AdminBaseHandler) AllParams(c *gin.Context) map[string]interface{} {
@@ -27,9 +26,8 @@ func (h *AdminBaseHandler) AllParams(c *gin.Context) map[string]interface{} {
 	return queryMap
 }
 
-func (h *AdminBaseHandler) GetWhere(len int) map[string]interface{} {
-	h.Where = make(map[string]interface{}, len)
-	return h.Where
+func (h *AdminBaseHandler) GetMap(len int) map[string]interface{} {
+	return make(map[string]interface{}, len)
 }
 func (h *AdminBaseHandler) ShowError(c *gin.Context, url string) {
 	ginview.HTML(c, 200, "err/redirect", gin.H{

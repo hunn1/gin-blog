@@ -20,7 +20,7 @@ func (p *PermissionHandler) Lists(c *gin.Context) {
 	all := p.AllParams(c)
 
 	// 条件封装
-	where := p.GetWhere(10)
+	where := p.GetMap(10)
 	if all["title"] != nil {
 		where["title like"] = all["title"].(string) + "%"
 	}
@@ -51,7 +51,7 @@ func (p *PermissionHandler) ShowEdit(c *gin.Context) {
 	var model = models.Permissions{}
 	// 编辑
 	if query["id"] != nil {
-		where := p.GetWhere(10)
+		where := p.GetMap(10)
 
 		where["id"] = query["id"]
 		build, vals, _ := models.WhereBuild(where)
@@ -75,7 +75,7 @@ func (p *PermissionHandler) Apply(c *gin.Context) {
 	}
 
 	if model.ID > 0 {
-		v := p.GetWhere(10)
+		v := p.GetMap(10)
 		marshal, _ := json.Marshal(model)
 		_ = json.Unmarshal(marshal, &v)
 		err = model.Update(int(model.ID), v)

@@ -95,18 +95,14 @@
                             if (json.url) location.href = json.url; else location.reload();
                         }, 1500);
                     } else {
-                        $.each(json.message, function (i, item) {
-                            $.each(item, function (k, val) {
-                                $('body').pgNotification({
-                                    title: '错误消息',
-                                    message: val,
-                                    style: 'bar',
-                                    timeout: 4000,
-                                    type: 'warning',
-                                    position: 'top',
-                                }).show();
-                            });
-                        });
+                        $('body').pgNotification({
+                            title: '错误消息',
+                            message: json.message,
+                            style: 'bar',
+                            timeout: 4000,
+                            type: 'warning',
+                            position: 'top',
+                        }).show();
 
                         // window.bootbox.alert(json.message);
                     }

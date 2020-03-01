@@ -15,9 +15,8 @@ type Permissions struct {
 	Method      string `gorm:"type:char(10);"`
 }
 
-func (m *Permissions) GetMenus() []Permissions {
-
-	allMenu := make([]Permissions, 10)
+func (m *Permissions) GetMenus() []*Permissions {
+	var allMenu []*Permissions
 	databases.DB.Model(&allMenu).Find(&allMenu)
 	return allMenu
 }

@@ -37,7 +37,7 @@ func (l LoginHandler) Login(c *gin.Context) {
 	admin.Password = ""
 	session.SaveSession(c, session.UserKey, admin)
 
-	v := l.GetWhere(1)
+	v := l.GetMap(1)
 	ip := c.ClientIP()
 	v["last_login_ip"] = ip
 	databases.DB.Model(&admin).Where("id = ?", admin.ID).Update(v)

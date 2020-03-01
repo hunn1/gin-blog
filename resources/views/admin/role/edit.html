@@ -1,52 +1,131 @@
 {{define "title"}}编辑角色{{end}}
 {{define "content"}}
-    <div class=" container-fluid   container-fixed-lg">
-        <!-- START card -->
-        <div class="card card-default">
-            <div class="card-header ">
-                <div class="card-title">编辑角色
+    <form
+            enctype="multipart/form-data"
+            class="form-horizontal form-ajax"
+            action="/admin/role/apply"
+            method="POST"
+            role="form"
+            autocomplete="on"
+            novalidate="novalidate">
+        <div class=" container-fluid   container-fixed-lg">
+            <!-- START card -->
+            <div class="card card-default">
+                <div class="card-header ">
+                    <div class="card-title">编辑角色
+                    </div>
                 </div>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-10">
-                        <form
-                                enctype="multipart/form-data"
-                                class="form-horizontal form-ajax"
-                                action="/admin/admins/apply"
-                                method="POST"
-                                role="form"
-                                autocomplete="on"
-                                novalidate="novalidate">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-10">
+
 
                             {{include "role/form"}}
 
                             <br/>
+
+
                             <div class="row">
                                 <div class="col-md-2">
-                                    <input type="hidden" name="id" value="{{.role.ID}}">
+                                    <input type="hidden" name="ID" value="{{.role.ID}}">
 
                                 </div>
-                                <div class="col-md-7">
-                                    <button class="btn btn-success" type="submit">提交</button>
-                                    <a href="javascript:window.history.back();" class="btn btn-default">返回</a>
-                                </div>
+
                             </div>
-                        </form>
+
+                        </div>
                     </div>
                 </div>
             </div>
+            <!-- END card -->
         </div>
-        <!-- END card -->
-    </div>
+        <div class=" container-fluid container-fixed-lg">
+
+            <div class="row">
+                {{ range $key,$v :=.permissions}}
+
+                    <div class="col-lg-4">
+                        <!-- START card -->
+                        <div class="card card-default">
+                            <div class="card-header ">
+                                <div class="card-title">
+                                    {{ $key }}
+                                </div>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="col-md-12">
+                                    <table class="table table-hover table-condensed dataTable no-footer">
+                                        <thead>
+                                        <tr>
+                                            <th width="60">
+                                                <input class="check-all" type="checkbox" value="0"
+                                                       data-wrap="table">
+                                            </th>
+                                            <th>名称</th>
+                                            <th width="180">路由</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {{range $i,$item:= $v}}
+                                            <tr role="row" class="odd">
+                                                <td class="v-align-middle sorting_1">
+                                                    <div>
+                                                        <input type="checkbox" value="{{.ID}}" name="permission[]"
+                                                               id="checkbox{{.ID}}"
+                                                                {{if eq .ID (index $.mapd .HttpPath)}}
+                                                                    checked
+                                                                {{end}}
+                                                        >
+                                                        <label for="checkbox{{.ID}}"
+                                                               class="no-padding no-margin"></label>
+                                                    </div>
+                                                </td>
+
+                                                <td class="v-align-middle"><p>{{.Title}}</p></td>
+                                                <td class="v-align-middle"><p>{{.HttpPath}}</p></td>
+                                            </tr>
+                                        {{end}}
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                {{end}}
+            </div>
+
+            <!-- START card -->
+            <div class="card card-default">
+                <div class="card-footer">
+                    <div class="col-md-7">
+                        <button class="btn btn-success" type="submit">提交</button>
+                        <a href="javascript:window.history.back();" class="btn btn-default">返回</a>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </form>
     </div>
 {{end}}
-
 {{define "js"}}
     {{include "public/footer"}}
     <!-- END PAGE LEVEL JS -->
-    <script type="application/javascript">
-
+    <script type="text/javascript">
+        $(function () {
+            $('.check-all').on({
+                'click': function (event) {
+                    /*阻止向上冒泡，以防再次触发点击操作*/
+                    event.stopPropagation();
+                    var $thr = $(this).parents('table');
+                    $thr.find('input').prop('checked', $(this).prop('checked'));
+                }
+            });
+        });
     </script>
 {{end}}
-

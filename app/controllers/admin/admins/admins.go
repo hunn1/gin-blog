@@ -22,7 +22,7 @@ func (a AdminsHandler) Lists(c *gin.Context) {
 	all := a.AllParams(c)
 
 	// 条件封装
-	where := a.GetWhere(10)
+	where := a.GetMap(10)
 	if all["username"] != nil {
 		where["username like"] = all["username"].(string) + "%"
 	}
@@ -54,7 +54,7 @@ func (a AdminsHandler) ShowEdit(c *gin.Context) {
 	var model = models.Admin{}
 	// 编辑
 	if query["id"] != nil {
-		where := a.GetWhere(10)
+		where := a.GetMap(10)
 
 		where["id"] = query["id"]
 		build, vals, _ := models.WhereBuild(where)
@@ -86,7 +86,7 @@ func (a AdminsHandler) Apply(c *gin.Context) {
 
 	if model.ID > 0 {
 
-		v := a.GetWhere(10)
+		v := a.GetMap(10)
 		if model.Password != "" {
 			v["passowrd"], _ = password.Encrypt(model.Password)
 		}
@@ -106,7 +106,7 @@ func (a AdminsHandler) Apply(c *gin.Context) {
 
 		model.Password, _ = password.Encrypt(model.Password)
 
-		v := a.GetWhere(10)
+		v := a.GetMap(10)
 		v["role_id"] = roleId
 		create, err := model.Create(v)
 		if err != nil {

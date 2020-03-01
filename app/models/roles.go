@@ -4,6 +4,7 @@ import (
 	"Kronos/library/casbin_adapter"
 	"Kronos/library/databases"
 	"Kronos/library/page"
+	"errors"
 	"github.com/jinzhu/gorm"
 )
 
@@ -79,18 +80,26 @@ func (r *Roles) CheckRoleName(name string) (bool, error) {
 }
 
 // 编辑角色
-func (r *Roles) EditRole(id int, data map[string]interface{}) error {
-	var role []Roles
-	var permsiss Permissions
-	databases.DB.Where("id in (?)", data["permissions_id"].(int)).Find(&permsiss)
+func (r Roles) EditRole(id int, data map[string]interface{}) error {
 
-	err := databases.DB.Where("id = ?", id).Find(&role).Error
-	if err != nil {
+	var permsiss = make([]Permissions, 10)
+	if err2 := databases.DB.Where("id in (?)", data["permissions_id"]).Find(&permsiss).Error; err2 != nil {
+		return errors.New("无法找到该权限，请刷新后重试")
+	}
+
+	if err := databases.DB.Model(&r).Where("id = ?", id).Find(&r).Error; err != nil {
 		return err
 	}
-	databases.DB.Model(&role).Association("Permissions").Replace(permsiss)
-	databases.DB.Model(&role).Update(data)
+
+	if err := databases.DB.Model(&r).Association("Permissions").Replace(permsiss).Error; err != nil {
+		return err
+	}
+
+	if update := databases.DB.Model(&r).Update(r).Error; update != nil {
+		return update
+	}
 	return nil
+
 }
 
 // 添加角色
@@ -99,8 +108,8 @@ func (r *Roles) AddRole(data map[string]interface{}) (id int, err error) {
 		Title:       data["title"].(string),
 		Description: data["description"].(string),
 	}
-	var per Permissions
-	databases.DB.Where("id in (?)", data["permissions_id"].(int)).Find(&per)
+	var per []Permissions
+	databases.DB.Where("id in (?)", data["permissions_id"]).Find(&per)
 	err = databases.DB.Create(&role).Association("Permissions").Append(&per).Error
 	if err != nil {
 		return 0, err
