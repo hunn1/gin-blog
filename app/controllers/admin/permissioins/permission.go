@@ -35,7 +35,7 @@ func (p *PermissionHandler) Lists(c *gin.Context) {
 	pagination := page.NewPagination(c.Request, count, 10)
 	// 查询数据绑定到列表slice
 	fields := "id, title, http_path, method,slug"
-	lists, _ := model.Lists(fields, build, vals, pagination)
+	lists, _ := model.Lists(fields, build, vals, pagination.GetPage(), pagination.Perineum)
 
 	ginview.HTML(c, 200, "permission/lists", gin.H{
 		"pagination": template.HTML(pagination.Pages()),

@@ -2,7 +2,6 @@ package models
 
 import (
 	"Kronos/library/databases"
-	"Kronos/library/page"
 )
 
 // 菜单权限
@@ -26,9 +25,9 @@ func (m *Permissions) GetByCount(where string, values []interface{}) (count int)
 	return
 }
 
-func (m *Permissions) Lists(fields string, where string, values []interface{}, page *page.Pagination) ([]Permissions, error) {
-	list := make([]Permissions, page.Perineum)
-	if err := databases.DB.Model(&list).Select(fields).Where(where, values).Offset(page.GetPage()).Limit(page.Perineum).Find(&list).Error; err != nil {
+func (m *Permissions) Lists(fields string, where string, values []interface{}, offset, limit int) ([]Permissions, error) {
+	list := make([]Permissions, limit)
+	if err := databases.DB.Model(&list).Select(fields).Where(where, values).Offset(offset).Limit(limit).Find(&list).Error; err != nil {
 		return nil, err
 	}
 	return list, nil

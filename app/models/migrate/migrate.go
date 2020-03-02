@@ -8,6 +8,7 @@ import (
 
 var Models = []interface{}{
 	&models.Article{},
+	&models.ArticleContent{},
 	&models.Admin{},
 	&models.Permissions{},
 	&models.Roles{},

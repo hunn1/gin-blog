@@ -3,7 +3,6 @@ package models
 import (
 	"Kronos/library/casbin_adapter"
 	"Kronos/library/databases"
-	"Kronos/library/page"
 	"fmt"
 	"github.com/jinzhu/gorm"
 	"github.com/pkg/errors"
@@ -33,9 +32,9 @@ func (u Admin) GetByCount(whereSql string, vals []interface{}) (count int) {
 	return
 }
 
-func (u Admin) Lists(fields string, whereSql string, vals []interface{}, page *page.Pagination) ([]Admin, error) {
-	list := make([]Admin, page.Perineum)
-	find := databases.DB.Preload("Roles").Model(&u).Select(fields).Where(whereSql, vals).Offset(page.GetPage()).Limit(page.Perineum).Find(&list)
+func (u Admin) Lists(fields string, whereSql string, vals []interface{}, offset, limit int) ([]Admin, error) {
+	list := make([]Admin, limit)
+	find := databases.DB.Preload("Roles").Model(&u).Select(fields).Where(whereSql, vals).Offset(offset).Limit(limit).Find(&list)
 	if find.Error != nil && find.Error != gorm.ErrRecordNotFound {
 		return nil, find.Error
 	}

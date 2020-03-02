@@ -38,7 +38,7 @@ func (a AdminsHandler) Lists(c *gin.Context) {
 	pagination := page.NewPagination(c.Request, count, 10)
 	// 查询数据绑定到列表slice
 	fields := "id, username, last_login_ip, is_super,created_at"
-	lists, _ := model.Lists(fields, build, vals, pagination)
+	lists, _ := model.Lists(fields, build, vals, pagination.GetPage(), pagination.Perineum)
 
 	ginview.HTML(c, 200, "admins/lists", gin.H{
 		"pagination": template.HTML(pagination.Pages()),

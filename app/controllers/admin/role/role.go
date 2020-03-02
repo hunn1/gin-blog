@@ -27,7 +27,7 @@ func (r *RolesHandler) Lists(c *gin.Context) {
 	var model = models.Roles{}
 	count, _ := model.GetCount(build, vals)
 	page := page.NewPagination(c.Request, count, 10)
-	list, _ := model.GetRolesPage(build, vals, page)
+	list, _ := model.GetRolesPage(build, vals, page.GetPage(), page.Perineum)
 
 	ginview.HTML(c, 200, "role/lists", gin.H{
 		"pagination": template.HTML(page.Pages()),

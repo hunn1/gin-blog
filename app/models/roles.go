@@ -3,7 +3,6 @@ package models
 import (
 	"Kronos/library/casbin_adapter"
 	"Kronos/library/databases"
-	"Kronos/library/page"
 	"errors"
 	"github.com/jinzhu/gorm"
 )
@@ -47,9 +46,9 @@ func (r *Roles) GetCount(whereSql string, vals []interface{}) (int, error) {
 }
 
 // 获取角色列表
-func (r *Roles) GetRolesPage(whereSql string, vals []interface{}, p *page.Pagination) ([]*Roles, error) {
+func (r *Roles) GetRolesPage(whereSql string, vals []interface{}, offset, limit int) ([]*Roles, error) {
 	var role []*Roles
-	err := databases.DB.Where(whereSql, vals).Offset(p.GetPage()).Limit(p.Perineum).Find(&role).Error
+	err := databases.DB.Where(whereSql, vals).Offset(offset).Limit(limit).Find(&role).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, err
 	}
