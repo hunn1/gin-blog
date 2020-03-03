@@ -1,0 +1,45 @@
+<div class="row">
+    <label class="col-md-2 control-label"> 标题</label>
+    <div class="col-md-7">
+        <input type="text" class="form-control input-sm"
+               id="Title"
+               placeholder="标题..."
+               name="Title"
+               value="{{.admin.Title}}"
+                {{if .admin.Title}}
+                    disabled="disabled"
+                {{end}}
+               required="">
+        <label id="route_name" class="error" for="Title"></label>
+    </div>
+</div>
+<div class="row">
+    <label class="col-md-2 control-label"> 关键字</label>
+    <div class="col-md-7">
+        <select id="multi" class="full-width" name="role_id[]" multiple>
+
+
+        </select>
+    </div>
+</div>
+<br/>
+
+
+<div class="row">
+    <label class="col-md-2 control-label"> 创建时间</label>
+    <div class="col-md-7">
+        <label>{{showtime .admin.CreatedAt "2006-01-02 15:04:05"}}</label>
+    </div>
+</div>
+
+<div class="row">
+    <label class="col-md-2 control-label"> 更新时间</label>
+    <div class="col-md-7">
+        <label>{{showtime .admin.UpdatedAt "2006-01-02 15:04:05"}}</label>
+    </div>
+</div>
+
+
+
+
+

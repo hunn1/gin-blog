@@ -1,0 +1,128 @@
+{{define "title"}}文章列表{{end}}
+{{define "content"}}
+    <div class="container-fluid container-fixed-lg ">
+        <!-- START card -->
+        <div class="card card-default">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-10">
+                        <form class="form-horizontal" action="">
+                            <div class="row">
+                                <label for="fname" class="col-md-1 control-label">标题 ：</label>
+                                <div class="col-md-5">
+                                    <input type="text" class="form-control input-sm" id="Title"
+                                           placeholder="输入标题查找..."
+                                           value="{{.req.Title}}"
+                                           name="Title">
+                                    <label id="fname-error" class="error" for="Title"></label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-9">
+                                    <button class="btn btn-sm btn-success" type="submit">搜索</button>
+                                    <button class="btn btn-sm btn-default" type="button" data-click="clear_form"
+                                            onclick="javascript:;">清除
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END card -->
+    </div>
+    <div class=" container-fluid   container-fixed-lg">
+        <!-- START card -->
+        <div class="card card-transparent">
+            <div class="card-header ">
+                <div class="card-title">文章列表
+                </div>
+
+                <div class="pull-right">
+
+                    <div class="col-xs-12">
+                        <a id="show-modal" href="/admin/admins/edit" class="btn btn-primary btn-cons"><i
+                                    class="fa fa-plus"></i> 添加记录
+                        </a>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+        </div>
+        <!-- END card -->
+    </div>
+    <div class="container-fluid container-fixed-lg ">
+        <!-- START card -->
+        <div class="card card-default">
+            <div class="card-body dataTables_wrapper">
+                <div class="row">
+                    <table class="table table-hover" cellspacing="0" width="100%">
+                        <thead>
+                        <tr role="row">
+                            <th>标题</th>
+                            <th>缩略图</th>
+                            <th width="160">创作时间</th>
+                            <th width="160">更新时间</th>
+                            <th width="160">操作</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {{ range .lists}}
+                            <tr role="row" class="odd">
+                                <td class="v-align-middle sorting_1">
+                                    <p>{{.Title}}</p>
+                                </td>
+                                <td class="v-align-middle">
+                                    <p><img src="{{.Thumb}}"/></p>
+                                </td>
+                                <td class="v-align-middle">
+                                    <p>{{showtime .CreatedAt "2006-01-02 15:04:05"}}</p>
+                                </td>
+                                <td class="v-align-middle">
+                                    <p>{{showtime .UpdatedAt "2006-01-02 15:04:05"}}</p>
+                                </td>
+
+                                <td>
+                                    <a href="/admin/article/edit?id={{.ID}}"
+                                       class="btn btn-xs btn-info">
+                                        编辑
+                                    </a>
+                                    <a href="/admin/article/delete?id={{.ID}}"
+                                       class="btn btn-xs btn-danger">
+                                        删除
+                                    </a>
+                                </td>
+                            </tr>
+                        {{end}}
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div>
+                        <div class="dataTables_paginate paging_simple_numbers" id="tableWithExportOptions_paginate">
+                            {{.page}}
+                        </div>
+                        <div class="dataTables_info" id="tableWithExportOptions_info" role="status" aria-live="polite">
+                            共计{{.total}} 记录
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END card -->
+    </div>
+    </div>
+
+
+{{end}}
+
+{{define "js"}}
+    {{include "public/footer"}}
+    <!-- END PAGE LEVEL JS -->
+{{end}}
+

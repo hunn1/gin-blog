@@ -2,6 +2,7 @@ package admin
 
 import (
 	"Kronos/app/controllers/admin/admins"
+	"Kronos/app/controllers/admin/articles"
 	"Kronos/app/controllers/admin/auth"
 	"Kronos/app/controllers/admin/dashboard"
 	"Kronos/app/controllers/admin/permissioins"
@@ -71,7 +72,7 @@ func RegAdminRouter(router *gin.Engine) {
 			roles.POST("delete", roleHandler.Delete)
 		}
 
-		// 角色
+		// 权限
 		permission := ntc.Group("permission")
 		{
 			var permissionHandler = permissioins.PermissionHandler{}
@@ -79,6 +80,16 @@ func RegAdminRouter(router *gin.Engine) {
 			permission.GET("edit", permissionHandler.ShowEdit)
 			permission.POST("apply", permissionHandler.Apply)
 			permission.POST("delete", permissionHandler.Delete)
+		}
+
+		// 文章
+		article := ntc.Group("article")
+		{
+			var artilceHandler = articles.ArticleHandler{}
+			article.GET("lists", artilceHandler.Lists)
+			article.GET("edit", artilceHandler.ShowEdit)
+			article.POST("apply", artilceHandler.Apply)
+			article.POST("delete", artilceHandler.Delete)
 		}
 
 	}
