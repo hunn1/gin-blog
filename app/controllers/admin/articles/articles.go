@@ -53,6 +53,7 @@ func (a ArticleHandler) ShowEdit(c *gin.Context) {
 func (a ArticleHandler) Apply(c *gin.Context) {
 
 	array := c.PostFormMap("content")
+
 	err := c.ShouldBind(&a.model)
 	if err != nil {
 		c.JSON(200, apgs.NewApiReturn(3003, "无法获取到数据", nil))
@@ -72,14 +73,23 @@ func (a ArticleHandler) Apply(c *gin.Context) {
 			c.JSON(200, apgs.NewApiReturn(4005, "无法更新该文章数据", err.Error()))
 			return
 		}
-		c.JSON(200, apgs.NewApiReturn(300, "更新成功", nil))
-		return
+
 	} else {
-		for _, i2 := range array {
+		form := c.PostFormArray("content[]")
+
+		for _, i2 := range form {
 			artc = append(artc, models.ArticleContent{Body: i2})
 		}
-		a.model.ArticleContent = artc
+		err := a.model.Create(artc)
+		if err != nil {
+			c.JSON(200, apgs.NewApiReturn(4004, "无法创建该文章数据", err.Error()))
+			return
+		}
+
 	}
+
+	c.JSON(200, apgs.NewApiReturn(300, "操作成功", nil))
+	return
 
 }
 

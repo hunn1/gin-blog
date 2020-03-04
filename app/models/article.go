@@ -59,3 +59,10 @@ func (a Article) Update(id uint64, data []ArticleContent) error {
 	}
 	return nil
 }
+func (a Article) Create(data []ArticleContent) error {
+	err := databases.DB.Model(&a).Create(&a).Association("ArticleContent").Append(data).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
