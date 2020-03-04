@@ -15,6 +15,7 @@ var Builtins = template.FuncMap{
 	"showtime":   ShowTime,
 	"ip2long":    Ip2long,
 	"long2ip":    Long2ip,
+	"decodeHtml": DecodeHtml,
 }
 
 func Ip2long(ipstr string) uint32 {
@@ -73,4 +74,10 @@ func Abort(c *gin.Context, message string) {
 	c.HTML(http.StatusInternalServerError, "/home/err/500.html", gin.H{
 		"message": message,
 	})
+}
+
+func DecodeHtml(str string) interface{} {
+	fmt.Println(str)
+	html := template.HTML(str)
+	return html
 }

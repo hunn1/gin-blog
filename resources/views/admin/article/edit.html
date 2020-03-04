@@ -1,10 +1,10 @@
-{{define "title"}}编辑管理员{{end}}
+{{define "title"}}编辑文章{{end}}
 {{define "content"}}
     <div class=" container-fluid   container-fixed-lg">
         <!-- START card -->
         <div class="card card-default">
             <div class="card-header ">
-                <div class="card-title">编辑管理员
+                <div class="card-title">编辑文章
                 </div>
             </div>
             <div class="card-body">
@@ -13,18 +13,18 @@
                         <form
                                 enctype="multipart/form-data"
                                 class="form-horizontal form-ajax"
-                                action="/admin/admins/apply"
+                                action="/admin/article/apply"
                                 method="POST"
                                 role="form"
                                 autocomplete="on"
                                 novalidate="novalidate">
 
-                            {{include "admins/form"}}
+                            {{include "article/form"}}
 
                             <br/>
                             <div class="row">
                                 <div class="col-md-2">
-                                    <input type="hidden" name="ID" value="{{.admin.ID}}">
+                                    <input type="hidden" name="ID" value="{{.data.ID}}">
 
                                 </div>
                                 <div class="col-md-7">
@@ -44,19 +44,21 @@
 
 {{define "js"}}
     {{include "public/footer"}}
+
+
     <!-- END PAGE LEVEL JS -->
     <script type="application/javascript">
-        var data = {{.marshal}};
-        var arr = new Array()
-        $(document).ready(function () {
-            if (data) {
-                let parseJSON = $.parseJSON(data);
-                for (item in parseJSON) {
-                    arr.push(parseJSON[item].id)
-                }
-            }
-            $("#multi").val(arr).select2();
-        });
+        {{/*var data = {{.marshal}};*/}}
+        {{/*var arr = new Array()*/}}
+        {{/*$(document).ready(function () {*/}}
+        {{/*    if (data) {*/}}
+        {{/*        let parseJSON = $.parseJSON(data);*/}}
+        {{/*        for (item in parseJSON) {*/}}
+        {{/*            arr.push(parseJSON[item].id)*/}}
+        {{/*        }*/}}
+        {{/*    }*/}}
+        {{/*    $("#multi").val(arr).select2();*/}}
+        {{/*});*/}}
     </script>
 {{end}}
 

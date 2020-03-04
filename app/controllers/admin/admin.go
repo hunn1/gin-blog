@@ -9,7 +9,7 @@ import (
 type AdminBaseHandler struct {
 }
 
-func (h *AdminBaseHandler) AllParams(c *gin.Context) map[string]interface{} {
+func (h *AdminBaseHandler) AllParams(c *gin.Context) (req map[string]interface{}) {
 	query := c.Request.URL.Query()
 	queryMap := make(map[string]interface{}, 3)
 	for key, value := range query {

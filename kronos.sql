@@ -11,7 +11,7 @@
  Target Server Version : 80018
  File Encoding         : 65001
 
- Date: 01/03/2020 18:21:23
+ Date: 04/03/2020 15:18:29
 */
 
 SET NAMES utf8mb4;
@@ -61,6 +61,21 @@ INSERT INTO `kr_admins` VALUES (1, '2020-03-01 11:40:50', '2020-03-01 18:20:21',
 COMMIT;
 
 -- ----------------------------
+-- Table structure for kr_article_contents
+-- ----------------------------
+DROP TABLE IF EXISTS `kr_article_contents`;
+CREATE TABLE `kr_article_contents` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `article_id` bigint(20) unsigned DEFAULT NULL,
+  `body` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_kr_article_contents_deleted_at` (`deleted_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- ----------------------------
 -- Table structure for kr_articles
 -- ----------------------------
 DROP TABLE IF EXISTS `kr_articles`;
@@ -75,7 +90,15 @@ CREATE TABLE `kr_articles` (
   `thumb` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_kr_articles_deleted_at` (`deleted_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- ----------------------------
+-- Records of kr_articles
+-- ----------------------------
+BEGIN;
+INSERT INTO `kr_articles` VALUES (1, '2020-03-03 16:30:31', '2020-03-03 16:30:34', '2020-03-03 16:30:48', '1', '1', '1', NULL);
+INSERT INTO `kr_articles` VALUES (2, '2020-03-03 16:30:55', '2020-03-03 16:30:57', NULL, '1', '1', '1', NULL);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for kr_casbin_rule
