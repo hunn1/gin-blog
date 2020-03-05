@@ -71,7 +71,7 @@ func RegAdminRouter(router *gin.Engine) {
 			roles.GET("lists", roleHandler.Lists)
 			roles.GET("edit", roleHandler.ShowEdit)
 			roles.POST("apply", roleHandler.Apply)
-			roles.POST("delete", roleHandler.Delete)
+			roles.GET("delete", roleHandler.Delete)
 		}
 
 		// 权限
@@ -81,7 +81,7 @@ func RegAdminRouter(router *gin.Engine) {
 			permission.GET("lists", permissionHandler.Lists)
 			permission.GET("edit", permissionHandler.ShowEdit)
 			permission.POST("apply", permissionHandler.Apply)
-			permission.POST("delete", permissionHandler.Delete)
+			permission.GET("delete", permissionHandler.Delete)
 		}
 
 		// 文章
@@ -91,7 +91,7 @@ func RegAdminRouter(router *gin.Engine) {
 			article.GET("lists", artilceHandler.Lists)
 			article.GET("edit", artilceHandler.ShowEdit)
 			article.POST("apply", artilceHandler.Apply)
-			article.POST("delete", artilceHandler.Delete)
+			article.GET("delete", artilceHandler.Delete)
 		}
 
 		// 文章
@@ -101,7 +101,7 @@ func RegAdminRouter(router *gin.Engine) {
 			tag.GET("lists", tagHandler.Lists)
 			tag.GET("edit", tagHandler.ShowEdit)
 			tag.POST("apply", tagHandler.Apply)
-			tag.POST("delete", tagHandler.Delete)
+			tag.GET("delete", tagHandler.Delete)
 		}
 
 		// 文章
@@ -111,7 +111,7 @@ func RegAdminRouter(router *gin.Engine) {
 			cate.GET("lists", cateHandler.Lists)
 			cate.GET("edit", cateHandler.ShowEdit)
 			cate.POST("apply", cateHandler.Apply)
-			cate.POST("delete", cateHandler.Delete)
+			cate.GET("delete", cateHandler.Delete)
 		}
 
 	}

@@ -118,10 +118,10 @@ func (r *Roles) AddRole(data map[string]interface{}) (id int, err error) {
 
 // 删除角色
 func (r *Roles) DeleteRole(id int) error {
-	var role Roles
-	databases.DB.Where("id = ?", id).First(&role)
-	databases.DB.Model(&role).Association("Permissions").Delete()
-	err := databases.DB.Where("id = ?", id).Delete(&role).Error
+
+	databases.DB.Where("id = ?", id).First(&r)
+	databases.DB.Model(&r).Association("Permissions").Delete()
+	err := databases.DB.Where("id = ?", id).Delete(&r).Error
 
 	if err != nil {
 		return err

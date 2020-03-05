@@ -12,7 +12,7 @@ type Article struct {
 	Keyword        string           `gorm:"type:varchar(100);"`
 	Description    string           `gorm:"type:varchar(100);"`
 	Thumb          string           `gorm:"size:255"` // 设置字段大小为255
-	ArticleContent []ArticleContent `gorm:"foreignkey:article_id;association_foreignkey:id"`
+	ArticleContent []ArticleContent `gorm:"foreignkey:article_id;"`
 	Category       []Category       `gorm:"many2many:article_cate;"`
 	Tags           []Tags           `gorm:"many2many:article_tags;"`
 }
@@ -43,7 +43,7 @@ func (a Article) Get(where string, vals []interface{}) (Article, error) {
 	return a, nil
 }
 
-func (a Article) Update(id uint64) error {
+func (a Article) Update(id uint64, data map[string]interface{}) error {
 
 	first := databases.DB.Model(&a).Where("id = ?", id).First(&a)
 	if first.Error != nil {
@@ -54,35 +54,40 @@ func (a Article) Update(id uint64) error {
 	if association.Error != nil {
 		return association.Error
 	}
-	update.Association("Category").Replace(a.Category)
-	update.Association("Tags").Replace(a.Tags)
+	var cate []Category
+	databases.DB.Where("id in (?)", data["category_ids"]).Find(&cate)
+	update.Association("Category").Replace(cate)
+	var tag []Tags
+	databases.DB.Where("id in (?)", data["tag_ids"]).Find(&tag)
+	update.Association("Tags").Replace(tag)
 	if err := databases.DB.Model(&a).Update(a).Error; err != nil {
 		return err
 	}
 	return nil
 }
-func (a Article) Create() error {
+func (a Article) Create(data map[string]interface{}) error {
 	create := databases.DB.Model(&a).Create(&a)
 	err := create.Association("ArticleContent").Append(a.ArticleContent).Error
 	if err != nil {
 		return err
 	}
-	create.Association("Category").Append(a.Category)
-	create.Association("Tags").Append(a.Tags)
+	var cate []Category
+	databases.DB.Where("id in (?)", data["category_ids"]).Find(&cate)
+	create.Association("Category").Append(cate)
+	var tag []Tags
+	databases.DB.Where("id in (?)", data["tag_ids"]).Find(&tag)
+	create.Association("Tags").Append(tag)
 	return nil
 }
 
 func (m Article) Delete(id uint64) error {
-	if err := databases.DB.Where("id = ?", id).Find(&m).Error; err != nil {
+	first := databases.DB.Model(&m).Preload("Category").Preload("Tags").Where("id = ?", id).First(&m)
+	if err := first.Error; err != nil {
 		return err
 	}
-	databases.DB.Model(&m).Association("ArticleContent").Delete()
-	databases.DB.Model(&m).Association("Category").Delete()
-	databases.DB.Model(&m).Association("Tags").Delete()
-	db := databases.DB.Model(&m).Where("id = ?", id).Delete(&m)
-	if db.Error != nil {
-		return db.Error
-	}
+	//first.Association("Category").Delete(m.Category)
+	//first.Association("Tags").Delete(m.Tags)
+	first.Delete(&m)
 
 	return nil
 }

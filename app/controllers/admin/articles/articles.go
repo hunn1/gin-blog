@@ -65,6 +65,8 @@ func (a ArticleHandler) Apply(c *gin.Context) {
 	fmt.Println(file)
 
 	array := c.PostFormMap("content")
+	categoryIds := c.PostFormArray("category[]")
+	tagIds := c.PostFormArray("tags[]")
 	form := c.PostFormArray("content[]")
 	err = c.ShouldBind(&a.model)
 	if err != nil {
@@ -80,28 +82,29 @@ func (a ArticleHandler) Apply(c *gin.Context) {
 		for _, i2 := range form {
 			artc = append(artc, models.ArticleContent{Body: i2})
 		}
-
 		a.model.ArticleContent = artc
-		err := a.model.Update(a.model.ID)
+		err := a.model.Update(a.model.ID, map[string]interface{}{
+			"category_ids": categoryIds,
+			"tag_ids":      tagIds,
+		})
 		if err != nil {
 			c.JSON(200, apgs.NewApiReturn(4005, "无法更新该文章数据", err.Error()))
 			return
 		}
-
 	} else {
-
 		for _, i2 := range form {
 			artc = append(artc, models.ArticleContent{Body: i2})
 		}
 		a.model.ArticleContent = artc
-		err := a.model.Create()
+		err := a.model.Create(map[string]interface{}{
+			"category_ids": categoryIds,
+			"tag_ids":      tagIds,
+		})
 		if err != nil {
 			c.JSON(200, apgs.NewApiReturn(4004, "无法创建该文章数据", err.Error()))
 			return
 		}
-
 	}
-
 	c.JSON(200, apgs.NewApiReturn(300, "操作成功", nil))
 	return
 
