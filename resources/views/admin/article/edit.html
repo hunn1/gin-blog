@@ -48,17 +48,25 @@
 
     <!-- END PAGE LEVEL JS -->
     <script type="application/javascript">
-        var cates = "";
-        var arr = new Array()
+        var cates = "{{.curr_cate}}";
+        var tags = "{{.curr_tags}}";
+        var cate_arr = new Array()
+        var tag_arr = new Array()
         $(document).ready(function () {
             if (cates) {
-                let parseJSON = $.parseJSON(data);
+                let parseJSON = $.parseJSON(cates);
                 for (item in parseJSON) {
-                    arr.push(parseJSON[item].id)
+                    cate_arr.push(parseJSON[item].id)
                 }
             }
-            $("#multi").val(arr).select2();
-            $("#multi1").val(arr).select2();
+            if (tags) {
+                let parseJSON = $.parseJSON(tags);
+                for (item in parseJSON) {
+                    tag_arr.push(parseJSON[item].id)
+                }
+            }
+            $("#multi").val(cate_arr).select2();
+            $("#multi1").val(tag_arr).select2();
         });
     </script>
 {{end}}

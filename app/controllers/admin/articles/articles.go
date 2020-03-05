@@ -6,6 +6,7 @@ import (
 	"Kronos/helpers"
 	"Kronos/library/apgs"
 	"Kronos/library/page"
+	"encoding/json"
 	"fmt"
 	"github.com/foolin/goview/supports/ginview"
 	"github.com/gin-gonic/gin"
@@ -63,17 +64,21 @@ func (a ArticleHandler) ShowEdit(c *gin.Context) {
 		getMap["id"], _ = strconv.ParseInt(params["id"].(string), 10, 0)
 		build, vals, _ := models.WhereBuild(getMap)
 		a.model, _ = a.model.Get(build, vals)
-		fmt.Println(a.model)
+
 	}
 	cateModel := models.Category{}
 	allcate, _ := cateModel.GetAll()
 	tagModel := models.Tags{}
 	allTags, _ := tagModel.GetAll()
+	curr_tags, _ := json.Marshal(a.model.Tags)
+	curr_cate, _ := json.Marshal(a.model.Category)
 	ginview.HTML(c, 200, "article/edit", gin.H{
-		"data": a.model,
-		"req":  params,
-		"cate": allcate,
-		"tags": allTags,
+		"data":      a.model,
+		"req":       params,
+		"cate":      allcate,
+		"tags":      allTags,
+		"curr_tags": string(curr_tags),
+		"curr_cate": string(curr_cate),
 	})
 }
 
