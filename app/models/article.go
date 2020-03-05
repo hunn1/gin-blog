@@ -66,3 +66,18 @@ func (a Article) Create(data []ArticleContent) error {
 	}
 	return nil
 }
+
+func (m Article) Delete(id uint64) error {
+	if err := databases.DB.Where("id = ?", id).Find(&m).Error; err != nil {
+		return err
+	}
+	databases.DB.Model(&m).Association("ArticleContent").Delete()
+	databases.DB.Model(&m).Association("Category").Delete()
+	databases.DB.Model(&m).Association("Tags").Delete()
+	db := databases.DB.Model(&m).Where("id = ?", id).Delete(&m)
+	if db.Error != nil {
+		return db.Error
+	}
+
+	return nil
+}

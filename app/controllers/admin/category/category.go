@@ -1,4 +1,4 @@
-package permissioins
+package category
 
 import (
 	"Kronos/app/controllers/admin"
@@ -12,33 +12,33 @@ import (
 	"strconv"
 )
 
-type PermissionHandler struct {
+type CateHandler struct {
 	admin.AdminBaseHandler
 }
 
-func (p *PermissionHandler) Lists(c *gin.Context) {
+func (p *CateHandler) Lists(c *gin.Context) {
 
 	all := p.AllParams(c)
 
 	// 条件封装
 	where := p.GetMap(10)
-	if all["title"] != nil {
-		where["title like"] = all["title"].(string) + "%"
+	if all["name"] != nil {
+		where["name like"] = all["name"].(string) + "%"
 	}
 
 	build, vals, _ := models.WhereBuild(where)
 	// 列表页
 	//
-	var model = &models.Permissions{}
+	var model = &models.Category{}
 	//查询总条数
 	count := model.GetByCount(build, vals)
 	// 分页
 	pagination := page.NewPagination(c.Request, count, 10)
 	// 查询数据绑定到列表slice
-	fields := "id, title, http_path, method,slug"
+	fields := "name,id,created_at, updated_at"
 	lists, _ := model.Lists(fields, build, vals, pagination.GetPage(), pagination.Perineum)
 
-	ginview.HTML(c, 200, "permission/lists", gin.H{
+	ginview.HTML(c, 200, "category/lists", gin.H{
 		"pagination": template.HTML(pagination.Pages()),
 		"total":      pagination.Total,
 		"lists":      lists,
@@ -46,10 +46,10 @@ func (p *PermissionHandler) Lists(c *gin.Context) {
 	})
 }
 
-func (p *PermissionHandler) ShowEdit(c *gin.Context) {
+func (p *CateHandler) ShowEdit(c *gin.Context) {
 	query := p.AllParams(c)
 
-	var model = models.Permissions{}
+	var model = models.Category{}
 	// 编辑
 	if query["id"] != nil {
 		where := p.GetMap(10)
@@ -59,15 +59,15 @@ func (p *PermissionHandler) ShowEdit(c *gin.Context) {
 		model, _ = model.Get(build, vals)
 	}
 
-	ginview.HTML(c, 200, "permission/edit", gin.H{
+	ginview.HTML(c, 200, "category/edit", gin.H{
 		"data": model,
 		"req":  query,
 	})
 }
 
-func (p *PermissionHandler) Apply(c *gin.Context) {
+func (p *CateHandler) Apply(c *gin.Context) {
 
-	var model = models.Permissions{}
+	var model = models.Category{}
 	err := c.ShouldBind(&model)
 
 	if err != nil {
@@ -79,29 +79,30 @@ func (p *PermissionHandler) Apply(c *gin.Context) {
 		v := p.GetMap(10)
 		marshal, _ := json.Marshal(model)
 		_ = json.Unmarshal(marshal, &v)
-		err = model.Update(int(model.ID), v)
+		err = model.Update(model.ID, v)
 		if err != nil {
 			c.JSON(200, apgs.NewApiReturn(4003, "无法更新该数据", err))
 			return
 		}
-		c.JSON(200, apgs.NewApiRedirect(200, "更新成功", "/admin/permission/lists"))
+		c.JSON(200, apgs.NewApiRedirect(200, "更新成功", "/admin/category/lists"))
 		return
 
 	} else {
+
 		err := model.Create()
 		if err != nil {
 			c.JSON(200, apgs.NewApiReturn(4003, "无法创建该数据", nil))
 			return
 		}
-		c.JSON(200, apgs.NewApiRedirect(200, "创建成功", "/admin/permission/lists"))
+		c.JSON(200, apgs.NewApiRedirect(200, "创建成功", "/admin/category/lists"))
 		return
 	}
 }
 
-func (p *PermissionHandler) Delete(c *gin.Context) {
+func (p *CateHandler) Delete(c *gin.Context) {
 	id := c.Query("id")
 	parseInt, _ := strconv.ParseInt(id, 10, 64)
-	var mod = models.Permissions{}
+	var mod = models.Category{}
 	if parseInt <= 0 {
 		c.JSON(200, apgs.NewApiReturn(4004, "ID不能为0", nil))
 		return

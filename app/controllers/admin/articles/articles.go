@@ -44,9 +44,15 @@ func (a ArticleHandler) ShowEdit(c *gin.Context) {
 		build, vals, _ := models.WhereBuild(getMap)
 		a.model, _ = a.model.Get(build, vals)
 	}
+	cateModel := models.Category{}
+	allcate, _ := cateModel.GetAll()
+	tagModel := models.Tags{}
+	allTags, _ := tagModel.GetAll()
 	ginview.HTML(c, 200, "article/edit", gin.H{
 		"data": a.model,
 		"req":  params,
+		"cate": allcate,
+		"tags": allTags,
 	})
 }
 
@@ -94,5 +100,18 @@ func (a ArticleHandler) Apply(c *gin.Context) {
 }
 
 func (a ArticleHandler) Delete(c *gin.Context) {
-
+	id := c.Query("id")
+	parseInt, _ := strconv.ParseInt(id, 10, 64)
+	var mod = models.Article{}
+	if parseInt <= 0 {
+		c.JSON(200, apgs.NewApiReturn(4004, "ID不能为0", nil))
+		return
+	}
+	err := mod.Delete(uint64(parseInt))
+	if err != nil {
+		c.JSON(200, apgs.NewApiReturn(4004, "无法删除该数据", nil))
+		return
+	}
+	c.JSON(200, apgs.NewApiRedirect(200, "删除成功", "/admin/admins/lists"))
+	return
 }

@@ -4,9 +4,11 @@ import (
 	"Kronos/app/controllers/admin/admins"
 	"Kronos/app/controllers/admin/articles"
 	"Kronos/app/controllers/admin/auth"
+	"Kronos/app/controllers/admin/category"
 	"Kronos/app/controllers/admin/dashboard"
 	"Kronos/app/controllers/admin/permissioins"
 	"Kronos/app/controllers/admin/role"
+	"Kronos/app/controllers/admin/tags"
 	"Kronos/app/middle"
 	"Kronos/helpers"
 	"Kronos/library/casbin_adapter"
@@ -90,6 +92,26 @@ func RegAdminRouter(router *gin.Engine) {
 			article.GET("edit", artilceHandler.ShowEdit)
 			article.POST("apply", artilceHandler.Apply)
 			article.POST("delete", artilceHandler.Delete)
+		}
+
+		// 文章
+		tag := ntc.Group("tags")
+		{
+			var tagHandler = tags.TagHandler{}
+			tag.GET("lists", tagHandler.Lists)
+			tag.GET("edit", tagHandler.ShowEdit)
+			tag.POST("apply", tagHandler.Apply)
+			tag.POST("delete", tagHandler.Delete)
+		}
+
+		// 文章
+		cate := ntc.Group("category")
+		{
+			var cateHandler = category.CateHandler{}
+			cate.GET("lists", cateHandler.Lists)
+			cate.GET("edit", cateHandler.ShowEdit)
+			cate.POST("apply", cateHandler.Apply)
+			cate.POST("delete", cateHandler.Delete)
 		}
 
 	}

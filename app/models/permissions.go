@@ -65,7 +65,7 @@ func (m Permissions) Create() error {
 	return nil
 }
 
-func EditPerRoles(id int) []int {
+func (m Permissions) EditPerRoles(id int) []int {
 	var permission Permissions
 	var role []Roles
 
@@ -79,4 +79,17 @@ func EditPerRoles(id int) []int {
 		roleList = append(roleList, int(v.ID))
 	}
 	return roleList
+}
+
+func (m Permissions) Delete(id uint64) error {
+	if err := databases.DB.Where("id = ?", id).Find(&m).Error; err != nil {
+		return err
+	}
+
+	db := databases.DB.Model(&m).Where("id = ?", id).Delete(&m)
+	if db.Error != nil {
+		return db.Error
+	}
+
+	return nil
 }
