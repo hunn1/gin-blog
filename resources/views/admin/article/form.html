@@ -18,6 +18,30 @@
     </div>
 </div>
 <div class="row">
+    <label class="col-md-2 control-label"> 标签</label>
+    <div class="col-md-7">
+        <select id="multi" class="full-width" name="tags[]" multiple>
+            {{range .tags}}
+                <option value="{{.ID}}">{{.Name}}</option>
+            {{end}}
+
+        </select>
+    </div>
+</div>
+<br/>
+<div class="row">
+    <label class="col-md-2 control-label"> 分类</label>
+    <div class="col-md-7">
+        <select id="multi1" class="full-width" name="category[]" multiple>
+            {{range .cate}}
+                <option value="{{.ID}}">{{.Name}}</option>
+            {{end}}
+
+        </select>
+    </div>
+</div>
+<br/>
+<div class="row">
     <label class="col-md-2 control-label"> 简介</label>
     <div class="col-md-7">
         <input type="text" class="form-control input-sm"
@@ -92,10 +116,6 @@
     });
 </script>
 
-<script src="lib/template-web.js"></script>
-<script id="copy_content" type="text/html">
-
-</script>
 
 <div class="row">
     <label class="col-md-2 control-label"> 创建时间</label>

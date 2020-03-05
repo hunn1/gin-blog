@@ -3,8 +3,10 @@ package articles
 import (
 	"Kronos/app/controllers/admin"
 	"Kronos/app/models"
+	"Kronos/helpers"
 	"Kronos/library/apgs"
 	"Kronos/library/page"
+	"fmt"
 	"github.com/foolin/goview/supports/ginview"
 	"github.com/gin-gonic/gin"
 	"html/template"
@@ -43,6 +45,7 @@ func (a ArticleHandler) ShowEdit(c *gin.Context) {
 		getMap["id"], _ = strconv.ParseInt(params["id"].(string), 10, 0)
 		build, vals, _ := models.WhereBuild(getMap)
 		a.model, _ = a.model.Get(build, vals)
+		fmt.Println(a.model)
 	}
 	cateModel := models.Category{}
 	allcate, _ := cateModel.GetAll()
@@ -58,9 +61,12 @@ func (a ArticleHandler) ShowEdit(c *gin.Context) {
 
 func (a ArticleHandler) Apply(c *gin.Context) {
 
-	array := c.PostFormMap("content")
+	file, err := helpers.UploadFile(c, "thumb")
+	fmt.Println(file)
 
-	err := c.ShouldBind(&a.model)
+	array := c.PostFormMap("content")
+	form := c.PostFormArray("content[]")
+	err = c.ShouldBind(&a.model)
 	if err != nil {
 		c.JSON(200, apgs.NewApiReturn(3003, "无法获取到数据", nil))
 		return
@@ -71,22 +77,24 @@ func (a ArticleHandler) Apply(c *gin.Context) {
 			parseInt, _ := strconv.ParseInt(id, 10, 64)
 			artc = append(artc, models.ArticleContent{ID: uint64(parseInt), ArticleID: 1, Body: i2})
 		}
+		for _, i2 := range form {
+			artc = append(artc, models.ArticleContent{Body: i2})
+		}
 
 		a.model.ArticleContent = artc
-
-		err := a.model.Update(a.model.ID, artc)
+		err := a.model.Update(a.model.ID)
 		if err != nil {
 			c.JSON(200, apgs.NewApiReturn(4005, "无法更新该文章数据", err.Error()))
 			return
 		}
 
 	} else {
-		form := c.PostFormArray("content[]")
 
 		for _, i2 := range form {
 			artc = append(artc, models.ArticleContent{Body: i2})
 		}
-		err := a.model.Create(artc)
+		a.model.ArticleContent = artc
+		err := a.model.Create()
 		if err != nil {
 			c.JSON(200, apgs.NewApiReturn(4004, "无法创建该文章数据", err.Error()))
 			return

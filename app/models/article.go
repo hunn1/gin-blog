@@ -36,34 +36,39 @@ func (a Article) Lists(where string, vals []interface{}, offset, limit int) ([]A
 }
 
 func (a Article) Get(where string, vals []interface{}) (Article, error) {
-	first := databases.DB.Model(a).Preload("ArticleContent").Where(where, vals).First(&a)
+	first := databases.DB.Model(a).Preload("ArticleContent").Preload("Category").Preload("Tags").Where(where, vals).First(&a)
 	if first.Error != nil {
 		return a, first.Error
 	}
 	return a, nil
 }
 
-func (a Article) Update(id uint64, data []ArticleContent) error {
+func (a Article) Update(id uint64) error {
 
 	first := databases.DB.Model(&a).Where("id = ?", id).First(&a)
 	if first.Error != nil {
 		return first.Error
 	}
-
-	association := databases.DB.Model(&a).Association("ArticleContent").Replace(data)
+	update := databases.DB.Model(&a)
+	association := update.Association("ArticleContent").Replace(a.ArticleContent)
 	if association.Error != nil {
 		return association.Error
 	}
+	update.Association("Category").Replace(a.Category)
+	update.Association("Tags").Replace(a.Tags)
 	if err := databases.DB.Model(&a).Update(a).Error; err != nil {
 		return err
 	}
 	return nil
 }
-func (a Article) Create(data []ArticleContent) error {
-	err := databases.DB.Model(&a).Create(&a).Association("ArticleContent").Append(data).Error
+func (a Article) Create() error {
+	create := databases.DB.Model(&a).Create(&a)
+	err := create.Association("ArticleContent").Append(a.ArticleContent).Error
 	if err != nil {
 		return err
 	}
+	create.Association("Category").Append(a.Category)
+	create.Association("Tags").Append(a.Tags)
 	return nil
 }
 

@@ -48,17 +48,18 @@
 
     <!-- END PAGE LEVEL JS -->
     <script type="application/javascript">
-        {{/*var data = {{.marshal}};*/}}
-        {{/*var arr = new Array()*/}}
-        {{/*$(document).ready(function () {*/}}
-        {{/*    if (data) {*/}}
-        {{/*        let parseJSON = $.parseJSON(data);*/}}
-        {{/*        for (item in parseJSON) {*/}}
-        {{/*            arr.push(parseJSON[item].id)*/}}
-        {{/*        }*/}}
-        {{/*    }*/}}
-        {{/*    $("#multi").val(arr).select2();*/}}
-        {{/*});*/}}
+        var cates = "";
+        var arr = new Array()
+        $(document).ready(function () {
+            if (cates) {
+                let parseJSON = $.parseJSON(data);
+                for (item in parseJSON) {
+                    arr.push(parseJSON[item].id)
+                }
+            }
+            $("#multi").val(arr).select2();
+            $("#multi1").val(arr).select2();
+        });
     </script>
 {{end}}
 

@@ -2,11 +2,14 @@ package helpers
 
 import (
 	"encoding/binary"
+	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"html/template"
+	"io"
 	"net"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -80,4 +83,31 @@ func DecodeHtml(str string) interface{} {
 	fmt.Println(str)
 	html := template.HTML(str)
 	return html
+}
+
+func UploadFile(c *gin.Context, key string) (path string, err error) {
+	// FormFile方法会读取参数“upload”后面的文件名，返回值是一个File指针，和一个FileHeader指针，和一个err错误。
+	file, header, err := c.Request.FormFile(key)
+	if err != nil {
+		return "", errors.New("错误的请求")
+	}
+	// header调用Filename方法，就可以得到文件名
+	filename := header.Filename
+	fmt.Println(file, err, filename)
+
+	// 创建一个文件，文件名为filename，这里的返回值out也是一个File指针
+	out, err := os.Create(filename)
+	if err != nil {
+		return "", errors.New("创建文件出错")
+	}
+
+	defer out.Close()
+
+	// 将file的内容拷贝到out
+	_, err = io.Copy(out, file)
+	if err != nil {
+		return "", errors.New("拷贝文件出错")
+	}
+
+	return filename, nil
 }
