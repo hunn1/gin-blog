@@ -13,8 +13,8 @@ type Article struct {
 	Description    string           `gorm:"type:varchar(100);"`
 	Thumb          string           `gorm:"size:255"` // 设置字段大小为255
 	ArticleContent []ArticleContent `gorm:"foreignkey:article_id;association_foreignkey:id"`
-	Category       []Category       `gorm:"foreignkey:category_id;many2many:article_cate;"`
-	Tags           []Tags           `gorm:"foreignkey:tag_id;many2many:article_tags"`
+	Category       []Category       `gorm:"many2many:article_cate;"`
+	Tags           []Tags           `gorm:"many2many:article_tags;"`
 }
 
 func (a Article) Count(where string, vals []interface{}) (int, error) {
