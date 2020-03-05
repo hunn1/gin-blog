@@ -35,6 +35,15 @@ func (a Article) Lists(where string, vals []interface{}, offset, limit int) ([]A
 	return list, nil
 }
 
+func (a Article) Trash(where string, vals []interface{}, offset, limit int) ([]Article, error) {
+	list := make([]Article, limit)
+	err := databases.DB.Model(a).Unscoped().Where(where, vals).Offset(offset).Limit(limit).Find(&list)
+	if err.Error != nil {
+		return nil, errors.New("暂无数据可查")
+	}
+	return list, nil
+}
+
 func (a Article) Get(where string, vals []interface{}) (Article, error) {
 	first := databases.DB.Model(a).Preload("ArticleContent").Preload("Category").Preload("Tags").Where(where, vals).First(&a)
 	if first.Error != nil {

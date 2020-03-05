@@ -36,6 +36,24 @@ func (a ArticleHandler) Lists(c *gin.Context) {
 		"page":  template.HTML(p.Pages()),
 	})
 }
+func (a ArticleHandler) Trash(c *gin.Context) {
+	req := a.AllParams(c)
+	getMap := a.GetMap(10)
+	if req["title"] != nil {
+		getMap["title like"] = req["title"].(string) + "%"
+	}
+	build, vals, _ := models.WhereBuild(getMap)
+	total, _ := a.model.Count(build, vals)
+	p := page.NewPagination(c.Request, total, 10)
+	lists, _ := a.model.Lists(build, vals, p.GetPage(), p.Perineum)
+
+	ginview.HTML(c, 200, "article/lists", gin.H{
+		"lists": lists,
+		"req":   req,
+		"total": total,
+		"page":  template.HTML(p.Pages()),
+	})
+}
 
 func (a ArticleHandler) ShowEdit(c *gin.Context) {
 	params := a.AllParams(c)
