@@ -92,6 +92,8 @@ func RegAdminRouter(router *gin.Engine) {
 			article.GET("edit", artilceHandler.ShowEdit)
 			article.POST("apply", artilceHandler.Apply)
 			article.GET("delete", artilceHandler.Delete)
+			article.GET("trash", artilceHandler.Trash)
+			article.GET("force_delete", artilceHandler.ForceDelete)
 		}
 
 		// 文章
