@@ -43,7 +43,8 @@
         })
         $('#form-project').submit(function (e) {
             e.preventDefault()
-        })
+        });
+        
         $('.form-ajax').submit(function (e) {
             e.preventDefault();
 

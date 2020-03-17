@@ -146,7 +146,7 @@ func (a ArticleHandler) Delete(c *gin.Context) {
 		c.JSON(200, apgs.NewApiReturn(4004, "无法删除该数据", nil))
 		return
 	}
-	c.JSON(200, apgs.NewApiRedirect(200, "删除成功", "/admin/admins/lists"))
+	c.JSON(200, apgs.NewApiRedirect(200, "删除成功", "/admin/article/lists"))
 	return
 }
 
