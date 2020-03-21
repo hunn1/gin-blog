@@ -53,12 +53,12 @@ func (a Article) Get(where string, vals []interface{}) (Article, error) {
 }
 
 func (a Article) Update(id uint64, data map[string]interface{}) error {
-
-	first := databases.DB.Model(&a).Where("id = ?", id).First(&a)
+	var find Article
+	first := databases.DB.Model(&a).Where("id = ?", id).First(&find)
 	if first.Error != nil {
 		return first.Error
 	}
-	update := databases.DB.Model(&a)
+	update := databases.DB.Model(&find)
 	association := update.Association("ArticleContent").Replace(a.ArticleContent)
 	if association.Error != nil {
 		return association.Error
@@ -69,7 +69,8 @@ func (a Article) Update(id uint64, data map[string]interface{}) error {
 	var tag []Tags
 	databases.DB.Where("id in (?)", data["tag_ids"]).Find(&tag)
 	update.Association("Tags").Replace(tag)
-	if err := databases.DB.Model(&a).Update(a).Error; err != nil {
+
+	if err := databases.DB.Model(&find).Update(a).Error; err != nil {
 		return err
 	}
 	return nil

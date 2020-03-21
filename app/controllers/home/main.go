@@ -9,17 +9,17 @@ import (
 	"github.com/gin-gonic/gin"
 	"html/template"
 	"net/http"
-	"strconv"
 )
 
 func IndexApi(c *gin.Context) {
 
-	PageSize, _ := strconv.ParseInt(c.DefaultQuery("limit", "1"), 10, 0)
+	var PageSize int64 = 10
 	// 文章模型
 	var artList []models.Article
 
 	var count int32
 	artCount := databases.DB.Model(models.Article{}).Count(&count)
+
 	if artCount.Error != nil {
 		helpers.Abort(c, "没有数据")
 	}
@@ -29,8 +29,16 @@ func IndexApi(c *gin.Context) {
 	artCount.Offset((pagination.Page - 1) * PageSize).Limit(PageSize).Find(&artList)
 
 	ginview.HTML(c, http.StatusOK, "main/main", gin.H{
-		"title":   "Go Go Go !" + strconv.Itoa(int(pagination.Page-1)),
+		"title":   "",
 		"artList": artList,
 		"page":    template.HTML(pagination.Pages()),
 	})
+}
+
+func Posts(c *gin.Context) {
+	c.JSON(200, "Todo")
+}
+
+func Timeline(c *gin.Context) {
+	ginview.HTML(c, http.StatusOK, "main/timeline", gin.H{})
 }

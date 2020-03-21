@@ -5,20 +5,34 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/segmentio/ksuid"
 	"html/template"
-	"io"
+	"mime/multipart"
 	"net"
 	"net/http"
 	"os"
+	"path"
 	"time"
 )
 
 var Builtins = template.FuncMap{
-	"showStatus": ShowStatus,
-	"showtime":   ShowTime,
-	"ip2long":    Ip2long,
-	"long2ip":    Long2ip,
-	"decodeHtml": DecodeHtml,
+	"showStatus":    ShowStatus,
+	"showtime":      ShowTime,
+	"ip2long":       Ip2long,
+	"long2ip":       Long2ip,
+	"decodeHtml":    DecodeHtml,
+	"getUploadPath": GetUploadPath,
+}
+
+const UploadPath = "./resources/public/thumb/"
+const UploadUrl = "/public/thumb/"
+
+func GetUploadPath(filename string) string {
+
+	if filename == "" {
+		return UploadUrl + "none.jpg"
+	}
+	return UploadUrl + filename
 }
 
 func Ip2long(ipstr string) uint32 {
@@ -85,29 +99,73 @@ func DecodeHtml(str string) interface{} {
 	return html
 }
 
-func UploadFile(c *gin.Context, key string) (path string, err error) {
+func GetFileContentType(out multipart.File) (string, error) {
+	// 只需要前 512 个字节就可以了
+	buffer := make([]byte, 512)
+	_, err := out.Read(buffer)
+	if err != nil {
+		return "", err
+	}
+	contentType := http.DetectContentType(buffer)
+	return contentType, nil
+}
+
+func UploadFile(c *gin.Context, key string) (filename string, err error) {
 	// FormFile方法会读取参数“upload”后面的文件名，返回值是一个File指针，和一个FileHeader指针，和一个err错误。
-	file, header, err := c.Request.FormFile(key)
-	if err != nil {
-		return "", errors.New("错误的请求")
+	header, err := c.FormFile(key)
+	if err == nil {
+		err = CheckDir(UploadPath, 0711)
+		if err != nil {
+			return "", errors.New("文件夹不存在无法创建")
+		}
+		k := ksuid.New()
+		open, err := header.Open()
+
+		contentType, err := GetFileContentType(open)
+		isSupportFile := false
+		allowTypes := []string{
+			"image/png",
+			"image/jpg",
+			"image/jpeg",
+			"image/gif",
+			"image/webp",
+		}
+		if len(allowTypes) != 0 {
+			for i := 0; i < len(allowTypes); i++ {
+				if allowTypes[i] == contentType {
+					isSupportFile = true
+					break
+				}
+			}
+			if isSupportFile == false {
+				return "", errors.New("不支持的文件类型")
+			}
+		}
+		filename = k.String() + path.Ext(header.Filename)
+		err = c.SaveUploadedFile(header, UploadPath+filename)
+		if err != nil {
+			return "", err
+		}
+		return filename, nil
 	}
-	// header调用Filename方法，就可以得到文件名
-	filename := header.Filename
-	fmt.Println(file, err, filename)
+	return "", nil
 
-	// 创建一个文件，文件名为filename，这里的返回值out也是一个File指针
-	out, err := os.Create(filename)
-	if err != nil {
-		return "", errors.New("创建文件出错")
+}
+
+func CheckDir(path string, perm os.FileMode) error {
+	// check
+	if _, err := os.Stat(path); err == nil {
+		return nil
+	} else {
+		err := os.MkdirAll(path, perm)
+		if err != nil {
+			return err
+		}
 	}
 
-	defer out.Close()
-
-	// 将file的内容拷贝到out
-	_, err = io.Copy(out, file)
-	if err != nil {
-		return "", errors.New("拷贝文件出错")
+	// check again
+	if _, err := os.Stat(path); err == nil {
+		return nil
 	}
-
-	return filename, nil
+	return nil
 }

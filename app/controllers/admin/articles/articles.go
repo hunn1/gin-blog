@@ -84,18 +84,26 @@ func (a ArticleHandler) ShowEdit(c *gin.Context) {
 
 func (a ArticleHandler) Apply(c *gin.Context) {
 
-	file, err := helpers.UploadFile(c, "thumb")
-	fmt.Println(file)
-
 	array := c.PostFormMap("content")
 	categoryIds := c.PostFormArray("category[]")
 	tagIds := c.PostFormArray("tags[]")
 	form := c.PostFormArray("content[]")
-	err = c.ShouldBind(&a.model)
+	err := c.ShouldBind(&a.model)
 	if err != nil {
 		c.JSON(200, apgs.NewApiReturn(3003, "无法获取到数据", nil))
 		return
 	}
+
+	file, err := helpers.UploadFile(c, "cover_photo")
+	if err != nil {
+		c.JSON(200, apgs.NewApiReturn(3001, err.Error(), nil))
+		return
+	}
+
+	if file != "" {
+		a.model.Thumb = file
+	}
+	fmt.Println(a.model)
 	var artc = make([]models.ArticleContent, 0)
 	if a.model.ID > 0 {
 		for id, i2 := range array {

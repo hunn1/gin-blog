@@ -1,11 +1,109 @@
 <!doctype html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>document.getElementsByTagName("html")[0].className += " js";</script>
+    <script>
+        if ('CSS' in window && CSS.supports('color', 'var(--color-var)')) {
+            document.write('<link rel="stylesheet" href="/public/k/css/style.css">');
+        } else {
+            document.write('<link rel="stylesheet" href="/public/k/css/style-fallback.css">');
+        }
+    </script>
+    <noscript>
+        <link rel="stylesheet" href="/public/k/css/style-fallback.css">
+    </noscript>
     <title>{{template  "title" .}}</title>
-    {{include "public/headers"}}
 </head>
 <body>
-{{template  "content" .}}
-</body>
+<a href="#main-content" class="skip-link">跳过</a>
+<header class="main-header js-main-header">
+    <div class="container max-width-lg">
+        <div class="main-header__layout">
+            <div class="main-header__logo">
+                博客系统
+            </div>
+
+            <button class="btn btn--subtle main-header__nav-trigger js-main-header__nav-trigger"
+                    aria-label="Toggle menu" aria-expanded="false" aria-controls="main-header-nav">
+                <i class="main-header__nav-trigger-icon" aria-hidden="true"></i>
+                <span>Menu</span>
+            </button>
+
+            <nav class="main-header__nav js-main-header__nav" id="main-header-nav"
+                 aria-labelledby="main-header-nav-label" role="navigation">
+                <div id="main-header-nav-label" class="main-header__nav-label">主菜单</div>
+                <ul class="main-header__nav-list">
+                    <li class="main-header__nav-item">
+                        <a href="/" class="main-header__nav-link" aria-current="page">主页</a></li>
+                    <li class="main-header__nav-item">
+                        a href="/arh" class="main-header__nav-link">归档</a>
+                    </li>
+                    <li class="main-header__nav-item">
+                        <a href="/tags" class="main-header__nav-link">标签</a>
+                    </li>
+                    <li class="main-header__nav-item main-header__nav-divider" aria-hidden="true"></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</header>
+
+<main id="main-content">
+    {{template  "content" .}}
+
+</main>
+
+<footer class="main-footer padding-y-lg">
+    <div class="container max-width-lg">
+        <div class="main-footer__content">
+            <div class="main-footer__logo">
+                大佬推荐
+            </div>
+            <nav class="main-footer__nav">
+                <ul class="main-footer__nav-list">
+                    <li class="main-footer__nav-item">
+                        <h4>Product</h4>
+
+                    </li>
+
+                    <li class="main-footer__nav-item">
+                        <h4>Developers</h4>
+
+                    </li>
+
+                    <li class="main-footer__nav-item">
+                        <h4>Resources</h4>
+
+                    </li>
+
+                    <li class="main-footer__nav-item">
+                        <h4>About</h4>
+
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="main-footer__colophon">
+            <div class="main-footer__colophon-nav">
+                <span>&copy; fei.dev</span>
+            </div>
+
+            <div class="main-footer__socials">
+                <a href="https://github.com/lookwi">
+                    <svg class="icon" viewBox="0 0 16 16"><title>Follow us on Github</title>
+                        <g>
+                            <path d="M8,0.2c-4.4,0-8,3.6-8,8c0,3.5,2.3,6.5,5.5,7.6 C5.9,15.9,6,15.6,6,15.4c0-0.2,0-0.7,0-1.4C3.8,14.5,3.3,13,3.3,13c-0.4-0.9-0.9-1.2-0.9-1.2c-0.7-0.5,0.1-0.5,0.1-0.5 c0.8,0.1,1.2,0.8,1.2,0.8C4.4,13.4,5.6,13,6,12.8c0.1-0.5,0.3-0.9,0.5-1.1c-1.8-0.2-3.6-0.9-3.6-4c0-0.9,0.3-1.6,0.8-2.1 c-0.1-0.2-0.4-1,0.1-2.1c0,0,0.7-0.2,2.2,0.8c0.6-0.2,1.3-0.3,2-0.3c0.7,0,1.4,0.1,2,0.3c1.5-1,2.2-0.8,2.2-0.8 c0.4,1.1,0.2,1.9,0.1,2.1c0.5,0.6,0.8,1.3,0.8,2.1c0,3.1-1.9,3.7-3.7,3.9C9.7,12,10,12.5,10,13.2c0,1.1,0,1.9,0,2.2 c0,0.2,0.1,0.5,0.6,0.4c3.2-1.1,5.5-4.1,5.5-7.6C16,3.8,12.4,0.2,8,0.2z"></path>
+                        </g>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+</footer>
 {{template  "js" .}}
+<script src="/public/k/js/scripts.js"></script>
+</body>
 </html>

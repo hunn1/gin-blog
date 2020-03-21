@@ -17,6 +17,8 @@ import (
 func InitRouters() *gin.Engine {
 	_ = config.Init("./config/config.yaml")
 	engine := gin.New()
+
+	engine.MaxMultipartMemory = 8 << 20 // 8 MiB
 	// 自定义中间件
 	// Session
 	var store sessions.Store
