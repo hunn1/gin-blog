@@ -1,0 +1,32 @@
+{{define "title"}}首页{{end}}
+{{define "content"}}
+
+    <div class="container max-width-sm margin-bottom-lg">
+        <div class="margin-bottom-xxs">
+            <a href="/">&larr; 回到首页</a>
+        </div>
+
+        <div class="text-component">
+            <h1>{{.data.Title}}</h1>
+            <p class="color-contrast-medium text-md">{{.data.Description}}</p>
+        </div>
+    </div>
+
+    <div class="container max-width-lg margin-bottom-lg">
+        <img class="width-100%" src="{{.data.Thumb|getUploadPath}}" alt="Blog featured image">
+    </div>
+
+    <div class="container max-width-sm">
+        <article class="article text-component">
+            {{ range .data.ArticleContent}}
+                {{.Body|decodeHtml}}
+            {{end}}
+        </article>
+    </div>
+{{end}}
+
+{{define "js"}}
+{{end}}
+
+
+

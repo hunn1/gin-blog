@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"html/template"
 	"net/http"
+	"strconv"
 )
 
 func IndexApi(c *gin.Context) {
@@ -35,10 +36,48 @@ func IndexApi(c *gin.Context) {
 	})
 }
 
+// 显示文章详情
 func Posts(c *gin.Context) {
-	c.JSON(200, "Todo")
+	var model models.Article
+	var where = make(map[string]interface{}, 1)
+	req_id := c.Param("id")
+	id, _ := strconv.ParseInt(req_id, 10, 64)
+	if id <= 0 {
+		ginview.HTML(c, http.StatusNotFound, "err/404", gin.H{
+			"message": "无法获取到ID",
+		})
+		return
+	}
+
+	where["id"] = id
+	build, vals, err := models.WhereBuild(where)
+	if err != nil {
+		ginview.HTML(c, http.StatusNotFound, "err/msg", nil)
+		return
+	}
+	get, err := model.Get(build, vals)
+	if err != nil {
+		ginview.HTML(c, http.StatusNotFound, "err/msg", gin.H{
+			"msg": err,
+		})
+		return
+	}
+	ginview.HTML(c, http.StatusOK, "main/posts", gin.H{
+		"data": get,
+	})
 }
 
+// 显示时间戳归档
 func Timeline(c *gin.Context) {
 	ginview.HTML(c, http.StatusOK, "main/timeline", gin.H{})
+}
+
+// 标签列表
+func TagLists(c *gin.Context) {
+
+}
+
+// 分类列表
+func CateLists(c *gin.Context) {
+
 }

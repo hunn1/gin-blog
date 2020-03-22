@@ -12,7 +12,7 @@ type Article struct {
 	Keyword        string           `gorm:"type:varchar(100);"`
 	Description    string           `gorm:"type:varchar(100);"`
 	Thumb          string           `gorm:"size:255"` // 设置字段大小为255
-	ArticleContent []ArticleContent `gorm:"foreignkey:ArticleID;"`
+	ArticleContent []ArticleContent `gorm:"foreignkey:ArticleID;association_foreignkey:ID;"`
 	Category       []Category       `gorm:"many2many:article_cate;"`
 	Tags           []Tags           `gorm:"many2many:article_tags;"`
 }
@@ -59,10 +59,6 @@ func (a Article) Update(id uint64, data map[string]interface{}) error {
 		return first.Error
 	}
 	update := databases.DB.Model(&find)
-	association := update.Association("ArticleContent").Replace(a.ArticleContent)
-	if association.Error != nil {
-		return association.Error
-	}
 	var cate []Category
 	databases.DB.Where("id in (?)", data["category_ids"]).Find(&cate)
 	update.Association("Category").Replace(cate)
@@ -73,6 +69,11 @@ func (a Article) Update(id uint64, data map[string]interface{}) error {
 	if err := databases.DB.Model(&find).Update(a).Error; err != nil {
 		return err
 	}
+
+	//association := update.Association("ArticleContent").Replace(a.ArticleContent)
+	//if association.Error != nil {
+	//	return association.Error
+	//}
 	return nil
 }
 func (a Article) Create(data map[string]interface{}) error {
@@ -91,13 +92,25 @@ func (a Article) Create(data map[string]interface{}) error {
 }
 
 func (m Article) Delete(id uint64) error {
-	first := databases.DB.Model(&m).Preload("Category").Preload("Tags").Where("id = ?", id).First(&m)
+	first := databases.DB.Model(&m).Where("id = ?", id).First(&m)
 	if err := first.Error; err != nil {
 		return err
 	}
-	//first.Association("Category").Delete(m.Category)
-	//first.Association("Tags").Delete(m.Tags)
 	first.Delete(&m)
+
+	return nil
+}
+
+func (m Article) ForceDelete(id uint64) error {
+	first := databases.DB.Model(&m).Unscoped().Preload("Category").Preload("ArticleContent").Preload("Tags").Where("id = ?", id).First(&m)
+	if err := first.Error; err != nil {
+		return err
+	}
+
+	databases.DB.Model(&m).Unscoped().Delete(m)
+	databases.DB.Model(&m).Unscoped().Association("ArticleContent").Clear()
+	databases.DB.Model(&m).Unscoped().Association("Category").Delete(m.Category)
+	databases.DB.Model(&m).Unscoped().Association("Tags").Delete(m.Tags)
 
 	return nil
 }

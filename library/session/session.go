@@ -2,7 +2,6 @@ package session
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/gin-contrib/sessions"
 
 	"github.com/gin-contrib/sessions/cookie"
@@ -121,7 +120,7 @@ func SaveSession(c *gin.Context, key interface{}, val interface{}) bool {
 	if err != nil {
 		//_ = c.AbortWithError(http.StatusInternalServerError, err)
 		//c.Abort()
-		fmt.Println(err)
+		//fmt.Println(err)
 		return false
 	}
 	return true

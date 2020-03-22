@@ -94,7 +94,6 @@ func Abort(c *gin.Context, message string) {
 }
 
 func DecodeHtml(str string) interface{} {
-	fmt.Println(str)
 	html := template.HTML(str)
 	return html
 }

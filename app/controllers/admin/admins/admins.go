@@ -7,7 +7,6 @@ import (
 	"Kronos/library/page"
 	"Kronos/library/password"
 	"encoding/json"
-	"fmt"
 	"github.com/foolin/goview/supports/ginview"
 	"github.com/gin-gonic/gin"
 	"html/template"
@@ -80,7 +79,6 @@ func (a AdminsHandler) Apply(c *gin.Context) {
 
 	var model = models.Admin{}
 	err := c.ShouldBind(&model)
-	fmt.Println(model)
 	if err != nil {
 		c.JSON(200, apgs.NewApiReturn(4003, "无法获取数据", err))
 		return

@@ -7,7 +7,6 @@ import (
 	"Kronos/library/apgs"
 	"Kronos/library/page"
 	"encoding/json"
-	"fmt"
 	"github.com/foolin/goview/supports/ginview"
 	"github.com/gin-gonic/gin"
 	"html/template"
@@ -43,12 +42,13 @@ func (a ArticleHandler) Trash(c *gin.Context) {
 	if req["title"] != nil {
 		getMap["title like"] = req["title"].(string) + "%"
 	}
+	getMap["deleted_at"] = models.IsNotNull
 	build, vals, _ := models.WhereBuild(getMap)
 	total, _ := a.model.Count(build, vals)
 	p := page.NewPagination(c.Request, total, 10)
-	lists, _ := a.model.Lists(build, vals, p.GetPage(), p.Perineum)
+	lists, _ := a.model.Trash(build, vals, p.GetPage(), p.Perineum)
 
-	ginview.HTML(c, 200, "article/lists", gin.H{
+	ginview.HTML(c, 200, "article/trash", gin.H{
 		"lists": lists,
 		"req":   req,
 		"total": total,
@@ -88,6 +88,7 @@ func (a ArticleHandler) Apply(c *gin.Context) {
 	categoryIds := c.PostFormArray("category[]")
 	tagIds := c.PostFormArray("tags[]")
 	form := c.PostFormArray("content[]")
+
 	err := c.ShouldBind(&a.model)
 	if err != nil {
 		c.JSON(200, apgs.NewApiReturn(3003, "无法获取到数据", nil))
@@ -103,7 +104,7 @@ func (a ArticleHandler) Apply(c *gin.Context) {
 	if file != "" {
 		a.model.Thumb = file
 	}
-	fmt.Println(a.model)
+
 	var artc = make([]models.ArticleContent, 0)
 	if a.model.ID > 0 {
 		for id, i2 := range array {
@@ -111,7 +112,9 @@ func (a ArticleHandler) Apply(c *gin.Context) {
 			artc = append(artc, models.ArticleContent{ID: uint64(parseInt), ArticleID: 1, Body: i2})
 		}
 		for _, i2 := range form {
-			artc = append(artc, models.ArticleContent{Body: i2})
+			if i2 != "" {
+				artc = append(artc, models.ArticleContent{Body: i2, ArticleID: a.model.ID})
+			}
 		}
 		a.model.ArticleContent = artc
 		err := a.model.Update(a.model.ID, map[string]interface{}{
@@ -159,5 +162,18 @@ func (a ArticleHandler) Delete(c *gin.Context) {
 }
 
 func (a ArticleHandler) ForceDelete(c *gin.Context) {
-
+	id := c.Query("id")
+	parseInt, _ := strconv.ParseInt(id, 10, 64)
+	var mod = models.Article{}
+	if parseInt <= 0 {
+		c.JSON(200, apgs.NewApiReturn(4004, "ID不能为0", nil))
+		return
+	}
+	err := mod.ForceDelete(uint64(parseInt))
+	if err != nil {
+		c.JSON(200, apgs.NewApiReturn(4004, "无法删除该数据", nil))
+		return
+	}
+	c.JSON(200, apgs.NewApiRedirect(200, "删除成功", "/admin/article/trash"))
+	return
 }
