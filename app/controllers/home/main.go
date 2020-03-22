@@ -82,9 +82,10 @@ func TagLists(c *gin.Context) {
 	var art []models.Article
 	if id > 0 {
 		databases.DB.Model(&tags).First(&tags, id)
-		databases.DB.Model(&tags).Related(&art, "Article")
+		databases.DB.Model(&tags).Preload("Tags").Preload("Category").Related(&art, "Article")
 		//databases.DB.Model(&tags).Association("Article").Find(&art)
 	}
+
 	c.JSON(200, gin.H{
 		"allTags": allTags,
 		"art":     art,
