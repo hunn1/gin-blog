@@ -80,9 +80,10 @@ func TagLists(c *gin.Context) {
 	req_id := c.Param("id")
 	id, _ := strconv.ParseInt(req_id, 10, 64)
 	var art []models.Article
+
 	if id > 0 {
 		databases.DB.Model(&tags).First(&tags, id)
-		databases.DB.Model(&tags).Preload("Tags").Preload("Category").Related(&art, "Article")
+		databases.DB.Model(&tags).Preload("Tags").Preload("Category").Limit(0).Offset(10).Related(&art, "Article")
 		//databases.DB.Model(&tags).Association("Article").Find(&art)
 	}
 
@@ -90,6 +91,10 @@ func TagLists(c *gin.Context) {
 		"allTags": allTags,
 		"art":     art,
 	})
+	//ginview.HTML(c, http.StatusOK, "main/cate", gin.H{
+	//	"allTags": allTags,
+	//	"art":     art,
+	//})
 }
 
 // 分类列表
