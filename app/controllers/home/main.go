@@ -74,15 +74,34 @@ func Timeline(c *gin.Context) {
 
 // 标签列表
 func TagLists(c *gin.Context) {
-	ginview.HTML(c, http.StatusOK, "main/tag", gin.H{})
+	var tags models.Tags
+	allTags, _ := tags.GetAll()
+
+	req_id := c.Param("id")
+	id, _ := strconv.ParseInt(req_id, 10, 64)
+	var art []models.Article
+	if id > 0 {
+		databases.DB.Model(&tags).First(&tags, id)
+		databases.DB.Model(&tags).Related(&art, "Article")
+		//databases.DB.Model(&tags).Association("Article").Find(&art)
+	}
+	c.JSON(200, gin.H{
+		"allTags": allTags,
+		"art":     art,
+	})
 }
 
 // 分类列表
 func CateLists(c *gin.Context) {
-	p := page.NewPagination(c.Request, 100, 10)
+
+	//req_id := c.Param("id")
+	//id, _ := strconv.ParseInt(req_id, 10, 64)
+
+	var cate models.Category
+	allCate, _ := cate.GetAll()
 
 	ginview.HTML(c, http.StatusOK, "main/cate", gin.H{
-		"page": p.PagesCody(),
+		"cateLists": allCate,
 	})
 
 }

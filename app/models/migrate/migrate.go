@@ -9,6 +9,8 @@ import (
 var Models = []interface{}{
 	&models.Category{},
 	&models.Tags{},
+	&models.ArticleTags{},
+	&models.ArticleCate{},
 	&models.Article{},
 	&models.ArticleContent{},
 	&models.Admin{},

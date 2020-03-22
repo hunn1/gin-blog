@@ -12,8 +12,8 @@ type Article struct {
 	Keyword        string           `gorm:"type:varchar(100);"`
 	Description    string           `gorm:"type:varchar(100);"`
 	Thumb          string           `gorm:"size:255"` // 设置字段大小为255
-	ArticleContent []ArticleContent `gorm:"foreignkey:ArticleID;association_foreignkey:ID;"`
-	Category       []Category       `gorm:"many2many:article_cate;"`
+	ArticleContent []ArticleContent `gorm:"foreignkey:article_id;association_foreignkey:id;"`
+	Category       []Category       `gorm:"many2many:article_cates;"`
 	Tags           []Tags           `gorm:"many2many:article_tags;"`
 }
 

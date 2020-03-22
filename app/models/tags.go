@@ -4,7 +4,8 @@ import "Kronos/library/databases"
 
 type Tags struct {
 	BaseModel
-	Name string `gorm:"type:varchar(100);unique_index;not null;index:name;"`
+	Name    string    `gorm:"type:varchar(100);unique_index;not null;index:name;"`
+	Article []Article `gorm:"many2many:article_tags;" json:",omitempty"`
 }
 
 func (t Tags) GetByCount(cd string, val []interface{}) (count int) {

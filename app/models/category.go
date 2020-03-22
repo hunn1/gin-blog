@@ -4,7 +4,8 @@ import "Kronos/library/databases"
 
 type Category struct {
 	BaseModel
-	Name string `gorm:"type:varchar(100);unique_index;not null;index:name;"`
+	Name    string    `gorm:"type:varchar(100);unique_index;not null;index:name;"`
+	Article []Article `gorm:"many2many:article_cates;"`
 }
 
 func (c Category) Lists(fields, ws string, val []interface{}, ofst, limit int) (cate []Category, err error) {
