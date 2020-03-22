@@ -74,10 +74,15 @@ func Timeline(c *gin.Context) {
 
 // 标签列表
 func TagLists(c *gin.Context) {
-
+	ginview.HTML(c, http.StatusOK, "main/tag", gin.H{})
 }
 
 // 分类列表
 func CateLists(c *gin.Context) {
+	p := page.NewPagination(c.Request, 100, 10)
+
+	ginview.HTML(c, http.StatusOK, "main/cate", gin.H{
+		"page": p.PagesCody(),
+	})
 
 }

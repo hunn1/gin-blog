@@ -1,0 +1,95 @@
+{{define "title"}}首页{{end}}
+{{define "content"}}
+    <link rel="stylesheet" href="./public/k/css/article-gallery.css?v=2">
+    <div class="bg-contrast-lower">
+        <div class="container max-width-lg">
+            <div class="subnav  js-subnav">
+                <button class="reset btn btn--subtle margin-y-sm subnav__control js-subnav__control">
+                    <span>Show Categories</span>
+                    <svg class="icon icon--xxs margin-left-xxs" aria-hidden="true" viewBox="0 0 12 12">
+                        <polyline points="0.5 3.5 6 9.5 11.5 3.5" fill="none" stroke-width="1" stroke="currentColor"
+                                  stroke-linecap="round" stroke-linejoin="round"></polyline>
+                    </svg>
+                </button>
+
+                <div class="subnav__wrapper js-subnav__wrapper">
+                    <nav class="subnav__nav justify-center">
+                        <button class="reset subnav__close-btn js-subnav__close-btn js-tab-focus"
+                                aria-label="Close navigation">
+                            <svg class="icon" viewBox="0 0 16 16">
+                                <g stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round"
+                                   stroke-linejoin="round" stroke-miterlimit="10">
+                                    <line x1="13.5" y1="2.5" x2="2.5" y2="13.5"></line>
+                                    <line x1="2.5" y1="2.5" x2="13.5" y2="13.5"></line>
+                                </g>
+                            </svg>
+                        </button>
+
+                        <ul class="subnav__list">
+                            <li class="subnav__item"><a href="#0" class="subnav__link" aria-current='page'>Intro</a>
+                            </li>
+                            <li class="subnav__item"><a href="#0" class="subnav__link">Features</a></li>
+                            <li class="subnav__item"><a href="#0" class="subnav__link">Photos</a></li>
+                            <li class="subnav__item"><a href="#0" class="subnav__link">Videos</a></li>
+                            <li class="subnav__item"><a href="#0" class="subnav__link">Specs</a></li>
+                            <li class="subnav__item"><a href="#0" class="subnav__link">Support</a></li>
+                            <li class="subnav__item"><a href="#0" class="subnav__link">Compare</a></li>
+                            <li class="subnav__item"><a href="#0" class="subnav__link">Buy</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="cd-demo cd-demo-padding-y-xl js-cd-demo">
+
+        <div class="x-nob">
+            <div class="x-t max-width-adaptive-lg">
+                <div class="x-p gap-lg">
+
+                    <article class="story x-ru">
+                        <a href="#0" class="x-noh">
+                            <figure class="media-wrapper x-gx"><img
+                                        src="../../../app/assets/img/article-gallery-img-2.jpg" alt="Image description">
+                            </figure>
+                        </a>
+                        <div class="story__content">
+                            <div class="x-uk"><a href="#0" class="x-nop">
+                                    <svg class="icon x-as" aria-hidden="true" viewBox="0 0 16 16">
+                                        <g stroke-width="1" fill="none" stroke="currentColor" stroke-linecap="round"
+                                           stroke-linejoin="round">
+                                            <rect x="0.5" y="1.5" width="15" height="13" rx="1" ry="1"></rect>
+                                            <polygon points="5.5 4.5 11 8 5.5 11.5 5.5 4.5"></polygon>
+                                        </g>
+                                    </svg>
+                                    <i>Video</i></a></div>
+                            <div class="text-component"><h2 class="x-nod"><a href="#0">Lorem ipsum dolor sit amet
+                                        consectetur adipisicing elit</a></h2></div>
+                            <div class="x-nov x-uc"><a href="#0" class="block"><img
+                                            src="../../../app/assets/img/article-gallery-img-author-2.svg"
+                                            alt="Author picture"></a>
+                                <div>
+                                    <address class="x-nom"><a href="#0" rel="author">James Powell</a></address>
+                                    <p class="x-nog">
+                                        <time>May 12</time>
+                                        , — 5 min read
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+                <nav class="x-noc x-uv" aria-label="Pagination">
+                    {{.page | decodeHtml}}
+                </nav>
+            </div>
+        </div>
+    </div>
+
+{{end}}
+
+{{define "js"}}
+{{end}}
+
+
+

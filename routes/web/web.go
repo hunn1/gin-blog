@@ -25,6 +25,8 @@ func RegisterWebRouter(router *gin.Engine) {
 		web.GET("/", home.IndexApi)
 		web.GET("/posts/:id", home.Posts)
 		web.GET("/arh", home.Timeline)
+		web.GET("/tags", home.TagLists)
+		web.GET("/cate", home.CateLists)
 	}
 
 }
