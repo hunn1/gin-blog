@@ -98,7 +98,10 @@ func (a AdminsHandler) Apply(c *gin.Context) {
 			return
 		}
 
-		model.LoadPolicy(int(model.ID))
+		err1 := model.LoadPolicy(int(model.ID))
+		if err1 != nil {
+			c.JSON(200, apgs.NewApiReturn(300, "更新权限失败", nil))
+		}
 		c.JSON(200, apgs.NewApiRedirect(200, "更新成功", "/admin/admins/lists"))
 		return
 
@@ -113,7 +116,10 @@ func (a AdminsHandler) Apply(c *gin.Context) {
 			c.JSON(200, apgs.NewApiReturn(4003, "无法创建该数据", nil))
 			return
 		}
-		model.LoadPolicy(int(create.ID))
+		err1 := model.LoadPolicy(int(create.ID))
+		if err1 != nil {
+			c.JSON(200, apgs.NewApiReturn(200, "加载权限失败", nil))
+		}
 		create.Password = ""
 		c.JSON(200, apgs.NewApiRedirect(200, "创建成功", "/admin/admins/lists"))
 		return
@@ -135,6 +141,4 @@ func (a AdminsHandler) Delete(c *gin.Context) {
 		return
 	}
 	c.JSON(200, apgs.NewApiRedirect(200, "删除成功", "/admin/admins/lists"))
-	return
-
 }

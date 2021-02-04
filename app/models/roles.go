@@ -173,13 +173,19 @@ func (a *Roles) LoadPolicy(id int) error {
 	if err != nil {
 		return err
 	}
-	casbin_adapter.GetEnforcer().DeleteRole(role.Title)
+	_, err = casbin_adapter.GetEnforcer().DeleteRole(role.Title)
+	if err != nil {
+		return err
+	}
 
 	for _, menu := range role.Permissions {
 		if menu.HttpPath == "" || menu.Method == "" {
 			continue
 		}
-		casbin_adapter.GetEnforcer().AddPermissionForUser(role.Title, menu.HttpPath, menu.Method)
+		_, err = casbin_adapter.GetEnforcer().AddPermissionForUser(role.Title, menu.HttpPath, menu.Method)
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }

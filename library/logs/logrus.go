@@ -40,7 +40,7 @@ func LoggerToFile() gin.HandlerFunc {
 	logger.SetLevel(logrus.DebugLevel)
 
 	// 设置
-	logWriter, err := rotators.New(
+	logWriter, _ := rotators.New(
 		// 分割后的文件名称
 		fileName+".%Y%m%d.log",
 

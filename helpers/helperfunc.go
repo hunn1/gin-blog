@@ -118,9 +118,15 @@ func UploadFile(c *gin.Context, key string) (filename string, err error) {
 			return "", errors.New("文件夹不存在无法创建")
 		}
 		k := ksuid.New()
-		open, err := header.Open()
+		open, err1 := header.Open()
+		if err1 != nil {
+			return "", err1
+		}
 
-		contentType, err := GetFileContentType(open)
+		contentType, err2 := GetFileContentType(open)
+		if err2 != nil {
+			return "", err2
+		}
 		isSupportFile := false
 		allowTypes := []string{
 			"image/png",
@@ -136,7 +142,7 @@ func UploadFile(c *gin.Context, key string) (filename string, err error) {
 					break
 				}
 			}
-			if isSupportFile == false {
+			if !isSupportFile {
 				return "", errors.New("不支持的文件类型")
 			}
 		}

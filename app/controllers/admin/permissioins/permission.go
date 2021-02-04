@@ -112,5 +112,5 @@ func (p *PermissionHandler) Delete(c *gin.Context) {
 		return
 	}
 	c.JSON(200, apgs.NewApiRedirect(200, "删除成功", "/admin/admins/lists"))
-	return
+
 }

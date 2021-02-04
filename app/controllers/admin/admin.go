@@ -15,7 +15,7 @@ func (h *AdminBaseHandler) AllParams(c *gin.Context) (req map[string]interface{}
 	for key, value := range query {
 		if len(value) > 0 {
 			isFilter := strings.ContainsAny(key, "filter_")
-			if isFilter != false {
+			if isFilter {
 				index := strings.Index(key, "_")
 				if value[0] != "" {
 					queryMap[key[index+1:len(key)]] = value[0]

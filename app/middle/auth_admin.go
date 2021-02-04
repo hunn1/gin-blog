@@ -78,7 +78,6 @@ func AuthAdmin(enforcer *casbin.SyncedEnforcer, nocheck ...casbin_helper.DontChe
 		}
 
 		c.Next()
-		return
 
 	}
 }

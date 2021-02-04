@@ -140,7 +140,6 @@ func (a ArticleHandler) Apply(c *gin.Context) {
 		}
 	}
 	c.JSON(200, apgs.NewApiReturn(300, "操作成功", nil))
-	return
 
 }
 
@@ -158,7 +157,7 @@ func (a ArticleHandler) Delete(c *gin.Context) {
 		return
 	}
 	c.JSON(200, apgs.NewApiRedirect(200, "删除成功", "/admin/article/lists"))
-	return
+
 }
 
 func (a ArticleHandler) ForceDelete(c *gin.Context) {
@@ -175,5 +174,5 @@ func (a ArticleHandler) ForceDelete(c *gin.Context) {
 		return
 	}
 	c.JSON(200, apgs.NewApiRedirect(200, "删除成功", "/admin/article/trash"))
-	return
+
 }

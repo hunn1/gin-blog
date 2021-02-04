@@ -23,7 +23,7 @@ db:
   host: localhost:3306
   charset: utf8mb4
   user: root
-  pass: root_123456
+  pass: Root_123123
   native: true
   debug: true
   prefix: kr_

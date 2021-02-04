@@ -94,7 +94,10 @@ func (u Admin) Delete(id int) (bool, error) {
 	if db.Error != nil {
 		return false, db.Error
 	}
-	casbin_adapter.GetEnforcer().DeleteUser(u.Username)
+	_, err := casbin_adapter.GetEnforcer().DeleteUser(u.Username)
+	if err != nil {
+		return false, err
+	}
 	return true, nil
 }
 
@@ -105,10 +108,12 @@ func (u *Admin) LoadPolicy(id int) error {
 	if err != nil {
 		return err
 	}
-	casbin_adapter.GetEnforcer().DeleteRolesForUser(admin.Username)
-
+	_, err = casbin_adapter.GetEnforcer().DeleteRolesForUser(admin.Username)
+	if err != nil {
+		return err
+	}
 	for _, ro := range admin.Roles {
-		casbin_adapter.GetEnforcer().AddRoleForUser(admin.Username, ro.Title)
+		_, _ = casbin_adapter.GetEnforcer().AddRoleForUser(admin.Username, ro.Title)
 	}
 	fmt.Println("更新角色权限关系", casbin_adapter.GetEnforcer().GetGroupingPolicy())
 	return nil

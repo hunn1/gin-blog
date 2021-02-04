@@ -69,7 +69,6 @@ func AuthSessionMiddle() gin.HandlerFunc {
 		}
 		c.Set(UserKey, userId)
 		c.Next()
-		return
 	}
 }
 
@@ -117,12 +116,5 @@ func SaveSession(c *gin.Context, key interface{}, val interface{}) bool {
 	inrec, _ := json.Marshal(val)
 	session.Set(key, inrec)
 	err := session.Save()
-	if err != nil {
-		//_ = c.AbortWithError(http.StatusInternalServerError, err)
-		//c.Abort()
-		//fmt.Println(err)
-		return false
-	}
-	return true
-
+	return err == nil
 }

@@ -23,30 +23,30 @@ func (l LoginHandler) ShowLogin(c *gin.Context) {
 // 登录
 func (l LoginHandler) Login(c *gin.Context) {
 	username, pass := c.PostForm("username"), c.PostForm("password")
-	var admin models.Admin
-	adminData := databases.DB.Model(&admin).Preload("Roles").Where("username=?", username).First(&admin)
+	var adminmod models.Admin
+	adminData := databases.DB.Model(&adminmod).Preload("Roles").Where("username=?", username).First(&adminmod)
 	if adminData.Error != nil {
 		c.JSON(200, apgs.NewApiReturn(400, "账号或密码错误", nil))
 		return
 	}
-	passBool := password.Compare(admin.Password, pass)
+	passBool := password.Compare(adminmod.Password, pass)
 	if passBool != nil {
 		c.JSON(200, apgs.NewApiReturn(400, "账号或密码错误", nil))
 		return
 	}
-	admin.Password = ""
-	session.SaveSession(c, session.UserKey, admin)
+	adminmod.Password = ""
+	session.SaveSession(c, session.UserKey, adminmod)
 
 	v := l.GetMap(1)
 	ip := c.ClientIP()
 	v["last_login_ip"] = ip
-	databases.DB.Model(&admin).Where("id = ?", admin.ID).Update(v)
+	databases.DB.Model(&adminmod).Where("id = ?", adminmod.ID).Update(v)
 	c.Redirect(302, "/admin/")
 }
 
 // 登出
 func (l LoginHandler) Logout(c *gin.Context) {
-	if hasSession := session.HadSession(c); hasSession == false {
+	if hasSession := session.HadSession(c); !hasSession {
 		//c.JSON(200, apgs.NewApiReturn(200, "未进行登录", nil))
 		return
 	}

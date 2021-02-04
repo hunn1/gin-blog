@@ -26,11 +26,11 @@ func (r *RolesHandler) Lists(c *gin.Context) {
 	build, vals, _ := models.WhereBuild(where)
 	var model = models.Roles{}
 	count, _ := model.GetCount(build, vals)
-	page := page.NewPagination(c.Request, count, 10)
-	list, _ := model.GetRolesPage(build, vals, page.GetPage(), page.Perineum)
+	pagination := page.NewPagination(c.Request, count, 10)
+	list, _ := model.GetRolesPage(build, vals, pagination.GetPage(), pagination.Perineum)
 
 	ginview.HTML(c, 200, "role/lists", gin.H{
-		"pagination": template.HTML(page.Pages()),
+		"pagination": template.HTML(pagination.Pages()),
 		"lists":      list,
 		"total":      count,
 		"req":        params,
@@ -56,7 +56,7 @@ func (r *RolesHandler) ShowEdit(c *gin.Context) {
 
 	var permission = models.Permissions{}
 	menus := permission.GetMenus()
-	v := make(map[string][]interface{}, 0)
+	v := make(map[string][]interface{})
 
 	for _, menu := range menus {
 		split := strings.Split(menu.HttpPath, "/")
@@ -104,7 +104,10 @@ func (r *RolesHandler) Apply(c *gin.Context) {
 			c.JSON(200, apgs.NewApiReturn(4003, "无法更新数据", err.Error()))
 			return
 		}
-		model.LoadPolicy(int(model.ID))
+		err := model.LoadPolicy(int(model.ID))
+		if err != nil {
+			c.JSON(200, apgs.NewApiReturn(300, "加载权限失败", nil))
+		}
 		c.JSON(200, apgs.NewApiRedirect(200, "更新成功", "/admin/role/lists"))
 		return
 
@@ -119,7 +122,11 @@ func (r *RolesHandler) Apply(c *gin.Context) {
 			c.JSON(200, apgs.NewApiReturn(4003, "无法创建数据", nil))
 			return
 		}
-		model.LoadPolicy(int(model.ID))
+		err1 := model.LoadPolicy(int(model.ID))
+		if err1 != nil {
+			c.JSON(200, apgs.NewApiReturn(300, "加载权限失败", nil))
+
+		}
 		c.JSON(200, apgs.NewApiRedirect(200, "创建成功", "/admin/role/lists"))
 		return
 	}

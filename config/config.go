@@ -11,6 +11,7 @@ type Config struct {
 	Name string
 }
 
+// 初始化配置文件
 func Init(cfg string) error {
 	config := Config{
 		Name: cfg,
@@ -18,6 +19,7 @@ func Init(cfg string) error {
 	if err := config.initConfig(); err != nil {
 		return err
 	}
+	// 监听配置
 	config.watchConfig()
 	return nil
 }
@@ -48,6 +50,6 @@ func (c *Config) watchConfig() {
 	viper.WatchConfig()
 	viper.OnConfigChange(func(in fsnotify.Event) {
 		log.Printf("Config file Changed: %s %s %s \n", in.Name, in.String(), in.Op)
-		recover()
+
 	})
 }
